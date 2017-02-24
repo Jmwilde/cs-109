@@ -32,6 +32,16 @@ RuleEngine::RuleEngine(string sri_file)
 
 RuleEngine::~RuleEngine(){}
 
+void RuleEngine::storeRule(Rule& rule)
+{
+	return;
+}
+
+void RuleEngine::storeFact(Fact& fact)
+{
+	return;
+}
+
 void parseInput()
 {
 	return;
@@ -60,11 +70,15 @@ void RuleEngine::executeRule(Rule& rule)
 
 void RuleEngine::executeOr(Rule& rule)
 {
+	cout << "Called executeOr() method.\n";
 	int num_elems = rule.getNumPredicates();
+
+	cout << "There are " << num_elems << " predicates in this rule.\n";
 
 	for (int i=0; i<num_elems; i++)  // Examine each predicate
 	{
 		string predicate = rule.getPredicate(i);
+		cout << "Predicate " << i << ": " << predicate << endl;
 
 		// Look in the KB, then in the RB
 		auto kb_search = this->kb.find(predicate);
@@ -86,7 +100,7 @@ void RuleEngine::executeOr(Rule& rule)
 				for (int j=0; j<num_elems; j++)
     				cout << v[i].getPredicate(j) << endl;
 			}
-		}
+		} else cout << predicate << " not found in KB.\n";
 
 		auto rb_search = this->rb.find(predicate);
 		if (rb_search != rb.end())
@@ -106,7 +120,7 @@ void RuleEngine::executeOr(Rule& rule)
 				for (int j=0; j<num_elems; j++)
     				executeRule(v[j]);
 			}
-		}
+		} else cout << predicate << " not found in RB.\n";
 	}
 	return;
 }
@@ -115,4 +129,14 @@ void RuleEngine::executeAnd(Rule& rule)
 {
 	cout << "Called executeAnd() method.\n";
 	return;
+}
+
+void RuleEngine::printKb()
+{
+
+}
+
+void RuleEngine::printRb()
+{
+
 }
