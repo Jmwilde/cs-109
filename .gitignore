@@ -1,2 +1,6 @@
-.DS_Store
-.bak
+*.DS_Store
+*.docx
+*.o
+*.bak
+/objects
+
