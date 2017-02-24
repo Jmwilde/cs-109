@@ -22,4 +22,14 @@ Fact::Fact(vector<string> predicates)
 	this->predicates = predicates; // copy by value??
 }
 
+int Fact::getNumPredicates()
+{
+	return this->num_predicates;
+}
+
+string Fact::getPredicate(const int index)
+{
+    return this->predicates[index];
+}
+
 Fact::~Fact(){}

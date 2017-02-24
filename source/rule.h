@@ -14,14 +14,19 @@
 
 using namespace std;
 
+enum logical_op_t {OR, AND};
+
 class Rule
 {
 public:
-	Rule(string logical_op, vector<string> predicates);
+	Rule(logical_op_t logical_op, vector<string> predicates);
 	~Rule();
-	string getOp();
+	logical_op_t getOp();
+	string getPredicate(const int index);
+	int getNumPredicates();
 private:
-	string logical_op;
+	logical_op_t logical_op;
+	int num_predicates;
 	vector<string> predicates;
 };
 

@@ -19,10 +19,17 @@ using namespace std;
 
 int main(int argc, char const *argv[])
 {
-	//RuleEngine sri; // Declare a new rule engine
+	RuleEngine sri; // Declare a new rule engine
 
 	cout << "Welcome to the Simple Rule Inference Engine!\n";
 	cout << "Please input a command.\n";
+
+	vector<string> p = {"Apple", "Orange", "Banana"};
+	Rule r(OR, p);
+	Rule r1(AND, p);
+	sri.executeRule(r);
+	sri.executeRule(r1);
+
 
 	// user inputs a command, and hits Enter/Return
 

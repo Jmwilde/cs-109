@@ -23,6 +23,8 @@ class Fact
 public:
 	Fact(vector<string> predicates);
 	~Fact();
+	int getNumPredicates();
+	string getPredicate(const int index);
 private:
 	int num_predicates;
 	vector<string> predicates;
