@@ -11,12 +11,13 @@
 
 #include <vector>
 #include <string>
+#include "command.h"
 
 using namespace std;
 
 enum logical_op_t {OR, AND};
 
-class Rule
+class Rule: public Command
 {
 public:
 	Rule(logical_op_t logical_op, vector<string> predicates);
