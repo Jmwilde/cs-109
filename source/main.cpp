@@ -36,7 +36,6 @@ int main(int argc, char const *argv[])
 	sri.executeRule(rule);
 	//sri.executeRule(r1);
 
-
 	// user inputs a command, and hits Enter/Return
 
 	// the line of text is passed to the parseInput() method
@@ -45,5 +44,3 @@ int main(int argc, char const *argv[])
 
 	return 0;
 };
-
-

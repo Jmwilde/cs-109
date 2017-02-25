@@ -128,6 +128,7 @@ void RuleEngine::executeOr(Rule& rule)
 void RuleEngine::executeAnd(Rule& rule)
 {
 	cout << "Called executeAnd() method.\n";
+
 	return;
 }
 

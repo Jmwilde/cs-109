@@ -51,6 +51,3 @@ int Rule::getNumPredicates()
 {
 	return this->num_predicates;
 }
-
-
-
