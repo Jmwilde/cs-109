@@ -1,2 +1,3 @@
 # cs-109
-Your favorite place to work on C++.
+
+Simple Rule Inference Engine built with C++.

@@ -12,17 +12,44 @@
 
 using namespace std;
 
-Rule::Rule(string logical_op, vector<string> predicates)
+
+// Precondition: predicates passed to a Rule must be strings
+// that exist in KB or RB
+Rule::Rule(logical_op_t logical_op, vector<string> predicates)
 {
 	this->logical_op = logical_op;
 	this->predicates = predicates;
+	this->num_predicates = predicates.size();  // Assumes no nonsense values passed to the rule
+}
+
+Rule::Rule(string name, logical_op_t logical_op, vector<string> predicates)
+{
+	this->name = name;
+	this->logical_op = logical_op;
+	this->predicates = predicates;
+	this->num_predicates = predicates.size();
 }
 
 Rule::~Rule(){}
 
-string Rule::getOp()
+logical_op_t Rule::getOp()
 {
 	return this->logical_op;
+}
+
+string Rule::getName()
+{
+	return this->name;
+}
+
+string Rule::getPredicate(const int index)
+{
+	return this->predicates[index];
+}
+
+int Rule::getNumPredicates()
+{
+	return this->num_predicates;
 }
 
 

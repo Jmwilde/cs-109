@@ -33,10 +33,10 @@ $(OBJS): $(OBJDIR)/%.o: $(SRCDIR)/%.cpp $(DEPS)
 	$(CC) $(CXXFLAGS) $< -o $@
 
 clean:
-	rm output
 	rm objects/*.o
+	rm output
 
-run:
+run: output
 	./output
 
 .PHONY: clean run
