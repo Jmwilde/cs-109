@@ -11,6 +11,7 @@
 
 #include <vector>
 #include <string>
+#include "command.h"
 
 using namespace std;
 
@@ -18,7 +19,7 @@ using namespace std;
 
 // Construct a Fact by passing a vector holding its predicates
 //template <typename ...ArgsT>
-class Fact
+class Fact: public Command
 {
 public:
 	//template <typename ...ArgsT>
