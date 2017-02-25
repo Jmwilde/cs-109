@@ -24,7 +24,7 @@ class Command
 	private:
 		std::string command_type;
 		
-}; 
+}; // End class Command 
 
 #endif 
 

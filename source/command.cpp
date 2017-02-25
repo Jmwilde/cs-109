@@ -7,7 +7,6 @@
 // Noriaki Nakano - nnakano
 
 // Implementation of Command class
-#include <iostream>
 #include "command.h"
 #include <string>
 
@@ -19,7 +18,6 @@ Command::Command()
 Command::Command(std::string command_type)
 {// secondary constructor that takes in a command_type string 
 	this->command_type = command_type;
-	std::cout << "Command created: " << this->command_type << std::endl;
 }// End constructor 
 
 Command::~Command()
