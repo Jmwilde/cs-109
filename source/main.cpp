@@ -23,19 +23,23 @@ int main(int argc, char const *argv[])
 
 	cout << "Welcome to the Simple Rule Inference Engine!\n";
 	cout << "Please input a command.\n";
+	
+	vector<string> fruits = {"Apple", "Orange", "Banana"};
+	vector<string> meats = {"Steak", "Chicken", "Pork", "Lizard"};
+	vector<string> foods = {"Fruits", "Meats"};
 
-	vector<string> predicates = {"Apple", "Orange", "Banana"};
+	//  User creats & stores some Facts
+	Fact fact1("Fruits", fruits);
+	Fact fact2("Meats", meats);
+	sri.storeFact("Fruits", fact1);
+	sri.storeFact("Meats", fact2);
 
-	Rule rule(OR, predicates);
-	Fact fact(predicates);
-	//Fact fact("Apple", "Orange", "Banana");
+	//  Then makes a Rule and stores it
+	Rule rule1("Food", OR, foods);
+	sri.storeRule("Food", rule1);
 
-	sri.storeFact("Fruits", fact);
-	sri.storeRule("Fruits", rule);
-	//Rule r1(AND, p);
-	sri.executeRule(rule);
-	//sri.executeRule(r1);
-
+	//  Then Infers the rule!
+	sri.executeRule(rule1);
 
 	// user inputs a command, and hits Enter/Return
 

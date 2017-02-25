@@ -23,12 +23,13 @@ class Fact
 public:
 	//template <typename ...ArgsT>
 	//Fact(ArgsT ...strings);
-	Fact(vector<string> predicates);
+	Fact(string name, vector<string> predicates);
 	~Fact();
 	int getNumPredicates();
 	string getPredicate(const int index);
 private:
-	Fact(initializer_list<string> strings);
+	string name;
+	//Fact(initializer_list<string> strings);
 	int num_predicates;
 	vector<string> predicates;
 };

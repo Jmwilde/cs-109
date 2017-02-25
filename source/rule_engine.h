@@ -26,13 +26,16 @@ public:
 	void executeRule(Rule& rule);
 	void storeRule(string name, Rule rule);
 	void storeFact(string name, Fact fact);
+	void dump();
+	void load();
 	void printKb();
 	void printRb();
+	map<string, vector<Fact>> kb;
 private:
 	void executeOr(Rule& rule);
 	void executeAnd(Rule& rule);
 	string input;
-	map<string, vector<Fact>> kb;
+	
 	map<string, vector<Rule>> rb;
 };
 
