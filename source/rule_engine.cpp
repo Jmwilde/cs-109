@@ -32,14 +32,14 @@ RuleEngine::RuleEngine(string sri_file)
 
 RuleEngine::~RuleEngine(){}
 
-void RuleEngine::storeRule(Rule& rule)
+void RuleEngine::storeRule(string name, Rule rule)
 {
-	return;
+	this->rb[name].push_back(rule);
 }
 
-void RuleEngine::storeFact(Fact& fact)
+void RuleEngine::storeFact(string name, Fact fact)
 {
-	return;
+	this->kb[name].push_back(fact);
 }
 
 void parseInput()

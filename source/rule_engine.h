@@ -24,8 +24,8 @@ public:
 	~RuleEngine();
 	void parseInput();
 	void executeRule(Rule& rule);
-	void storeRule(Rule& rule);
-	void storeFact(Fact& fact);
+	void storeRule(string name, Rule rule);
+	void storeFact(string name, Fact fact);
 	void printKb();
 	void printRb();
 private:

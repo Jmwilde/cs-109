@@ -16,6 +16,12 @@ using namespace std;
 // Takes an array of predicates and stores them
 // This is better than making the constructor variadic
 
+// template <typename ...ArgsT>
+// Fact::Fact(ArgsT ...strings)
+// {
+//     Fact({strings...});
+// }
+
 Fact::Fact(vector<string> predicates)
 {
 	this->num_predicates = predicates.size();

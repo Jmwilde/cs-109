@@ -22,11 +22,24 @@ Rule::Rule(logical_op_t logical_op, vector<string> predicates)
 	this->num_predicates = predicates.size();  // Assumes no nonsense values passed to the rule
 }
 
+Rule::Rule(string name, logical_op_t logical_op, vector<string> predicates)
+{
+	this->name = name;
+	this->logical_op = logical_op;
+	this->predicates = predicates;
+	this->num_predicates = predicates.size();
+}
+
 Rule::~Rule(){}
 
 logical_op_t Rule::getOp()
 {
 	return this->logical_op;
+}
+
+string Rule::getName()
+{
+	return this->name;
 }
 
 string Rule::getPredicate(const int index)
