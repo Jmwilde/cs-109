@@ -82,6 +82,7 @@ void RuleEngine::executeOr(Rule& rule)
 
 		// Look in the KB, then in the RB
 		auto kb_search = this->kb.find(predicate);
+		cout << kb_search->first;
 		if( kb_search != kb.end() )
 		{
 			// Found in the KB
@@ -100,7 +101,7 @@ void RuleEngine::executeOr(Rule& rule)
 				for (int j=0; j<num_elems; j++)
     				cout << v[i].getPredicate(j) << endl;
 			}
-		} else cout << predicate << " not found in KB.\n";
+		} else cout << kb_search->first << " not found in KB.\n";
 
 		auto rb_search = this->rb.find(predicate);
 		if (rb_search != rb.end())
