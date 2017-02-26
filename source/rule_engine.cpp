@@ -53,15 +53,17 @@ void RuleEngine::executeRule(Rule& rule)
 	logical_op_t op = rule.getOp();
 
 	if(op == OR) {
-		cout << "Executing the OR operation!\n";
+		cout << "Executing the OR operation on " << rule.getName() << "!\n";
 		this->executeOr(rule);
 	} else if (op == AND) {
-		cout << "Executing the AND operation!\n";
+		cout << "Executing the AND operation on "<< rule.getName() << "!\n";
 		this->executeAnd(rule);
 	}
-	else
+	else {
 		// Print error message
 		cout << "Deez nutz!\n";
+		cout << rule.getName() << " not an OR or an AND!\n";
+	}
 	return;
 }
 

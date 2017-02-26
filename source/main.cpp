@@ -27,6 +27,7 @@ int main(int argc, char const *argv[])
 	vector<string> fruits = {"Apple", "Orange", "Banana"};
 	vector<string> meats = {"Steak", "Chicken", "Pork", "Lizard"};
 	vector<string> foods = {"Fruits", "Meats"};
+	vector<string> food_and_drink {"Food", "Drinks"};
 
 	//  User creats & stores some Facts
 	Fact fact1("Fruits", fruits);
@@ -40,6 +41,17 @@ int main(int argc, char const *argv[])
 
 	//  Then Infers the rule!
 	sri.executeRule(rule1);
+
+	vector<string> drinks = {"Pepsi", "Mtn Dew", "Coke"};
+	Fact fact3("Drinks", drinks);
+	sri.storeFact("Drinks", fact3);
+
+	cout << "\nBeginning 2nd Test!\n\n";
+
+	Rule rule2("Food and Drink", OR, food_and_drink);
+	sri.storeRule("Food and Drink", rule2);
+	
+	sri.executeRule(rule2);
 
 	// user inputs a command, and hits Enter/Return
 
