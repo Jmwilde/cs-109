@@ -39,6 +39,7 @@ void RuleEngine::storeRule(string name, Rule rule)
 
 void RuleEngine::storeFact(string name, Fact fact)
 {
+	cout << "Calling storeFact.\n";
 	this->kb[name].push_back(fact);
 }
 
@@ -78,11 +79,26 @@ void RuleEngine::executeOr(Rule& rule)
 	for (int i=0; i<num_elems; i++)  // Examine each predicate
 	{
 		string predicate = rule.getPredicate(i);
+
 		cout << "Predicate " << i << ": " << predicate << endl;
 
 		// Look in the KB, then in the RB
+		//cout << rule.getName() << endl;
+		//string rule_name = rule.getName();
 		auto kb_search = this->kb.find(predicate);
+<<<<<<< HEAD
 		cout << kb_search->first;
+=======
+		//vector<Fact> v = kb_search->second;
+
+		// for (int i=0; i<v.size(); i++)
+		// {
+		// 	int num_elems = v[i].getNumPredicates();
+		// 	for (int j=0; j<num_elems; j++)
+  //   			cout << v[i].getPredicate(j) << endl;
+		// }
+
+>>>>>>> origin/john
 		if( kb_search != kb.end() )
 		{
 			// Found in the KB
@@ -101,7 +117,12 @@ void RuleEngine::executeOr(Rule& rule)
 				for (int j=0; j<num_elems; j++)
     				cout << v[i].getPredicate(j) << endl;
 			}
+<<<<<<< HEAD
 		} else cout << kb_search->first << " not found in KB.\n";
+=======
+		//continue;
+		} else cout << predicate << " not found in KB.\n";
+>>>>>>> origin/john
 
 		auto rb_search = this->rb.find(predicate);
 		if (rb_search != rb.end())
@@ -130,6 +151,18 @@ void RuleEngine::executeAnd(Rule& rule)
 {
 	cout << "Called executeAnd() method.\n";
 
+	return;
+}
+
+// Store the KB and RB info
+// into a text file (.sri)
+void RuleEngine::dump()
+{
+	return;
+}
+
+void RuleEngine::load()
+{
 	return;
 }
 
