@@ -12,6 +12,7 @@
 #include <map>
 #include <vector>
 #include <iostream>
+#include <fstream>
 
 using namespace std;
 
@@ -181,10 +182,6 @@ void RuleEngine::executeAnd(Rule rule, int num_params)
 
 // Store the KB and RB info
 // into a text file (.sri)
-void RuleEngine::dump()
-{
-	return;
-}
 
 void RuleEngine::load()
 {
@@ -199,4 +196,50 @@ void RuleEngine::printKb()
 void RuleEngine::printRb()
 {
 
+}
+void RuleEngine::dump()
+{
+   string filename;
+   cout << "Insert a file name 'filename.sri'" << endl;
+   cin >> filename;
+   ofstream ofile (filename);
+   for(map<string, vector<Fact>>::iterator it = kb.begin(); it!=kb.end(); ++it)
+   {
+      ofile << "FACT " << it->first << "(";
+      vector<Fact> facts = kb[it->first];
+      for(uint y = 0; y<facts.size();y++)
+      {
+         int preds = facts[y].getNumPredicates();
+         for(int z = 0; z<preds;z++)
+         {
+            if(z + 1 == preds)
+            {
+               ofile << facts[y].getPredicate(z);
+               break;
+            }
+            ofile << facts[y].getPredicate(z) << ", ";
+         }
+         ofile << ")" << endl;
+      }
+   }
+   for(map<string, vector<Rule>>::iterator it = rb.begin(); it!= rb.end(); ++it)
+   {
+      ofile << "RULE " << it->first << "(";
+      vector<Rule> rules = rb[it->first];
+      for(uint y = 0; y<rules.size();y++)
+      {
+         int preds = rules[y].getNumPredicates();
+         for(int z = 0; z<preds;z++)
+         {
+            if(z + 1 == preds)
+            {
+               ofile << rules[y].getPredicate(z);
+               break;
+            }  
+            ofile << rules[y].getPredicate(z) << ", ";
+         }
+         ofile << ")" << endl;
+      }
+   }
+   ofile.close();
 }

@@ -42,7 +42,7 @@ int main(int argc, char const *argv[])
 
 	//  Then Infers the rule!
 	sri.inference("Fruits", 3);
-
+   sri.dump();
 	// Fact fact3("Drinks", drinks);
 	// sri.storeFact("Drinks", fact3);
 
