@@ -12,59 +12,92 @@
 #include <map>
 #include <vector>
 #include <iostream>
+#include <string>
+#include <sstream>
 
 using namespace std;
 
 RuleEngine::RuleEngine()
 {
-	// Initializes an empty rule engine
-	// Map the name of fact objects to their values
-	map<string, vector<Fact>> kb; // Knowledge Base
-	map<string, vector<Rule>> rb; // Rule Base
+  // Initializes an empty rule engine
+  // Map the name of fact objects to their values
+  map<string, vector<Fact>> kb; // Knowledge Base
+  map<string, vector<Rule>> rb; // Rule Base
 
-	// Could set a size for the kb and rb here!
+  // Could set a size for the kb and rb here!
 }
 
 RuleEngine::RuleEngine(string sri_file)
 {
-	// Build the KB and RB from the given .sri file
+  // Build the KB and RB from the given .sri file
 }
 
 RuleEngine::~RuleEngine(){}
 
 void RuleEngine::storeRule(string name, Rule rule)
 {
-	this->rb[name].push_back(rule);
+  this->rb[name].push_back(rule);
 }
 
 void RuleEngine::storeFact(string name, Fact fact)
 {
-	this->kb[name].push_back(fact);
+  this->kb[name].push_back(fact);
 }
 
-void parseInput()
+void RuleEngine::parseInput(string commandLine)
 {
-	return;
+  string name = "";
+  string pred = "";
+  string op = "";
+  string sriFile = "";
+  string temp = "";
+  vector<string> paramVec;
+  vector<string> predVec;
+  stringstream iss(commandLine);
+  getline(iss, name, ' ');
+  if(name == "FACT"){
+    getline(iss, pred, '(');
+    std::cout << pred << std::endl;
+    while(getline(iss, temp, ',')){
+      if(temp.back() == ')') temp.pop_back();
+      paramVec.push_back(temp);
+    }
+  }else if(name == "RULE"){
+    getline(iss, pred, ':');
+    getline(iss, temp, ' ');
+    getline(iss, op, ' ');
+    while(getline(iss, pred, '(')){
+      predVec.push_back(pred);
+      getline(iss, temp, ' ');
+    }
+  }else if(name == "INFERENCE"){
+    getline(iss, pred, '(');
+  }else if(name == "LOAD"){
+    getline(iss, sriFile);
+  }else if(name == "DUMP"){
+    getline(iss, sriFile);
+  }else if(name == "DROP"){
+    getline(iss, pred);
+  }
+  return;
 }
 
 void RuleEngine::executeRule(Rule& rule)
 {
-	// Check whether it is an AND or an OR operation
-	logical_op_t op = rule.getOp();
+  // Check whether it is an AND or an OR operation
+  logical_op_t op = rule.getOp();
 
-	if(op == OR) {
-		cout << "Executing the OR operation on " << rule.getName() << "!\n";
-		this->executeOr(rule);
-	} else if (op == AND) {
-		cout << "Executing the AND operation on "<< rule.getName() << "!\n";
-		this->executeAnd(rule);
-	}
-	else {
-		// Print error message
-		cout << "Deez nutz!\n";
-		cout << rule.getName() << " not an OR or an AND!\n";
-	}
-	return;
+  if(op == OR) {
+    cout << "Executing the OR operation!\n";
+    this->executeOr(rule);
+  } else if (op == AND) {
+    cout << "Executing the AND operation!\n";
+    this->executeAnd(rule);
+  }
+  else
+    // Print error message
+    cout << "Deez nutz!\n";
+  return;
 }
 
 // TODO: implement executeAnd
@@ -72,66 +105,66 @@ void RuleEngine::executeRule(Rule& rule)
 
 void RuleEngine::executeOr(Rule& rule)
 {
-	cout << "Called executeOr() method.\n";
-	int num_elems = rule.getNumPredicates();
+  cout << "Called executeOr() method.\n";
+  int num_elems = rule.getNumPredicates();
 
-	cout << "There are " << num_elems << " predicates in this rule.\n";
+  cout << "There are " << num_elems << " predicates in this rule.\n";
 
-	for (int i=0; i<num_elems; i++)  // Examine each predicate
-	{
-		string predicate = rule.getPredicate(i);
-		cout << "Predicate " << i << ": " << predicate << endl;
+  for (int i=0; i<num_elems; i++)  // Examine each predicate
+  {
+    string predicate = rule.getPredicate(i);
+    cout << "Predicate " << i << ": " << predicate << endl;
 
-		// Look in the KB, then in the RB
-		auto kb_search = this->kb.find(predicate);
-		if( kb_search != kb.end() )
-		{
-			// Found in the KB
-			cout << "Found " << kb_search->first << " in the KB!\n";
-			vector<Fact> v = kb_search->second;
+    // Look in the KB, then in the RB
+    auto kb_search = this->kb.find(predicate);
+    if( kb_search != kb.end() )
+    {
+      // Found in the KB
+      cout << "Found " << kb_search->first << " in the KB!\n";
+      vector<Fact> v = kb_search->second;
 
-			// NOTE: Need to check if Fact has proper number of predicates
-			// Should match the number of ($X, $Y, etc.) given by user
+      // NOTE: Need to check if Fact has proper number of predicates
+      // Should match the number of ($X, $Y, etc.) given by user
 
-			// For each Fact in the vector
-			// Print corresponding list of strings
+      // For each Fact in the vector
+      // Print corresponding list of strings
 
-			for (int i=0; i<v.size(); i++)
-			{
-				int num_elems = v[i].getNumPredicates();
-				for (int j=0; j<num_elems; j++)
-    				cout << v[i].getPredicate(j) << endl;
-			}
-		} else cout << predicate << " not found in KB.\n";
+      for (int i=0; i<v.size(); i++)
+      {
+        int num_elems = v[i].getNumPredicates();
+        for (int j=0; j<num_elems; j++)
+            cout << v[i].getPredicate(j) << endl;
+      }
+    } else cout << predicate << " not found in KB.\n";
 
-		auto rb_search = this->rb.find(predicate);
-		if (rb_search != rb.end())
-		{
-			// Found in the RB
-			cout << "Found " << rb_search->first << " in the RB!\n";
-			vector<Rule> v = rb_search->second;
+    auto rb_search = this->rb.find(predicate);
+    if (rb_search != rb.end())
+    {
+      // Found in the RB
+      cout << "Found " << rb_search->first << " in the RB!\n";
+      vector<Rule> v = rb_search->second;
 
-			// For each associated Rule,
-			// call executeRule on each of the associated predicates
+      // For each associated Rule,
+      // call executeRule on each of the associated predicates
 
-			// Will this iterate past the desired elements??
-			// I think it might
-			for (int i=0; i<v.size(); i++)
-			{
-				int num_elems = v[i].getNumPredicates();
-				for (int j=0; j<num_elems; j++)
-    				executeRule(v[j]);
-			}
-		} else cout << predicate << " not found in RB.\n";
-	}
-	return;
+      // Will this iterate past the desired elements??
+      // I think it might
+      for (int i=0; i<v.size(); i++)
+      {
+        int num_elems = v[i].getNumPredicates();
+        for (int j=0; j<num_elems; j++)
+            executeRule(v[j]);
+      }
+    } else cout << predicate << " not found in RB.\n";
+  }
+  return;
 }
 
 void RuleEngine::executeAnd(Rule& rule)
 {
-	cout << "Called executeAnd() method.\n";
-
-	return;
+  cout << "Called executeAnd() method.\n";
+  
+  return;
 }
 
 void RuleEngine::printKb()

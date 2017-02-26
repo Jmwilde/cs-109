@@ -22,7 +22,7 @@ public:
 	RuleEngine();
 	RuleEngine(string sri_file);
 	~RuleEngine();
-	void parseInput();
+	void parseInput(string commandLine);
 	void executeRule(Rule& rule);
 	void storeRule(string name, Rule rule);
 	void storeFact(string name, Fact fact);
@@ -35,7 +35,7 @@ private:
 	void executeOr(Rule& rule);
 	void executeAnd(Rule& rule);
 	string input;
-	
+
 	map<string, vector<Rule>> rb;
 };
 
