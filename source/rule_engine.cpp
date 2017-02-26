@@ -34,16 +34,14 @@ RuleEngine::~RuleEngine(){}
 
 void RuleEngine::inference(string query, int num_params)
 {
+	cout << "Called inference() on " << query << "\n\n";
 	//  Look in the KB
 	auto kb_search = this->kb.find(query);
 	if(kb_search != kb.end())
 	{
 		// Found in the KB
-		cout << "Found " << kb_search->first << " in the KB!\n";
+		cout << "Found " << query << " query in the KB!\n";
 		vector<Fact> fact_vect = kb_search->second;
-
-		// NOTE: Need to check if Fact has proper number of predicates
-		// Should match the number of ($X, $Y, etc.) given by user
 
 		// For each Fact in the vector
 		for (int i=0; i<fact_vect.size(); i++)
@@ -76,7 +74,7 @@ void RuleEngine::inference(string query, int num_params)
 			// Execute the current rule
 			executeRule(rule_vect[i], num_params);
 		}
-	} else cout << query << " query not found in RB.\n";
+	} else cout << query << " query not found in RB.\n\n";
 }
 
 void RuleEngine::storeRule(string name, Rule rule)
@@ -100,10 +98,10 @@ void RuleEngine::executeRule(Rule rule, int num_params)
 
 	// Check whether it is an AND or an OR rule
 	if(op == OR) {
-		cout << "Executing the OR operation on " << rule.getName() << "!\n";
+		//cout << "Executing the OR operation on " << rule.getName() << "!\n";
 		this->executeOr(rule, num_params);
 	} else if (op == AND) {
-		cout << "Executing the AND operation on "<< rule.getName() << "!\n";
+		//cout << "Executing the AND operation on "<< rule.getName() << "!\n";
 		this->executeAnd(rule, num_params);
 	}
 	else {
@@ -116,7 +114,7 @@ void RuleEngine::executeRule(Rule rule, int num_params)
 
 void RuleEngine::executeOr(Rule rule, int num_params)
 {
-	cout << "Called executeOr() method on << " << rule.getName() << "\n";
+	//cout << "Called executeOr() method on " << rule.getName() << "\n";
 	int num_elems = rule.getNumPredicates();
 	cout << "There are " << num_elems << " predicates in this " << rule.getName() << "\n";
 
@@ -160,12 +158,8 @@ void RuleEngine::executeOr(Rule rule, int num_params)
 			// For each rule in the vector
 			for (int i=0; i<rule_vect.size(); i++)
 			{
-				int num_elems = rule_vect[i].getNumPredicates();
-				for (int j=0; j<num_elems; j++)
-				{
-					cout << "Recursive execution called on: " << rule_vect[i].getName() << endl;
-    				executeRule(rule_vect[j], num_params);
-    			}
+				cout << "Recursive execution called on rule " << i << endl;
+				executeRule(rule_vect[i], num_params);
 			}
 		} else cout << predicate << " not found in RB.\n";
 	}
