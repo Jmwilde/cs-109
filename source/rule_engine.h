@@ -24,18 +24,20 @@ public:
 	~RuleEngine();
 	void parseInput(string commandLine);
 	void executeRule(Rule& rule);
+	void inference(string query, int num_predicates);
+	void inferRule(string name);
 	void storeRule(string name, Rule rule);
 	void storeFact(string name, Fact fact);
 	void dump();
 	void load();
 	void printKb();
 	void printRb();
-	map<string, vector<Fact>> kb;
 private:
-	void executeOr(Rule& rule);
-	void executeAnd(Rule& rule);
+	void executeRule(Rule rule, int num_params);
+	void executeOr(Rule rule, int num_params);
+	void executeAnd(Rule rule, int num_params);
 	string input;
-
+	map<string, vector<Fact>> kb;
 	map<string, vector<Rule>> rb;
 };
 
