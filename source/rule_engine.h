@@ -22,12 +22,18 @@ public:
 	RuleEngine();
 	RuleEngine(string sri_file);
 	~RuleEngine();
+<<<<<<< HEAD
 	void parseInput(string commandLine);
 	void executeRule(Rule& rule);
+=======
+	void parseInput();
+>>>>>>> john
 	void inference(string query, int num_predicates);
 	void inferRule(string name);
 	void storeRule(string name, Rule rule);
 	void storeFact(string name, Fact fact);
+	void searchKnowledgeBase(string query, int num_params);
+	void searchRuleBase(string query, int num_params);
 	void dump();
 	void load();
 	void printKb();
