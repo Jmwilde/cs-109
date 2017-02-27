@@ -23,7 +23,6 @@ int main(int argc, char const *argv[])
 
 	cout << "Welcome to the Simple Rule Inference Engine!\n";
 	cout << "Please input a command.\n\n";
-	
 	vector<string> fruits = {"Apple", "Orange"};
 	vector<string> meats = {"Steak", "Chicken"};
 	vector<string> foods = {"Fruits", "Meats"};
@@ -61,5 +60,3 @@ int main(int argc, char const *argv[])
 
 	return 0;
 };
-
-
