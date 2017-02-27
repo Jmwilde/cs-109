@@ -12,6 +12,7 @@
 #include <map>
 #include <vector>
 #include <iostream>
+#include <sstream>
 
 using namespace std;
 
@@ -89,10 +90,11 @@ void RuleEngine::storeFact(string name, Fact fact)
   this->kb[name].push_back(fact);
 }
 
-void parseInput()
+void RuleEngine::parseInput(string commandLine)
 {
   string name = "";
   string pred = "";
+  string ruleName = "";
   string op = "";
   string sriFile = "";
   string temp = "";
@@ -101,21 +103,44 @@ void parseInput()
   stringstream iss(commandLine);
   getline(iss, name, ' ');
   if(name == "FACT"){
+    try{
+      if(commandLine.find('(') == -1) throw 0;
+      if(commandLine.find(')') == -1) throw 0;
+    }catch(int e){
+      std::cout << "Error" << std::endl;
+    }
     getline(iss, pred, '(');
-    std::cout << pred << std::endl;
     while(getline(iss, temp, ',')){
       if(temp.back() == ')') temp.pop_back();
       paramVec.push_back(temp);
     }
   }else if(name == "RULE"){
-    getline(iss, pred, ':');
+    try{
+      if(commandLine.find(":-") == -1) throw 0;
+    }catch(int e){
+      std::cout << "Error" << std::endl;
+    }
+    getline(iss, ruleName, ':');
     getline(iss, temp, ' ');
     getline(iss, op, ' ');
+    if(op != "OR" && op != "AND") std::cout << "Error2" << std::endl;
     while(getline(iss, pred, '(')){
       predVec.push_back(pred);
+      iss.putback('(');
       getline(iss, temp, ' ');
+      try{
+        if(temp.find('(') == -1 || temp.find(')') == -1) throw 0;
+      }catch(int e){
+        std::cout << "Error" << std::endl;
+      }
     }
   }else if(name == "INFERENCE"){
+    try{
+      if(commandLine.find('(') == -1) throw 0;
+      if(commandLine.find(')') == -1) throw 0;
+    }catch(int e){
+      std::cout << "Error" << std::endl;
+    }
     getline(iss, pred, '(');
   }else if(name == "LOAD"){
     getline(iss, sriFile);
@@ -210,6 +235,7 @@ void RuleEngine::executeAnd(Rule rule, int num_params)
 {
   cout << "Called executeAnd() method.\n";
   int num_elems = rule.getNumPredicates();
+  cout << "There are " << num_elems << " predicates in this " << rule.getName() << "\n";
   return;
 }
 
