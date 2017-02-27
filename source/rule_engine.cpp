@@ -89,7 +89,41 @@ void RuleEngine::executeOr(Rule rule, int num_params)
 void RuleEngine::executeAnd(Rule rule, int num_params)
 {
 	cout << "Called executeAnd() method.\n";
+	// Assuming we only AND facts together for now
+
+	int index = 0;
+
+	// Look at the first predicate
+	string 1stPred = rule.getPredicate(index);
+
+	// Look in the KB for it
+	auto kb_search = this->kb.find(1stPred);
+	if(kb_search != kb.end())
+	{
+		vector<Fact> fact_vect = kb_search->second;
+
+		// For each Fact in the vector
+		for (int i=0; i<fact_vect.size(); i++)
+		{
+			// Check if the current Fact has the correct number of predicates
+			if (fact_vect[i].getNumPredicates() != num_params) continue;
+
+			int last = fact_vect.size() - 1;
+			string filter_val = fact_vect[last];  // Get the last value in the Fact
+
+			// Pass it down the chain of predicates in the rule
+			filter(rule.getPredicate(index), filter_val);
+
+		}
+		cout << endl;
+	} else cout << 1stPred << " not found in KB!\n";
+
 	return;
+}
+
+void RuleEngine::filter(string query, string value)
+{
+	
 }
 
 void RuleEngine::searchKnowledgeBase(string query, int num_params)
@@ -115,7 +149,6 @@ void RuleEngine::searchKnowledgeBase(string query, int num_params)
 		}
 		cout << endl;
 	} else cout << query << " fact not found in KB.\n";
-
 }
 
 void RuleEngine::searchRuleBase(string query, int num_params)
