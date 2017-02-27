@@ -91,6 +91,39 @@ void RuleEngine::storeFact(string name, Fact fact)
 
 void parseInput()
 {
+  string name = "";
+  string pred = "";
+  string op = "";
+  string sriFile = "";
+  string temp = "";
+  vector<string> paramVec;
+  vector<string> predVec;
+  stringstream iss(commandLine);
+  getline(iss, name, ' ');
+  if(name == "FACT"){
+    getline(iss, pred, '(');
+    std::cout << pred << std::endl;
+    while(getline(iss, temp, ',')){
+      if(temp.back() == ')') temp.pop_back();
+      paramVec.push_back(temp);
+    }
+  }else if(name == "RULE"){
+    getline(iss, pred, ':');
+    getline(iss, temp, ' ');
+    getline(iss, op, ' ');
+    while(getline(iss, pred, '(')){
+      predVec.push_back(pred);
+      getline(iss, temp, ' ');
+    }
+  }else if(name == "INFERENCE"){
+    getline(iss, pred, '(');
+  }else if(name == "LOAD"){
+    getline(iss, sriFile);
+  }else if(name == "DUMP"){
+    getline(iss, sriFile);
+  }else if(name == "DROP"){
+    getline(iss, pred);
+  }
   return;
 }
 
