@@ -41,16 +41,11 @@ void RuleEngine::storeFact(string name, Fact fact)
 	this->kb[name].push_back(fact);
 }
 
-void RuleEngine::parseInput(string commandLine)
+void RuleEngine::parseInput(string commandLine, string& name, string& query, string& op, vector<string>& paramVec, vector<string>& predVec)
 {
-  string name = "";
   string pred = "";
-  string ruleName = "";
-  string op = "";
   string sriFile = "";
   string temp = "";
-  vector<string> paramVec;
-  vector<string> predVec;
   stringstream iss(commandLine);
   getline(iss, name, ' ');
   if(name == "FACT"){
@@ -58,9 +53,9 @@ void RuleEngine::parseInput(string commandLine)
       if(commandLine.find('(') == -1) throw 0;
       if(commandLine.find(')') == -1) throw 0;
     }catch(int e){
-      std::cout << "Error" << std::endl;
+      std::cout << "Invalid command line argument" << std::endl;
     }
-    getline(iss, pred, '(');
+    getline(iss, query, '(');
     while(getline(iss, temp, ',')){
       if(temp.back() == ')') temp.pop_back();
       paramVec.push_back(temp);
@@ -69,12 +64,12 @@ void RuleEngine::parseInput(string commandLine)
     try{
       if(commandLine.find(":-") == -1) throw 0;
     }catch(int e){
-      std::cout << "Error" << std::endl;
+      std::cout << "Invalid command line argument" << std::endl;
     }
-    getline(iss, ruleName, ':');
+    getline(iss, query, ':');
     getline(iss, temp, ' ');
     getline(iss, op, ' ');
-    if(op != "OR" && op != "AND") std::cout << "Error2" << std::endl;
+    if(op != "OR" && op != "AND") std::cout << "Invalid command line argument" << std::endl;
     while(getline(iss, pred, '(')){
       predVec.push_back(pred);
       iss.putback('(');
@@ -82,7 +77,7 @@ void RuleEngine::parseInput(string commandLine)
       try{
         if(temp.find('(') == -1 || temp.find(')') == -1) throw 0;
       }catch(int e){
-        std::cout << "Error" << std::endl;
+        std::cout << "Invalid command line argument" << std::endl;
       }
     }
   }else if(name == "INFERENCE"){
@@ -90,9 +85,9 @@ void RuleEngine::parseInput(string commandLine)
       if(commandLine.find('(') == -1) throw 0;
       if(commandLine.find(')') == -1) throw 0;
     }catch(int e){
-      std::cout << "Error" << std::endl;
+      std::cout << "Invalid command line argument" << std::endl;
     }
-    getline(iss, pred, '(');
+    getline(iss, query, '(');
   }else if(name == "LOAD"){
     getline(iss, sriFile);
   }else if(name == "DUMP"){
@@ -147,6 +142,7 @@ void RuleEngine::executeOr(Rule rule, int num_params)
 void RuleEngine::executeAnd(Rule rule, int num_params)
 {
 	cout << "Called executeAnd() method.\n";
+
 	return;
 }
 

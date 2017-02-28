@@ -22,12 +22,8 @@ public:
 	RuleEngine();
 	RuleEngine(string sri_file);
 	~RuleEngine();
-<<<<<<< HEAD
-	void parseInput(string commandLine);
+	void parseInput(string commandLine, string& name, string& query, string& op, vector<string>& paramVec, vector<string>& predVec);
 	void executeRule(Rule& rule);
-=======
-	void parseInput();
->>>>>>> john
 	void inference(string query, int num_predicates);
 	void inferRule(string name);
 	void storeRule(string name, Rule rule);
