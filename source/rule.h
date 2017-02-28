@@ -23,7 +23,7 @@ public:
 	Rule(string name, logical_op_t logical_op, vector<string> predicates);
 	~Rule();
 	logical_op_t getOp();
-	string getPredicate(const int index);
+	string getPredicate(int index);
 	int getNumPredicates();
 	string getName();
 private:

@@ -34,9 +34,19 @@ int Fact::getNumPredicates()
 	return this->num_predicates;
 }
 
-string Fact::getPredicate(const int index)
+string Fact::getPredicate(int index)
 {
     return this->predicates[index];
+}
+
+string Fact::firstPredicate()
+{
+	return this->predicates[0];
+}
+
+string Fact::lastPredicate()
+{
+	return this->predicates[num_predicates-1];
 }
 
 Fact::~Fact(){}

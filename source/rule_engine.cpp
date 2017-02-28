@@ -47,9 +47,11 @@ void parseInput()
 
 void RuleEngine::inference(string query, int num_params)
 {
-	// Inference needs to know what parameter letters to print out
+	// TODO: Inference needs to properly format the outputs
 	// Like if user says INFERENCE Parent($X, $Y)
 	// The output should print X: foo Y: bar
+	// And num_params == 2 in this case
+
 	cout << "** Called inference() on " << query << " **\n\n";
 	searchKnowledgeBase(query, num_params);
 	searchRuleBase(query, num_params);
@@ -72,7 +74,8 @@ void RuleEngine::executeRule(Rule rule, int num_params)
 void RuleEngine::executeOr(Rule rule, int num_params)
 {
 	int num_elems = rule.getNumPredicates();
-	cout << "There are " << num_elems << " predicates in " << rule.getName() << ":\n";
+	cout << "There are " << num_elems << " predicates in " 
+	<< rule.getName() << ":\n";
 
 	// For each predicate
 	for (int i=0; i<num_elems; i++)
@@ -88,42 +91,97 @@ void RuleEngine::executeOr(Rule rule, int num_params)
 
 void RuleEngine::executeAnd(Rule rule, int num_params)
 {
-	cout << "Called executeAnd() method.\n";
-	// Assuming we only AND facts together for now
+	// Get the first predicate
+	string predicate = rule.getPredicate(0);
 
-	int index = 0;
-
-	// Look at the first predicate
-	string 1stPred = rule.getPredicate(index);
-
-	// Look in the KB for it
-	auto kb_search = this->kb.find(1stPred);
+	// Find query in KB
+	auto kb_search = this->kb.find(predicate);
 	if(kb_search != kb.end())
 	{
+		// Found in the KB
 		vector<Fact> fact_vect = kb_search->second;
 
-		// For each Fact in the vector
+		int filter_count = 0;
+		int pred_index = 1;
+
+		// For each FACT
 		for (int i=0; i<fact_vect.size(); i++)
 		{
-			// Check if the current Fact has the correct number of predicates
-			if (fact_vect[i].getNumPredicates() != num_params) continue;
+			// Check if the current Fact has the correct # of predicates
+			if (fact_vect[i].getNumPredicates() != num_params){
+				continue;
+			}
 
-			int last = fact_vect.size() - 1;
-			string filter_val = fact_vect[last];  // Get the last value in the Fact
+			// Make sure output is empty for each filter call
+			vector<string> output;
 
-			// Pass it down the chain of predicates in the rule
-			filter(rule.getPredicate(index), filter_val);
+			// Set the first output value
+			cout << "First output value: " << fact_vect[i].lastPredicate();
+			output.push_back(fact_vect[i].lastPredicate());
 
+			// Call the recursive filter
+			cout << "Calling first recursive filter on: " << fact_vect[i].getPredicate(pred_index);
+			//filter(rule, pred_index, output, num_params, filter_count);
 		}
-		cout << endl;
-	} else cout << 1stPred << " not found in KB!\n";
-
-	return;
+	}
 }
 
-void RuleEngine::filter(string query, string value)
+// Filter needs to know the name of the Rule/Fact to be filtered
+// As well as the filter value
+// And which position that filter is occupying
+// Ex: Parent(John, $B).
+// Parent is the query
+// John is the value
+// John is occupying index 0
+
+void RuleEngine::filter(Rule rule, int pred_index, vector<string> output, int num_params, int filter_count)
 {
-	
+	filter_count++;
+
+	// Base case
+	if (filter_count == rule.getNumPredicates() )
+	{
+		cout << "Finished filter execution!\n";
+		return;
+	}
+
+	string predicate = rule.getPredicate(pred_index);
+
+	// Search for the predicate in KB
+	auto kb_search = this->kb.find(predicate);
+	if(kb_search != kb.end())
+	{
+		// Found in the KB
+		vector<Fact> fact_vect = kb_search->second;
+
+		vector<string> filters;
+
+		// For each FACT
+		for (int i=0; i<fact_vect.size(); i++)
+		{
+			// Check if the current Fact has the correct # of predicates
+			if (fact_vect[i].getNumPredicates() != num_params) continue;
+
+			// Collect the filters
+			if (fact_vect[i].firstPredicate() == output.back())
+			{
+				filters.push_back(fact_vect[i].lastPredicate());
+			}
+		}
+
+		int next_pred = pred_index+1;
+
+		// For every filter value
+		for (int i=0; i<filters.size(); i++)
+		{
+			output.push_back(filters[i]);
+			filter(rule, next_pred, output, num_params, filter_count);
+		}
+		
+	} else {
+		cout << predicate << "Not found in KB!\n";
+	}
+	//return "Done with filter execution!\n";
 }
 
 void RuleEngine::searchKnowledgeBase(string query, int num_params)
@@ -139,7 +197,7 @@ void RuleEngine::searchKnowledgeBase(string query, int num_params)
 		// For each Fact in the vector
 		for (int i=0; i<fact_vect.size(); i++)
 		{
-			// Check if the current Fact has the correct number of predicates
+			// Check if the current Fact has the correct # of predicates
 			if (fact_vect[i].getNumPredicates() != num_params) continue;
 
 			// Print corresponding list of strings
@@ -164,7 +222,7 @@ void RuleEngine::searchRuleBase(string query, int num_params)
 		// For each Rule in the vector
 		for (int i=0; i<rule_vect.size(); i++)
 		{
-			// Check if the current Rule has the correct number of predicates
+			// Check if the current Rule has the correct # of predicates
 			if (rule_vect[i].getNumPredicates() != num_params) continue;
 
 			// Execute the current rule
