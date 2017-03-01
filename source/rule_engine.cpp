@@ -76,7 +76,7 @@ void RuleEngine::executeRule(Rule rule, int num_params)
 void RuleEngine::executeOr(Rule rule, int num_params)
 {
 	int num_elems = rule.getNumPredicates();
-	cout << "There are " << num_elems << " predicates in " 
+	cout << "There are " << num_elems << " predicates in "
 	<< rule.getName() << ":\n";
 
 	// For each predicate
@@ -198,7 +198,7 @@ void RuleEngine::filter(Rule rule, int pred_index, vector<string> output, int nu
 			output.push_back(filters[i]);
 			filter(rule, next_pred, output, num_params, filter_count);
 		}
-		
+
 	} else {
 		cout << predicate << " not found in KB!\n";
 	}
