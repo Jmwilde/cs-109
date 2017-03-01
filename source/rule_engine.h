@@ -27,13 +27,14 @@ public:
 	void inferRule(string name);
 	void storeRule(string name, Rule rule);
 	void storeFact(string name, Fact fact);
-	void searchKnowledgeBase(string query, int num_params);
-	void searchRuleBase(string query, int num_params);
 	void dump();
 	void load();
 	void printKb();
 	void printRb();
+	void filter(Rule rule, int pred_index, vector<string> output, int num_params, int filter_count);
 private:
+	void searchKnowledgeBase(string query, int num_params);
+	void searchRuleBase(string query, int num_params);
 	void executeRule(Rule rule, int num_params);
 	void executeOr(Rule rule, int num_params);
 	void executeAnd(Rule rule, int num_params);

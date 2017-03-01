@@ -42,7 +42,7 @@ string Rule::getName()
 	return this->name;
 }
 
-string Rule::getPredicate(const int index)
+string Rule::getPredicate(int index)
 {
 	return this->predicates[index];
 }
