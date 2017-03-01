@@ -238,25 +238,12 @@ void RuleEngine::dump()
          if( rules[i].getOp() == 0){
             oper = "OR";
             ofile << "$" << (char)ascii << ",$" << (char)(ascii+preds-1) << "):- " << oper << " ";
-
          }
          else{
             oper = "AND";
             ascii = 65;
             ofile << "$" << (char)ascii << ",$" << (char)(ascii+preds) << "):- " << oper << " ";
          }
-                  
-         
-         /**for(int j = 0; j<preds;j++)
-         {
-            if(j + 1 == preds)
-            {
-               ofile << "$" << (char)ascii << "):- " << oper << " ";
-               break;
-            }  
-            ofile << "$" << char(ascii) << ",";
-            ascii++;
-         }*/
          //need getPredicate on preds another for loop?
          ascii = 65;
          for(int j = 0; j<preds; j++)
