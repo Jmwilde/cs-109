@@ -138,6 +138,7 @@ void RuleEngine::executeAnd(Rule rule, int num_params)
 
 void RuleEngine::filter(Rule rule, int pred_index, vector<string> output, int num_params, int filter_count)
 {
+	filter_count++;
 
 	// Base case
 	if (filter_count == rule.getNumPredicates() )
@@ -146,11 +147,8 @@ void RuleEngine::filter(Rule rule, int pred_index, vector<string> output, int nu
 		return;
 	}
 
-	filter_count++;
-
 	string predicate = rule.getPredicate(pred_index);
 	cout << "Current predicate = " << rule.getPredicate(pred_index) << endl;
-	//cout << "Predicate = " << rule.getPredicate(pred_index+1) << endl;
 
 	// Search for the predicate in KB
 	auto kb_search = this->kb.find(predicate);
@@ -165,19 +163,22 @@ void RuleEngine::filter(Rule rule, int pred_index, vector<string> output, int nu
 		// For each FACT
 		for (int i=0; i<fact_vect.size(); i++)
 		{
+			cout << "i is " << i << endl;
+			cout << fact_vect[i].firstPredicate() << endl;
+
 			// Check if the current Fact has the correct # of predicates
 			if (fact_vect[i].getNumPredicates() != num_params) continue;
 
 			// Collect the filters
 			if (fact_vect[i].firstPredicate() == output.back())
 			{
-				cout << "i is " << i << endl;
 				cout << fact_vect[i].firstPredicate() << " matches " << output.back() << endl;
 				filters.push_back(fact_vect[i].lastPredicate());
 			}
 		}
 
 		int next_pred = pred_index+1;
+		cout << "Next pred index: " << next_pred << endl;
 
 		// For every filter value
 		for (int i=0; i<filters.size(); i++)

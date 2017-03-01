@@ -19,12 +19,43 @@
 
 using namespace std;
 
+void testExecAnd()
+{
+
+	RuleEngine sri;
+	cout << "Testing AND execution!\n";
+
+	vector<string> str1 = {"Roger", "John"};
+	vector<string> str2 = {"Roger", "Albert"};
+	vector<string> str3 = {"Allen", "Margret"};
+
+	vector<string> str4 = {"Marry", "John"};
+	vector<string> str5 = {"Marry", "Albert"};
+	vector<string> str6 = {"Margret", "Robert"};
+	vector<string> str7 = {"Margret", "Bob"};
+
+	vector<string> rule_preds = {"Father", "Parent"};
+
+	sri.storeFact("Father", str1);
+	sri.storeFact("Father", str2);
+	sri.storeFact("Father", str3);
+	sri.storeFact("Parent", str4);
+	sri.storeFact("Parent", str5);
+	sri.storeFact("Parent", str6);
+	sri.storeFact("Parent", str7);
+	sri.storeRule("Grandfather", AND, rule_preds);
+
+	sri.inference("Grandfather", 2);
+}
+
 int main(int argc, char const *argv[])
 {
-	RuleEngine sri; // Declare a new rule engine
+	//RuleEngine sri; // Declare a new rule engine
 
 	cout << "Welcome to the Simple Rule Inference Engine!\n";
 	cout << "Please input a command.\n\n";
+
+	testExecAnd();
 	
 	// vector<string> fruits = {"Apple", "Orange"};
 	// vector<string> meats = {"Steak", "Chicken"};
@@ -55,23 +86,22 @@ int main(int argc, char const *argv[])
 
 	// sri.inference("Food and Drink", 2);
 
-	cout << "Testing AND execution!\n";
 
-	vector<string> string1 = {"Frog", "Green"};
-	vector<string> string2 = {"Tiger", "Yellow"};
-	sri.storeFact("Animals", string1);
-	sri.storeFact("Animals", string2);
+	// vector<string> string1 = {"Frog", "Green"};
+	// vector<string> string2 = {"Tiger", "Yellow"};
+	// sri.storeFact("Animals", string1);
+	// sri.storeFact("Animals", string2);
 
-	vector<string> string3 = {"Green", "Turtle"};
-	vector<string> string4 = {"Yellow", "Lion"};
-	sri.storeFact("Colors", string3);
-	sri.storeFact("Colors", string4);
+	// vector<string> string3 = {"Green", "Turtle"};
+	// vector<string> string4 = {"Yellow", "Lion"};
+	// sri.storeFact("Colors", string3);
+	// sri.storeFact("Colors", string4);
 
 
-	vector<string> rule_preds = {"Animals", "Colors"};
-	sri.storeRule("Animals_And_Colors", AND, rule_preds);
+	// vector<string> rule_preds = {"Animals", "Colors"};
+	// sri.storeRule("Animals_And_Colors", AND, rule_preds);
 
-	sri.inference("Animals_And_Colors", 2);
+	// sri.inference("Animals_And_Colors", 2);
 
 
 
