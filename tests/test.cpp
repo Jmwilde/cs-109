@@ -25,11 +25,11 @@ void testExecAnd()
 	RuleEngine sri;
 	cout << "Testing AND execution!\n";
 
-	vector<string> str1 = {"Roger", "John"};
+	vector<string> str1 = {"James", "John"};
 	vector<string> str2 = {"Roger", "Albert"};
 	vector<string> str3 = {"Allen", "Margret"};
 
-	vector<string> str4 = {"Marry", "John"};
+	vector<string> str4 = {"Mickey", "John"};
 	vector<string> str5 = {"Marry", "Albert"};
 	vector<string> str6 = {"Margret", "Robert"};
 	vector<string> str7 = {"Margret", "Bob"};
