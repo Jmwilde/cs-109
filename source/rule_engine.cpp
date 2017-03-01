@@ -49,10 +49,10 @@ void RuleEngine::parseInput(string commandLine)
 	string name = "";
 	string query = "";
 	string stringOp = "";
-	logical_op_t op;
   string pred = "";
   string sriFile = "";
   string temp = "";
+	logical_op_t op;
 	vector<string> paramVec;
 	vector<string> predVec;
   stringstream iss(commandLine);
@@ -62,7 +62,7 @@ void RuleEngine::parseInput(string commandLine)
       if(commandLine.find('(') == -1) throw 0;
       if(commandLine.find(')') == -1) throw 0;
     }catch(int e){
-      std::cout << "Invalid command line argument" << std::endl;
+      cout << "Error: Invalid command line argument" << endl;
     }
     getline(iss, query, '(');
     while(getline(iss, temp, ',')){
@@ -74,14 +74,14 @@ void RuleEngine::parseInput(string commandLine)
     try{
       if(commandLine.find(":-") == -1) throw 0;
     }catch(int e){
-      std::cout << "Invalid command line argument" << std::endl;
+      cout << "Error: Invalid command line argument" << endl;
     }
-    getline(iss, query, ':');
+    getline(iss, query, '(');
     getline(iss, temp, ' ');
     getline(iss, stringOp, ' ');
     if(stringOp == "OR") op = OR;
 		else if(stringOp == "AND") op = AND;
-		else std::cout << "Invalid command line argument" << std::endl;
+		else cout << "Error: Invalid command line argument" << endl;
     while(getline(iss, pred, '(')){
       predVec.push_back(pred);
       iss.putback('(');
@@ -89,7 +89,7 @@ void RuleEngine::parseInput(string commandLine)
       try{
         if(temp.find('(') == -1 || temp.find(')') == -1) throw 0;
       }catch(int e){
-        std::cout << "Invalid command line argument" << std::endl;
+        cout << "Error: Invalid command line argument" << endl;
       }
     }
 		this->storeRule(query, op, predVec);
@@ -98,7 +98,7 @@ void RuleEngine::parseInput(string commandLine)
       if(commandLine.find('(') == -1) throw 0;
       if(commandLine.find(')') == -1) throw 0;
     }catch(int e){
-      std::cout << "Invalid command line argument" << std::endl;
+      cout << "Error: Invalid command line argument" << endl;
     }
     getline(iss, query, '(');
   }else if(name == "LOAD"){
@@ -182,11 +182,11 @@ void RuleEngine::executeAnd(Rule rule, int num_params)
 			vector<string> output;
 
 			// Set the first output value
-			cout << "First output value: " << fact_vect[i].lastPredicate();
+			cout << "First output value: " << fact_vect[i].lastPredicate() << endl;
 			output.push_back(fact_vect[i].lastPredicate());
 
 			// Call the recursive filter
-			cout << "Calling first recursive filter on: " << fact_vect[i].getPredicate(pred_index);
+			cout << "Calling first recursive filter on: " << fact_vect[i].getPredicate(pred_index) << endl;
 			//filter(rule, pred_index, output, num_params, filter_count);
 		}
 	}
@@ -289,7 +289,7 @@ void RuleEngine::searchRuleBase(string query, int num_params)
 		for (int i=0; i<rule_vect.size(); i++)
 		{
 			// Check if the current Rule has the correct # of predicates
-			if (rule_vect[i].getNumPredicates() != num_params) continue;
+			// if (rule_vect[i].getNumPredicates() != num_params) continue;
 
 			// Execute the current rule
 			executeRule(rule_vect[i], num_params);
@@ -305,14 +305,14 @@ void RuleEngine::dump()
 void RuleEngine::load(string testFile)
 {
 	string line;
-	ifstream myfile(testFile);
-	if(myfile.is_open()){
-		while(getline(myfile, line)){
+	ifstream sriFile(testFile);
+	if(sriFile.is_open()){
+		while(getline(sriFile, line)){
 			parseInput(line);
 		}
-		myfile.close();
+		sriFile.close();
 	}else{
-		cout << "Unable to open file" << endl;
+		cout << "Error: Unable to open file" << endl;
 	}
   return;
 }
