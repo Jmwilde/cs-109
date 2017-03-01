@@ -11,25 +11,15 @@
 
 #include <vector>
 #include <string>
-#include "command.h"
 
 using namespace std;
 
-// Each fact holds a vector of its predicates that it relates to
-
-// Construct a Fact by passing a vector holding its predicates
-//template <typename ...ArgsT>
-class Fact: public Command
 {
 public:
-	//template <typename ...ArgsT>
-	//Fact(ArgsT ...strings);
-	Fact(vector<string> predicates);
 	~Fact();
 	int getNumPredicates();
 	string getPredicate(const int index);
 private:
-	Fact(initializer_list<string> strings);
 	int num_predicates;
 	vector<string> predicates;
 };
