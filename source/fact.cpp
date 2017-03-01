@@ -8,6 +8,7 @@
 
 #include <vector>
 #include <string>
+#include <iostream>
 #include "fact.h"
 
 using namespace std;
@@ -21,8 +22,10 @@ using namespace std;
 // {
 //     Fact({strings...});
 // }
+
 Fact::Fact(string name, vector<string> predicates)
 {
+	this->name = name;
 	this->num_predicates = predicates.size();
 	this->predicates = predicates; // copy by value??
 }
@@ -32,9 +35,23 @@ int Fact::getNumPredicates()
 	return this->num_predicates;
 }
 
-string Fact::getPredicate(const int index)
+string Fact::getPredicate(int index)
 {
+	if (index >= num_predicates)
+	{
+		cout << "ERROR: Index out of bounds on getPredicate().";
+	}
     return this->predicates[index];
+}
+
+string Fact::firstPredicate()
+{
+	return this->predicates[0];
+}
+
+string Fact::lastPredicate()
+{
+	return this->predicates[num_predicates-1];
 }
 
 Fact::~Fact(){}

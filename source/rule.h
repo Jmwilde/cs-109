@@ -11,20 +11,19 @@
 
 #include <vector>
 #include <string>
-#include "command.h"
 
 using namespace std;
 
 enum logical_op_t {OR, AND};
 
-class Rule: public Command
+class Rule
 {
 public:
 	Rule(logical_op_t logical_op, vector<string> predicates);
 	Rule(string name, logical_op_t logical_op, vector<string> predicates);
 	~Rule();
 	logical_op_t getOp();
-	string getPredicate(const int index);
+	string getPredicate(int index);
 	int getNumPredicates();
 	string getName();
 private:
