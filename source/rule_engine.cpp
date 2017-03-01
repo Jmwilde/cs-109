@@ -104,7 +104,7 @@ void RuleEngine::executeAnd(Rule rule, int num_params)
 		vector<Fact> fact_vect = kb_search->second;
 
 		int filter_count = 0;
-		int pred_index = 1;
+		int pred_index = 0;
 
 		// For each FACT
 		for (int i=0; i<fact_vect.size(); i++)
@@ -118,12 +118,12 @@ void RuleEngine::executeAnd(Rule rule, int num_params)
 			vector<string> output;
 
 			// Set the first output value
-			cout << "First output value: " << fact_vect[i].lastPredicate() << endl;
+			//cout << "First output value: " << fact_vect[i].lastPredicate() << endl;
 			output.push_back(fact_vect[i].lastPredicate());
 
 			// Call the recursive filter
-			cout << "Calling first recursive filter with value: " << fact_vect[i].getPredicate(pred_index) << endl;
-			//filter(rule, pred_index, output, num_params, filter_count);
+			cout << "Calling filter() with value " << output.back() << " from predicate " << rule.getPredicate(pred_index) << endl;
+			filter(rule, pred_index+1, output, num_params, filter_count);
 		}
 	}
 }
@@ -138,7 +138,6 @@ void RuleEngine::executeAnd(Rule rule, int num_params)
 
 void RuleEngine::filter(Rule rule, int pred_index, vector<string> output, int num_params, int filter_count)
 {
-	filter_count++;
 
 	// Base case
 	if (filter_count == rule.getNumPredicates() )
@@ -147,13 +146,18 @@ void RuleEngine::filter(Rule rule, int pred_index, vector<string> output, int nu
 		return;
 	}
 
+	filter_count++;
+
 	string predicate = rule.getPredicate(pred_index);
+	cout << "Current predicate = " << rule.getPredicate(pred_index) << endl;
+	//cout << "Predicate = " << rule.getPredicate(pred_index+1) << endl;
 
 	// Search for the predicate in KB
 	auto kb_search = this->kb.find(predicate);
 	if(kb_search != kb.end())
 	{
 		// Found in the KB
+		cout << "Found " << predicate << " in the KB!\n";
 		vector<Fact> fact_vect = kb_search->second;
 
 		vector<string> filters;
@@ -167,6 +171,8 @@ void RuleEngine::filter(Rule rule, int pred_index, vector<string> output, int nu
 			// Collect the filters
 			if (fact_vect[i].firstPredicate() == output.back())
 			{
+				cout << "i is " << i << endl;
+				cout << fact_vect[i].firstPredicate() << " matches " << output.back() << endl;
 				filters.push_back(fact_vect[i].lastPredicate());
 			}
 		}
@@ -181,9 +187,9 @@ void RuleEngine::filter(Rule rule, int pred_index, vector<string> output, int nu
 		}
 		
 	} else {
-		cout << predicate << "Not found in KB!\n";
+		cout << predicate << " not found in KB!\n";
 	}
-	//return "Done with filter execution!\n";
+	cout << "Done with filter execution!\n";
 }
 
 void RuleEngine::searchKnowledgeBase(string query, int num_params)
