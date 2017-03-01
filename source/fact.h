@@ -1,11 +1,10 @@
 // CMPS 109
-// Winter 2017
-
-// John Wilde - jmwilde
-// Nathaniel Suriawijaya - nsuriawi
-// Tako Takeda - katakeda
-// Noriaki Nakano - nnakano
-
+// // Winter 2017
+//
+// // John Wilde - jmwilde
+// // Nathaniel Suriawijaya - nsuriawi
+// // Tako Takeda - katakeda
+// // Noriaki Nakano - nnakano
 #ifndef FACT_H
 #define FACT_H
 
@@ -14,12 +13,17 @@
 
 using namespace std;
 
+class Fact
 {
 public:
+	Fact(string name, vector<string> predicates);
 	~Fact();
 	int getNumPredicates();
-	string getPredicate(const int index);
+	string getPredicate(int index);
+	string firstPredicate();
+	string lastPredicate();
 private:
+	string name;
 	int num_predicates;
 	vector<string> predicates;
 };

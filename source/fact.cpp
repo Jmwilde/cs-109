@@ -21,6 +21,7 @@ using namespace std;
 // {
 //     Fact({strings...});
 // }
+Fact::Fact(string name, vector<string> predicates)
 {
 	this->num_predicates = predicates.size();
 	this->predicates = predicates; // copy by value??
