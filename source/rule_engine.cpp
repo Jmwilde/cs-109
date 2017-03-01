@@ -244,7 +244,6 @@ void RuleEngine::dump()
          if( rules[i].getOp() == 0){ //checking for operator enum
             oper = "OR";
             ofile << "$" << (char)ascii << ",$" << (char)(ascii+preds-1) << "):- " << oper << " ";
-
          }
          else{
             oper = "AND";
