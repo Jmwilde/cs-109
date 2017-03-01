@@ -30,14 +30,16 @@ RuleEngine::RuleEngine(string sri_file)
 
 RuleEngine::~RuleEngine(){}
 
-void RuleEngine::storeRule(string name, Rule rule)
+void RuleEngine::storeRule(string name, logical_op_t op, vector<string> predicates)
 {
-	this->rb[name].push_back(rule);
+	Rule new_rule(name, op, predicates);
+	this->rb[name].push_back(new_rule);
 }
 
-void RuleEngine::storeFact(string name, Fact fact)
+void RuleEngine::storeFact(string name, vector<string> predicates)
 {
-	this->kb[name].push_back(fact);
+	Fact new_fact(name, predicates);
+	this->kb[name].push_back(new_fact);
 }
 
 void parseInput()
