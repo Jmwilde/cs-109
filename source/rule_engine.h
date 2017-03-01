@@ -28,6 +28,7 @@ public:
 	void storeRule(string name, Rule rule);
 	void storeFact(string name, Fact fact);
 	void dump();
+   void drop();
 	void load();
 	void printKb();
 	void printRb();
