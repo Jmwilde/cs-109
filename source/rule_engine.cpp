@@ -68,7 +68,7 @@ void RuleEngine::executeRule(Rule rule, int num_params)
 		executeAnd(rule, num_params);
 	}
 	else {
-		cout << "Ivalid rule. Does not have a proper [OR,AND] operation.\n";
+		cout << "Invalid rule. Does not have a proper [OR,AND] operation.\n";
 	}
 	return;
 }
@@ -116,12 +116,18 @@ void RuleEngine::executeAnd(Rule rule, int num_params)
 
 			// Make sure output is empty for each filter call
 			vector<string> output;
+			//vector<vector<string>> output;
 
-			// Set the first output value
-			//cout << "First output value: " << fact_vect[i].lastPredicate() << endl;
+			// Get the first value
+			string first_value = fact_vect[i].firstPredicate();
+			cout << "First value: " << first_value << endl;
+
+			// Set the first and second output value
 			output.push_back(fact_vect[i].lastPredicate());
+			//output[0].push_back(fact_vect[i].lastPredicate());
 
 			// Call the recursive filter
+			//cout << "Calling filter() with value " << output.back() << " from predicate " << rule.getPredicate(pred_index) << endl;
 			cout << "Calling filter() with value " << output.back() << " from predicate " << rule.getPredicate(pred_index) << endl;
 			filter(rule, pred_index+1, output, num_params, filter_count);
 		}
@@ -163,8 +169,8 @@ void RuleEngine::filter(Rule rule, int pred_index, vector<string> output, int nu
 		// For each FACT
 		for (int i=0; i<fact_vect.size(); i++)
 		{
-			cout << "i is " << i << endl;
-			cout << fact_vect[i].firstPredicate() << endl;
+			cout << "i = " << i << endl;
+			cout << fact_vect[i].firstPredicate() << " = " << output.back() << "?\n";
 
 			// Check if the current Fact has the correct # of predicates
 			if (fact_vect[i].getNumPredicates() != num_params) continue;
@@ -175,6 +181,12 @@ void RuleEngine::filter(Rule rule, int pred_index, vector<string> output, int nu
 				cout << fact_vect[i].firstPredicate() << " matches " << output.back() << endl;
 				filters.push_back(fact_vect[i].lastPredicate());
 			}
+		}
+
+		if (filters.size() <= 1)
+		{
+			cout << "Filter did not match any values!" << endl;
+			return;
 		}
 
 		int next_pred = pred_index+1;
@@ -191,6 +203,10 @@ void RuleEngine::filter(Rule rule, int pred_index, vector<string> output, int nu
 		cout << predicate << " not found in KB!\n";
 	}
 	cout << "Done with filter execution!\n";
+	for (int i=0; i<output.size(); i++)
+	{
+		cout << output[i] << endl;
+	}
 }
 
 void RuleEngine::searchKnowledgeBase(string query, int num_params)
@@ -232,7 +248,7 @@ void RuleEngine::searchRuleBase(string query, int num_params)
 		for (int i=0; i<rule_vect.size(); i++)
 		{
 			// Check if the current Rule has the correct # of predicates
-			if (rule_vect[i].getNumPredicates() != num_params) continue;
+			//if (rule_vect[i].getNumPredicates() != num_params) continue;
 
 			// Execute the current rule
 			executeRule(rule_vect[i], num_params);
