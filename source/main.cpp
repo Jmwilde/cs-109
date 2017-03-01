@@ -30,25 +30,20 @@ int main(int argc, char const *argv[])
 	vector<string> food_and_drink {"Food", "Drinks"};
 
 	//  User creates & stores some Facts
-	Fact fact1("Fruits", fruits);
-	Fact fact2("Meats", meats);
-	sri.storeFact("Fruits", fact1);
-	sri.storeFact("Meats", fact2);
+	sri.storeFact("Fruits", fruits);
+	sri.storeFact("Meats", meats);
 
 	//  Then makes a Rule and stores it
-	Rule rule1("Food", OR, foods);
-	sri.storeRule("Food", rule1);
+	sri.storeRule("Food", OR, foods);
 
 	//  Then Infers the rule!
 	sri.inference("Food", 2);
 
-	Fact fact3("Drinks", drinks);
-	sri.storeFact("Drinks", fact3);
+	sri.storeFact("Drinks", drinks);
 
 	cout << "\nBeginning 2nd Test!\n\n";
 
-	Rule rule2("Food and Drink", OR, food_and_drink);
-	sri.storeRule("Food and Drink", rule2);
+	sri.storeRule("Food and Drink", OR, food_and_drink);
 
 	sri.inference("Food and Drink", 2);
 
@@ -56,7 +51,5 @@ int main(int argc, char const *argv[])
 
 	// the line of text is passed to the parseInput() method
 
-	// sri.parseInput()
-
 	return 0;
-};
+}
