@@ -29,12 +29,18 @@ int main(int argc, char const *argv[])
 	vector<string> foods = {"Fruits", "Meats"};
 	vector<string> drinks = {"Pepsi", "Mtn Dew", "Coke"};
 	vector<string> food_and_drink {"Food", "Drinks"};
+   vector<string> slurp = {"glurp", "qwerp", "twerp"};
+   vector<string> snot = {"thot", "got"};
+   vector<string> twerp = {"flop", "gwop"};
 
 	//  User creats & stores some Facts
 	Fact fact1("Fruits", fruits);
 	Fact fact2("Meats", meats);
 	sri.storeFact("Fruits", fact1);
 	sri.storeFact("Meats", fact2);
+   Rule rule2("Slurp", AND, slurp);
+   //Rule rule2("Snot", AND, snot);
+   sri.storeRule("Slurp", rule2);
 
 	//  Then makes a Rule and stores it
 	Rule rule1("Food", OR, foods);
