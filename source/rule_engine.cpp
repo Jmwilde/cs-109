@@ -12,6 +12,7 @@
 #include <map>
 #include <vector>
 #include <iostream>
+#include <fstream>
 #include <sstream>
 
 using namespace std;
@@ -166,7 +167,7 @@ void RuleEngine::executeAnd(Rule rule, int num_params)
 		// Found in the KB
 		vector<Fact> fact_vect = kb_search->second;
 
-		int filter_count = 0;
+		// int filter_count = 0;
 		int pred_index = 1;
 
 		// For each FACT
@@ -301,8 +302,18 @@ void RuleEngine::dump()
   return;
 }
 
-void RuleEngine::load()
+void RuleEngine::load(string testFile)
 {
+	string line;
+	ifstream myfile(testFile);
+	if(myfile.is_open()){
+		while(getline(myfile, line)){
+			parseInput(line);
+		}
+		myfile.close();
+	}else{
+		cout << "Unable to open file" << endl;
+	}
   return;
 }
 

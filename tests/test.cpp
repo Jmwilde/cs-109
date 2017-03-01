@@ -6,7 +6,7 @@
 // Tako Takeda - katakeda
 // Noriaki Nakano - nnakano
 
-// A test file 
+// A test file
 
 #include <vector>
 #include <string>
@@ -19,13 +19,17 @@
 
 using namespace std;
 
+void testEdgeCases();
+
 int main(int argc, char const *argv[])
 {
 	RuleEngine sri; // Declare a new rule engine
 
 	cout << "Welcome to the Simple Rule Inference Engine!\n";
 	cout << "Please input a command.\n\n";
-	
+
+	testEdgeCases();
+
 	// vector<string> fruits = {"Apple", "Orange"};
 	// vector<string> meats = {"Steak", "Chicken"};
 	// vector<string> foods = {"Fruits", "Meats"};
@@ -55,19 +59,19 @@ int main(int argc, char const *argv[])
 
 	// sri.inference("Food and Drink", 2);
 
-	cout << "Testing AND execution!\n";
+	// cout << "Testing AND execution!\n";
+	//
+	// vector<string> string1 = {"Frog", "Green"};
+	// vector<string> string2 = {"Tiger", "Yellow"};
+	// sri.storeFact("Animals", string1);
+	// sri.storeFact("Animals", string2);
+	//
+	// vector<string> string3 = {"Green", "Turtle"};
+	// vector<string> string4 = {"Yellow", "Lion"};
+	// sri.storeFact("Colors", string3);
+	// sri.storeFact("Colors", string4);
 
-	vector<string> string1 = {"Frog", "Green"};
-	vector<string> string2 = {"Tiger", "Yellow"};
-	sri.storeFact("Animals", string1);
-	sri.storeFact("Animals", string2);
 
-	vector<string> string3 = {"Green", "Turtle"};
-	vector<string> string4 = {"Yellow", "Lion"};
-	sri.storeFact("Colors", string3);
-	sri.storeFact("Colors", string4);
-
-	
 
 	// user inputs a command, and hits Enter/Return
 
@@ -77,3 +81,13 @@ int main(int argc, char const *argv[])
 
 	return 0;
 };
+
+void testEdgeCases(){
+
+	RuleEngine sri;
+	cout << "Testing edge cases" << endl;
+
+	sri.load("test.sri");
+	sri.inference("Parent", 1);
+
+}
