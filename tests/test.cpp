@@ -67,7 +67,13 @@ int main(int argc, char const *argv[])
 	sri.storeFact("Colors", string3);
 	sri.storeFact("Colors", string4);
 
-	
+
+	vector<string> rule_preds = {"Animals", "Colors"};
+	sri.storeRule("Animals_And_Colors", AND, rule_preds);
+
+	sri.inference("Animals_And_Colors", 2);
+
+
 
 	// user inputs a command, and hits Enter/Return
 

@@ -63,12 +63,12 @@ void RuleEngine::executeRule(Rule rule, int num_params)
 {
 	logical_op_t op = rule.getOp();
 	if(op == OR) {
-		this->executeOr(rule, num_params);
+		executeOr(rule, num_params);
 	} else if (op == AND) {
-		this->executeAnd(rule, num_params);
+		executeAnd(rule, num_params);
 	}
 	else {
-		cout << "Ivalid rule. Does not have an OR or an AND operation.\n";
+		cout << "Ivalid rule. Does not have a proper [OR,AND] operation.\n";
 	}
 	return;
 }
@@ -118,11 +118,11 @@ void RuleEngine::executeAnd(Rule rule, int num_params)
 			vector<string> output;
 
 			// Set the first output value
-			cout << "First output value: " << fact_vect[i].lastPredicate();
+			cout << "First output value: " << fact_vect[i].lastPredicate() << endl;
 			output.push_back(fact_vect[i].lastPredicate());
 
 			// Call the recursive filter
-			cout << "Calling first recursive filter on: " << fact_vect[i].getPredicate(pred_index);
+			cout << "Calling first recursive filter with value: " << fact_vect[i].getPredicate(pred_index) << endl;
 			//filter(rule, pred_index, output, num_params, filter_count);
 		}
 	}
