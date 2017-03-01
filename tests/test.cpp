@@ -6,7 +6,7 @@
 // Tako Takeda - katakeda
 // Noriaki Nakano - nnakano
 
-// A test file 
+// A test file
 
 #include <vector>
 #include <string>
@@ -56,7 +56,7 @@ int main(int argc, char const *argv[])
 	cout << "Please input a command.\n\n";
 
 	testExecAnd();
-	
+
 	// vector<string> fruits = {"Apple", "Orange"};
 	// vector<string> meats = {"Steak", "Chicken"};
 	// vector<string> foods = {"Fruits", "Meats"};
