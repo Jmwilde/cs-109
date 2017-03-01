@@ -34,7 +34,9 @@ void testExecAnd()
 	vector<string> str6 = {"Margret", "Robert"};
 	vector<string> str7 = {"Margret", "Bob"};
 
-	vector<string> rule_preds = {"Father", "Parent"};
+	vector<string> str8 = {"Bob", "Angela"};
+
+	vector<string> rule_preds = {"Father", "Parent", "Child"};
 
 	sri.storeFact("Father", str1);
 	sri.storeFact("Father", str2);
@@ -43,9 +45,10 @@ void testExecAnd()
 	sri.storeFact("Parent", str5);
 	sri.storeFact("Parent", str6);
 	sri.storeFact("Parent", str7);
+	sri.storeFact("Child", str8);
 	sri.storeRule("Grandfather", AND, rule_preds);
 
-	sri.inference("Grandfather", 2);
+	sri.inference("Grandfather", 2); // The value 2 refers to # of predicates to look for
 }
 
 void testExecOr()
@@ -83,8 +86,8 @@ int main(int argc, char const *argv[])
 	cout << "Welcome to the Simple Rule Inference Engine!\n";
 	cout << "Please input a command.\n\n";
 
-	testExecOr();
-	//testExecAnd();
+	//testExecOr();
+	testExecAnd();
 	
 	// vector<string> fruits = {"Apple", "Orange"};
 	// vector<string> meats = {"Steak", "Chicken"};

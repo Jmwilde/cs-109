@@ -93,6 +93,9 @@ void RuleEngine::executeOr(Rule rule, int num_params)
 
 void RuleEngine::executeAnd(Rule rule, int num_params)
 {
+	cout << "Numner of predicates to look for: " << num_params << endl;
+
+
 	// Get the first predicate
 	string predicate = rule.getPredicate(0);
 
@@ -101,6 +104,7 @@ void RuleEngine::executeAnd(Rule rule, int num_params)
 	if(kb_search != kb.end())
 	{
 		// Found in the KB
+		cout << predicate << " found in KB!\n";
 		vector<Fact> fact_vect = kb_search->second;
 
 		int pred_index = 0;
@@ -170,9 +174,13 @@ void RuleEngine::executeAnd(Rule rule, int num_params)
 
 void RuleEngine::filter(Rule rule, int pred_index, vector<string> filters, int num_params, vector<string>& last_values)
 {
+	cout << "Predicate index: " << pred_index << endl;
+	cout << rule.getNumPredicates() << endl;
 	// Base case
 	if (pred_index == rule.getNumPredicates() )
 	{
+		cout << "Base case!" << endl;
+		cout << pred_index << endl;
 		return;
 	}
 
@@ -193,6 +201,7 @@ void RuleEngine::filter(Rule rule, int pred_index, vector<string> filters, int n
 
 			//cout << fact_vect[i].firstPredicate() << " = " << filters.back() << "?\n";
 
+			cout << "The current filter is: " << filters.back() << endl;
 			// Collect the filters
 			if (fact_vect[i].firstPredicate() == filters.back())
 			{
@@ -205,13 +214,13 @@ void RuleEngine::filter(Rule rule, int pred_index, vector<string> filters, int n
 
 		last_values = current_filters;
 
-		int next_pred = pred_index+1;
+		//int next_pred = pred_index+1;
 
 		// For every current_filter value
 		for (int i=0; i<current_filters.size(); i++)
 		{
 			filters.push_back(current_filters[i]);
-			filter(rule, next_pred, filters, num_params, current_filters);
+			filter(rule, pred_index+1, filters, num_params, current_filters);
 		}
 
 		// If current_filters is empty
@@ -245,7 +254,7 @@ void RuleEngine::searchKnowledgeBase(string query, int num_params)
 			int num_elems = fact_vect[i].getNumPredicates();
 			for (int j=0; j<num_elems; j++)
 			{
-				cout << char(param_var) <<": " << fact_vect[i].getPredicate(j) << " ";
+				cout << char(param_var) << ": " << fact_vect[i].getPredicate(j) << " ";
 				param_var++;
 			}
 			cout << endl;
@@ -271,7 +280,7 @@ void RuleEngine::searchRuleBase(string query, int num_params)
 			//if (rule_vect[i].getNumPredicates() != num_params) continue;
 
 			// Execute the current rule
-			//cout << "Called execRule\n";
+			cout << "Called execRule\n";
 			executeRule(rule_vect[i], num_params);
 		}
 	} else cout << query << " rule not found in RB.\n";
