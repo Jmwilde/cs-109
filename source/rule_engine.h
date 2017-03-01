@@ -29,6 +29,7 @@ public:
 	void storeRule(string name, Rule rule);
 	void storeFact(string name, Fact fact);
 	void searchKnowledgeBase(string query, int num_params);
+	void searchKnowledgeBase(string query, int num_params, vector<Fact> factVec);
 	void searchRuleBase(string query, int num_params);
 	void dump();
 	void load();

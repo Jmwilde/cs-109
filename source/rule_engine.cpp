@@ -142,8 +142,28 @@ void RuleEngine::executeOr(Rule rule, int num_params)
 void RuleEngine::executeAnd(Rule rule, int num_params)
 {
 	cout << "Called executeAnd() method.\n";
+  int num_elems = rule.getNumPredicates();
+  vector<Fact> factVec1;
+  vector<Fact> factVec2;
 
+  for(int i=0; i<num_elems; i++){
+    string predicate = rule.getPredicate(i);
+    string predicate2 = rule.getPredicate(i+1);
+    searchKnowledgeBase(predicate, num_params, factVec1)
+    searchKnowledgeBase(predicate2, num_params, factVec2)
+  }
 	return;
+}
+
+void RuleEngine::searchKnowledgeBase(string query, int num_params, Fact& fact1){
+  auto kb_search = this->kb.find(query);
+  if(kb_search != kb.end()){
+    vector<Fact> fact_vect = kb_search->second;
+    for(int i=0; i<fact_vect.size(); i++){
+      if(fact_vect[i].getNumPredicates() != num_params) continue;
+      vec1 = fact_vect[i];
+    }
+  }
 }
 
 void RuleEngine::searchKnowledgeBase(string query, int num_params)
