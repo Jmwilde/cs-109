@@ -39,7 +39,7 @@ string Fact::getPredicate(int index)
 {
 	if (index >= num_predicates)
 	{
-		cout << "ERROR: Index out of bounds on getPredicate().";
+		cout << "ERROR: Index out of bounds on getPredicate().\n";
 	}
     return this->predicates[index];
 }
