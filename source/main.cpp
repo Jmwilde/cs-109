@@ -38,7 +38,7 @@ int main(int argc, char const *argv[])
 	sri.storeRule("Food", OR, foods);
 
 	//  Then Infers the rule!
-	sri.inference("Food", 2);
+	//sri.inference("Food", 2);
 
 	sri.storeFact("Drinks", drinks);
 
