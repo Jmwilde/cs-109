@@ -22,14 +22,14 @@ public:
 	RuleEngine();
 	RuleEngine(string sri_file);
 	~RuleEngine();
-	void parseInput(string commandLine, string& name, string& query, string& op, vector<string>& paramVec, vector<string>& predVec);
+	void parseInput(string commandLine);
 	void executeRule(Rule& rule);
 	void inference(string query, int num_predicates);
 	void inferRule(string name);
-	void storeRule(string name, Rule rule);
-	void storeFact(string name, Fact fact);
+	void storeRule(string name, logical_op_t op, vector<string> predicates);
+	void storeFact(string name, vector<string> predicates);
 	void searchKnowledgeBase(string query, int num_params);
-	void searchKnowledgeBase(string query, int num_params, vector<Fact> factVec);
+	// void searchKnowledgeBase(string query, int num_params, vector<Fact>& factVec);
 	void searchRuleBase(string query, int num_params);
 	void dump();
 	void load();

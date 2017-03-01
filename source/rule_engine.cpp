@@ -31,21 +31,29 @@ RuleEngine::RuleEngine(string sri_file)
 
 RuleEngine::~RuleEngine(){}
 
-void RuleEngine::storeRule(string name, Rule rule)
+void RuleEngine::storeRule(string name, logical_op_t op, vector<string> predicates)
 {
-  this->rb[name].push_back(rule);
+	Rule new_rule(name, op, predicates);
+  this->rb[name].push_back(new_rule);
 }
 
-void RuleEngine::storeFact(string name, Fact fact)
+void RuleEngine::storeFact(string name, vector<string> predicates)
 {
-	this->kb[name].push_back(fact);
+	Fact new_fact(name, predicates);
+	this->kb[name].push_back(new_fact);
 }
 
-void RuleEngine::parseInput(string commandLine, string& name, string& query, string& op, vector<string>& paramVec, vector<string>& predVec)
+void RuleEngine::parseInput(string commandLine)
 {
+	string name = "";
+	string query = "";
+	string stringOp = "";
+	logical_op_t op;
   string pred = "";
   string sriFile = "";
   string temp = "";
+	vector<string> paramVec;
+	vector<string> predVec;
   stringstream iss(commandLine);
   getline(iss, name, ' ');
   if(name == "FACT"){
@@ -60,6 +68,7 @@ void RuleEngine::parseInput(string commandLine, string& name, string& query, str
       if(temp.back() == ')') temp.pop_back();
       paramVec.push_back(temp);
     }
+		this->storeFact(query, paramVec);
   }else if(name == "RULE"){
     try{
       if(commandLine.find(":-") == -1) throw 0;
@@ -68,8 +77,10 @@ void RuleEngine::parseInput(string commandLine, string& name, string& query, str
     }
     getline(iss, query, ':');
     getline(iss, temp, ' ');
-    getline(iss, op, ' ');
-    if(op != "OR" && op != "AND") std::cout << "Invalid command line argument" << std::endl;
+    getline(iss, stringOp, ' ');
+    if(stringOp == "OR") op = OR;
+		else if(stringOp == "AND") op = AND;
+		else std::cout << "Invalid command line argument" << std::endl;
     while(getline(iss, pred, '(')){
       predVec.push_back(pred);
       iss.putback('(');
@@ -80,6 +91,7 @@ void RuleEngine::parseInput(string commandLine, string& name, string& query, str
         std::cout << "Invalid command line argument" << std::endl;
       }
     }
+		this->storeRule(query, op, predVec);
   }else if(name == "INFERENCE"){
     try{
       if(commandLine.find('(') == -1) throw 0;
@@ -142,29 +154,29 @@ void RuleEngine::executeOr(Rule rule, int num_params)
 void RuleEngine::executeAnd(Rule rule, int num_params)
 {
 	cout << "Called executeAnd() method.\n";
-  int num_elems = rule.getNumPredicates();
-  vector<Fact> factVec1;
-  vector<Fact> factVec2;
-
-  for(int i=0; i<num_elems; i++){
-    string predicate = rule.getPredicate(i);
-    string predicate2 = rule.getPredicate(i+1);
-    searchKnowledgeBase(predicate, num_params, factVec1)
-    searchKnowledgeBase(predicate2, num_params, factVec2)
-  }
+  // int num_elems = rule.getNumPredicates();
+  // vector<Fact> factVec1;
+  // vector<Fact> factVec2;
+	//
+  // for(int i=0; i<num_elems; i++){
+  //   string predicate = rule.getPredicate(i);
+  //   string predicate2 = rule.getPredicate(i+1);
+  //   searchKnowledgeBase(predicate, num_params, factVec1)
+  //   searchKnowledgeBase(predicate2, num_params, factVec2)
+  // }
 	return;
 }
 
-void RuleEngine::searchKnowledgeBase(string query, int num_params, Fact& fact1){
-  auto kb_search = this->kb.find(query);
-  if(kb_search != kb.end()){
-    vector<Fact> fact_vect = kb_search->second;
-    for(int i=0; i<fact_vect.size(); i++){
-      if(fact_vect[i].getNumPredicates() != num_params) continue;
-      vec1 = fact_vect[i];
-    }
-  }
-}
+// void RuleEngine::searchKnowledgeBase(string query, int num_params, Fact& fact1){
+//   auto kb_search = this->kb.find(query);
+//   if(kb_search != kb.end()){
+//     vector<Fact> fact_vect = kb_search->second;
+//     for(int i=0; i<fact_vect.size(); i++){
+//       if(fact_vect[i].getNumPredicates() != num_params) continue;
+//       vec1 = fact_vect[i];
+//     }
+//   }
+// }
 
 void RuleEngine::searchKnowledgeBase(string query, int num_params)
 {
