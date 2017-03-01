@@ -29,13 +29,15 @@ public:
 	void storeRule(string name, logical_op_t op, vector<string> predicates);
 	void storeFact(string name, vector<string> predicates);
 	void searchKnowledgeBase(string query, int num_params);
-	// void searchKnowledgeBase(string query, int num_params, vector<Fact>& factVec);
 	void searchRuleBase(string query, int num_params);
 	void dump();
 	void load();
 	void printKb();
 	void printRb();
+	void filter(Rule rule, int pred_index, vector<string> output, int num_params, int filter_count);
 private:
+	void searchKnowledgeBase(string query, int num_params);
+	void searchRuleBase(string query, int num_params);
 	void executeRule(Rule rule, int num_params);
 	void executeOr(Rule rule, int num_params);
 	void executeAnd(Rule rule, int num_params);

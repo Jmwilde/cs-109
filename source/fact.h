@@ -20,7 +20,9 @@ public:
 	Fact(string name, vector<string> predicates);
 	~Fact();
 	int getNumPredicates();
-	string getPredicate(const int index);
+	string getPredicate(int index);
+	string firstPredicate();
+	string lastPredicate();
 private:
 	string name;
 	int num_predicates;
