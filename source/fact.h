@@ -23,7 +23,7 @@ public:
 	string getPredicate(int index);
 	string firstPredicate();
 	string lastPredicate();
-	vector<string> getAllPredicates();
+	vector<string> getPredicateVector();
 private:
 	string name;
 	int num_predicates;

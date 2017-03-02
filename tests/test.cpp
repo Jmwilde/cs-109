@@ -98,7 +98,10 @@ void testExecOr()
 
 int main()
 {
-	testExecOr();
-	testExecAnd();
-	return 0;
+	RuleEngine sri; // Declare a new rule engine
+	cout << "*** Running test file! ***\n";
+	//testExecOr();
+	//testExecAnd();
+	sri.load("testcase1.sri");
+	sri.inference("GrandFather", 2, "GF");
 }
