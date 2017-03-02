@@ -24,18 +24,32 @@ void testExecAnd()
 	cout << "Testing AND execution!\n";
 	RuleEngine sri;
 
+	/* This test stores 3 types of facts into the KB
+	and then calls inference on the Grandfather rule 
+	that ANDs the facts together. Notice how this tests 
+	whether both whether James and Allen will be the 
+	intial LHS values and it tests whether Margret 
+	will filter to both Bob and Robert, and all three
+	filter down to Angela, Joe, and Jack. I added an
+	additinal Child fact that is non-related to make
+	sure it was not simply printing all the end results
+	of the Child key in the KB. This proves the 
+	algorithm for AND on factsworks for Rules with 
+	more than two parameters. */ 
+
 	vector<string> str1 = {"James", "John"};
 	vector<string> str2 = {"Roger", "Albert"};
 	vector<string> str3 = {"Allen", "Margret"};
 
-	vector<string> str4 = {"John", "Robert"};
+	vector<string> str4 = {"John", "Richard"};
 	vector<string> str5 = {"Marry", "Albert"};
 	vector<string> str6 = {"Margret", "Robert"};
 	vector<string> str7 = {"Margret", "Bob"};
 
 	vector<string> str8 = {"Bob", "Angela"};
-	vector<string> str9 = {"Bob", "Joe"};
-	vector<string> str10 = {"Robert", "Jack"};
+	vector<string> str9 = {"Robert", "Joe"};
+	vector<string> str10 = {"Richard", "Jack"};
+	vector<string> str11 = {"Kethaniel", "Tako"};
 
 	vector<string> rule_preds = {"Father", "Parent", "Child"};
 
@@ -51,6 +65,7 @@ void testExecAnd()
 	sri.storeFact("Child", str8);
 	sri.storeFact("Child", str9);
 	sri.storeFact("Child", str10);
+	sri.storeFact("Child", str11);
 	sri.storeRule("Grandfather", AND, rule_preds);
 
 	sri.inference("Grandfather", 2); // The value 2 refers to # of predicates to look for
