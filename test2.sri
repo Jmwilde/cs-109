@@ -1,0 +1,8 @@
+FACT Father(Roger,John)
+FACT Father(Roger,Peter)
+FACT Father(Allen,Margret)
+FACT Parent(Marry,Adam)
+FACT Parent(Marry,Albert)
+FACT Parent(Margret,Robert)
+FACT Parent(Margret,Bob)
+RULE GrandFather($X,$Y):- AND Father($X,$Z) Parent($Z,$Y)

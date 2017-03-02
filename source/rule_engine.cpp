@@ -93,6 +93,9 @@ void RuleEngine::executeOr(Rule rule, int num_params)
 
 void RuleEngine::executeAnd(Rule rule, int num_params)
 {
+	cout << "Numner of predicates to look for: " << num_params << endl;
+
+
 	// Get the first predicate
 	string predicate = rule.getPredicate(0);
 
@@ -101,6 +104,7 @@ void RuleEngine::executeAnd(Rule rule, int num_params)
 	if(kb_search != kb.end())
 	{
 		// Found in the KB
+		cout << predicate << " found in KB!\n";
 		vector<Fact> fact_vect = kb_search->second;
 
 		int pred_index = 0;
@@ -119,21 +123,45 @@ void RuleEngine::executeAnd(Rule rule, int num_params)
 
 			// Get the first value
 			string first_value = fact_vect[i].firstPredicate();
-			cout << "First value: " << first_value << endl;
+			//cout << "First value: " << first_value << endl;
 
 			// Set the first filter value
 			filters.push_back(fact_vect[i].lastPredicate());
 
 			// Call the recursive filter
-			cout << "Calling filter() with filter=" << filters.back() << " & value=" << first_value << " from predicate " << rule.getPredicate(pred_index) << endl;
+			//cout << "Calling filter() with filter=" << filters.back() << " & value=" << first_value << " from predicate " << rule.getPredicate(pred_index) << endl;
 			filter(rule, pred_index+1, filters, num_params, last_vals);
-			cout << "First value:  " << first_value << endl;
+			//cout << "First value:  " << first_value << endl;m
+
+			// May want to move this inside of filter
+			// Unless last_vals is always zero if filter didn't find anything?
 			for (int i=0; i<last_vals.size(); i++)
 			{
 				cout << first_value << " : " << last_vals[i] << endl;
 			}
 		}
 	}
+	auto rb_search = this->rb.find(predicate);
+	if(rb_search != rb.end())
+	{
+		// Found in the KB
+		vector<Fact> fact_vect = kb_search->second;
+
+		int pred_index = 0;
+
+		// For each FACT
+		for (int i=0; i<fact_vect.size(); i++)
+		{
+			// Check if the current Fact has the correct # of predicates
+			if (fact_vect[i].getNumPredicates() != num_params){
+				continue;
+			}
+		}
+	} else {
+		cout << predicate << " not found in RB!\n";
+	}
+	cout << "End of executeAnd()" << endl;
+
 }
 
 // Filter needs to know the name of the Rule/Fact to be filtered
@@ -146,12 +174,13 @@ void RuleEngine::executeAnd(Rule rule, int num_params)
 
 void RuleEngine::filter(Rule rule, int pred_index, vector<string> filters, int num_params, vector<string>& last_values)
 {
+	cout << "Predicate index: " << pred_index << endl;
+	cout << rule.getNumPredicates() << endl;
 	// Base case
 	if (pred_index == rule.getNumPredicates() )
 	{
-		// Print out first value
-		// And corresponding last values
-		cout << "Finished filter execution!\n";
+		cout << "Base case!" << endl;
+		cout << pred_index << endl;
 		return;
 	}
 
@@ -170,38 +199,36 @@ void RuleEngine::filter(Rule rule, int pred_index, vector<string> filters, int n
 			// Check if the current Fact has the correct # of predicates
 			if (fact_vect[i].getNumPredicates() != num_params) continue;
 
-			cout << fact_vect[i].firstPredicate() << " = " << filters.back() << "?\n";
+			//cout << fact_vect[i].firstPredicate() << " = " << filters.back() << "?\n";
 
+			cout << "The current filter is: " << filters.back() << endl;
 			// Collect the filters
 			if (fact_vect[i].firstPredicate() == filters.back())
 			{
-				cout << fact_vect[i].firstPredicate() << " matches " << filters.back() << endl;
+				//cout << fact_vect[i].firstPredicate() << " matches " << filters.back() << endl;
 				current_filters.push_back(fact_vect[i].lastPredicate());
-				cout << "Storing " << fact_vect[i].lastPredicate() << " in last_values.\n";
+				//cout << "Storing " << fact_vect[i].lastPredicate() << " in last_values.\n";
 				//last_vals.push_back(fact_vect[i].lastPredicate());
 			}
 		}
 
 		last_values = current_filters;
 
-		int next_pred = pred_index+1;
+		//int next_pred = pred_index+1;
 
 		// For every current_filter value
 		for (int i=0; i<current_filters.size(); i++)
 		{
 			filters.push_back(current_filters[i]);
-			filter(rule, next_pred, filters, num_params, current_filters);
+			filter(rule, pred_index+1, filters, num_params, current_filters);
 		}
+
+		// If current_filters is empty
+		// It will skip the next recursion
+		return;
 
 	} else {
 		cout << rule.getPredicate(pred_index) << " not found in KB!\n";
-	}
-
-	// Initial filters call
-	cout << "Done with filter execution!\n";
-	for (int i=0; i<last_values.size(); i++)
-	{
-		cout << last_values[i] << endl;
 	}
 }
 
@@ -221,10 +248,16 @@ void RuleEngine::searchKnowledgeBase(string query, int num_params)
 			// Check if the current Fact has the correct # of predicates
 			if (fact_vect[i].getNumPredicates() != num_params) continue;
 
+			int param_var = int('A');
+
 			// Print corresponding list of strings
 			int num_elems = fact_vect[i].getNumPredicates();
 			for (int j=0; j<num_elems; j++)
-    			cout << fact_vect[i].getPredicate(j) << endl;
+			{
+				cout << char(param_var) << ": " << fact_vect[i].getPredicate(j) << " ";
+				param_var++;
+			}
+			cout << endl;
 		}
 		cout << endl;
 	} else cout << query << " fact not found in KB.\n";
@@ -247,6 +280,7 @@ void RuleEngine::searchRuleBase(string query, int num_params)
 			//if (rule_vect[i].getNumPredicates() != num_params) continue;
 
 			// Execute the current rule
+			cout << "Called execRule\n";
 			executeRule(rule_vect[i], num_params);
 		}
 	} else cout << query << " rule not found in RB.\n";
