@@ -101,6 +101,10 @@ void RuleEngine::parseInput(string commandLine)
       cout << "Error: Invalid command line argument" << endl;
     }
     getline(iss, query, '(');
+		int count = 1;
+		while(getline(iss, temp, ',')){
+			count++;
+		}
 		this->inference(query, 2);
   }else if(name == "LOAD"){
     getline(iss, sriFile, ' ');

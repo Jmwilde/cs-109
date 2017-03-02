@@ -25,7 +25,6 @@ public:
 	void parseInput(string commandLine);
 	void inference(string query, int num_predicates);
 	void inference(string query, int num_predicates, string name);
-	void inferRule(string name);
 	void storeRule(string name, logical_op_t op, vector<string> predicates);
 	void storeFact(string name, vector<string> predicates);
 	void dump(string input);
