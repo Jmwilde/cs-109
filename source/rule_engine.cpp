@@ -343,13 +343,22 @@ void RuleEngine::printRb()
 	return;
 }
 
+void RuleEngine::drop()
+{
+   string tbd;
+   cout << "Name of fact/rule to drop?" <<endl;
+   cin >> tbd;
+   kb.erase(tbd);
+   rb.erase(tbd);
+}
+
 void RuleEngine::dump()
 {
    string filename;
    cout << "Insert a file name 'filename.sri'" << endl;
    cin >> filename;
    ofstream ofile (filename);
-   for(map<string, vector<Fact>>::iterator it = kb.begin(); it!=kb.end(); ++it)
+   for(map<string, vector<Fact>>::iterator it = kb.begin(); it!=kb.end(); ++it)//Iterating through KB
    {
       ofile << "FACT " << it->first << "(";
       vector<Fact> facts = kb[it->first];
@@ -368,11 +377,9 @@ void RuleEngine::dump()
          ofile << ")" << endl;
       }
    }
-   for(map<string, vector<Rule>>::iterator it = rb.begin(); it!= rb.end(); ++it)
+   for(map<string, vector<Rule>>::iterator it = rb.begin(); it!= rb.end(); ++it) //Iterating through RB
    {
-      //ofile << "RULE " << it->first << "(";
       vector<Rule> rules = rb[it->first];
-      //rules[y].getNumPredicates
       for(uint i = 0; i<rules.size();i++)
       {
          ofile << "RULE " << it->first << "("; //it->first is the key/string vector name
@@ -381,7 +388,7 @@ void RuleEngine::dump()
          int ascii = 65;
          int asciii = 67;
 
-         if( rules[i].getOp() == 0){
+         if( rules[i].getOp() == 0){ //checking for operator enum
             oper = "OR";
             ofile << "$" << (char)ascii << ",$" << (char)(ascii+preds-1) << "):- " << oper << " ";
          }
@@ -390,11 +397,9 @@ void RuleEngine::dump()
             ascii = 65;
             ofile << "$" << (char)ascii << ",$" << (char)(ascii+preds) << "):- " << oper << " ";
          }
-         //need getPredicate on preds another for loop?
          ascii = 65;
-         for(int j = 0; j<preds; j++)
+         for(int j = 0; j<preds; j++) //iterating for OR Rules
          {
-            //ofile << rules[i].getPredicate(j)<< "(";
             if(oper == "OR")
             {
                ofile << rules[i].getPredicate(j)<< "(";
@@ -413,7 +418,7 @@ void RuleEngine::dump()
             else
             {
                ascii = 65;
-               for(int j = 0; j<preds; j++)//+2 because it iterates through two params at a time
+               for(int j = 0; j<preds; j++)//iterate for AND Rules
                {
                   ofile << rules[i].getPredicate(j) << "(";
                   ofile << "$" << (char)ascii << ",$" << (char)asciii << ") ";

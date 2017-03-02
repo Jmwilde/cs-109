@@ -38,7 +38,11 @@ int main(int argc, char const *argv[])
   sri.parseInput("RULE Food_And_Drink($X,$Y):- OR Food($X,$Y) Drinks($X,$Y)");
 
 	sri.inference("Fruits", 3);
-  sri.dump();
+
+   //sri.dump();
+   sri.drop();
+   sri.dump();
+
 	// Fact fact3("Drinks", drinks);
 	// sri.storeFact("Drinks", fact3);
 

@@ -29,6 +29,7 @@ public:
 	void storeFact(string name, vector<string> predicates);
 	void dump();
 	void load(string testFile);
+  void drop();
 	void printKb();
 	void printRb();
 	void filter(Rule rule, int pred_index, vector<string> output, int num_params, vector<string>& last_values);
