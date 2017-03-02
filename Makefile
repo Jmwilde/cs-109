@@ -45,6 +45,7 @@ $(OBJS): $(OBJDIR)/%.o: $(SRCDIR)/%.cpp $(DEPS)
 clean:
 	rm objects/*.o
 	rm output
+	rm test
 
 test_run: test
 	./test

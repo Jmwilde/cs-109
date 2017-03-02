@@ -51,7 +51,6 @@ void RuleEngine::storeRule(string name, logical_op_t op, vector<string> predicat
 		{
 			if(iter->getPredicateVector() == predicates)
 			{
-				// cout << "Input is duplicate" << endl;
 				return;
 			}
 		}
@@ -69,7 +68,6 @@ void RuleEngine::storeFact(string name, vector<string> predicates)
 		{
 			if(iter->getPredicateVector() == predicates)
 			{
-				// cout << "Input is duplicate" << endl;
 				return;
 			}
 		}
@@ -153,6 +151,7 @@ void RuleEngine::parseInput(string commandLine)
 			this->inference(query, count);
 		}
   }else if(name == "LOAD"){
+  	cout << "Called LOAD!\n";
     getline(iss, sriFile);
 		this->load(sriFile);
   }else if(name == "DUMP"){
@@ -285,7 +284,6 @@ void RuleEngine::executeAnd(Rule rule, int num_params, bool add, string name)
 
 void RuleEngine::filter(Rule rule, int pred_index, string filter_value, int num_params, vector<string>& next_values, vector<string>& output)
 {
-	// cout << "Predicate index: " << pred_index << endl;
 	// Base case
 	if (pred_index == rule.getNumPredicates() )
 	{
@@ -362,14 +360,9 @@ void RuleEngine::searchRuleBase(string query, int num_params, bool add, string n
 		// For each Rule in the vector
 		for (int i=0; i<rule_vect.size(); i++)
 		{
-			// Check if the current Rule has the correct # of predicates
-			//if (rule_vect[i].getNumPredicates() != num_params) continue;
-
-			// Execute the current rule
-			// cout << "Called execRule\n";
 			executeRule(rule_vect[i], num_params, add, name);
 		}
-	} else cout << query << " rule not found in RB.\n";
+	}
 }
 
 void RuleEngine::load(string testFile)
@@ -378,13 +371,13 @@ void RuleEngine::load(string testFile)
 	ifstream sriFile(testFile);
 	if(sriFile.is_open()){
 		while(getline(sriFile, line)){
-			parseInput(line);
+				parseInput(line);
 		}
 		sriFile.close();
 	}else{
 		cout << "\nError: Unable to open file" << endl;
 	}
-  return;
+  	return;
 }
 
 void RuleEngine::drop(string input)
