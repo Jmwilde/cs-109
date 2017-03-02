@@ -27,9 +27,9 @@ public:
 	void inferRule(string name);
 	void storeRule(string name, logical_op_t op, vector<string> predicates);
 	void storeFact(string name, vector<string> predicates);
-	void dump();
+	void dump(string input);
 	void load(string testFile);
-  void drop();
+   void drop(string input);
 	void printKb();
 	void printRb();
 	void filter(Rule rule, int pred_index, vector<string> output, int num_params, vector<string>& last_values);

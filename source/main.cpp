@@ -22,17 +22,25 @@ int main(int argc, char const *argv[])
   RuleEngine sri; // Declare a new rule engine
   string commandLine;
 
-	cout << "Welcome to the Simple Rule Inference Engine!\n";
-	cout << "Please input a command.\n\n";
+	cout << "\nWelcome to the Simple Rule Inference Engine!\n";
 
   // user inputs a command, and hits Enter/Return
   // terminates when user inputs 'x'
 
-
   while(commandLine != "x"){
-    cin >> commandLine;
+    cout << "\nInput any of the following commands:" << endl;
+    cout << "- LOAD 'filename.sri'" << endl;
+    cout << "- DUMP 'filename.sri'" << endl;
+    cout << "- FACT 'FactName(A,B)'" << endl;
+    cout << "- RULE 'RuleName($A,$B)'" << endl;
+    cout << "- INFERENCE 'Query($A,$B)'" << endl;
+    cout << "- DROP 'Query'" << endl;
+    cout << "- Enter 'x' to terminate\n" << endl;
+    getline(cin, commandLine);
     sri.parseInput(commandLine);
   }
+
+  cout << "\nBye!" << endl;
 
 	return 0;
 };
