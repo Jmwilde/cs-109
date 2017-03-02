@@ -355,15 +355,16 @@ void RuleEngine::drop(string input)
 void RuleEngine::dump(string input)
 {
    string filename = input;
+   string prev;
    //cout << "Insert a file name 'filename.sri'" << endl;
    //cin >> filename;
    ofstream ofile (filename);
    for(map<string, vector<Fact>>::iterator it = kb.begin(); it!=kb.end(); ++it)//Iterating through KB
    {
-      ofile << "FACT " << it->first << "(";
       vector<Fact> facts = kb[it->first];
       for(uint i = 0; i<facts.size();i++)
       {
+         ofile << "FACT " << it->first << "(";
          int preds = facts[i].getNumPredicates();
          for(int j = 0; j<preds;j++)
          {
@@ -382,6 +383,9 @@ void RuleEngine::dump(string input)
       vector<Rule> rules = rb[it->first];
       for(uint i = 0; i<rules.size();i++)
       {
+         if (it->first == prev){//checking for duplicate rule names
+            ofile << endl;
+         }
          ofile << "RULE " << it->first << "("; //it->first is the key/string vector name
          int preds = rules[i].getNumPredicates();
          string oper;
@@ -443,7 +447,8 @@ void RuleEngine::dump(string input)
                }
                break;
             }
-         }
+          }
+            prev = it->first; //prev storing previous rule name
       }
       ofile << endl;
    }

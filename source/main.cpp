@@ -40,6 +40,7 @@ int main(int argc, char const *argv[])
 	sri.inference("Fruits", 3);
 
    //sri.dump();
+   sri.load("testcase1.sri");
    sri.drop("lol");
    sri.dump("test.sri");
 

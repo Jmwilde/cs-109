@@ -1,0 +1,13 @@
+FACT Spread(Butter,Bread)
+FACT Toast(Butter,Bread)
+FACT Power(Computer,Electricity)
+FACT Power(Automobile,Gas)
+FACT Power(Stove,Gas)
+FACT Power(Stove,Electricity)
+FACT Power(Stove,Solar)
+RULE Spreadable($X,$Y):- OR Spread($X,$Y) Toast($X,$Y)
+RULE Multisource($W,$Z):- AND Power($W,$Y) Power($Y,$X) Power($X,$Z)
+DROP TOAST 
+DROP SPREAD 
+DUMP Power.sri
+
