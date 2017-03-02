@@ -29,16 +29,16 @@ int main(int argc, char const *argv[])
   sri.parseInput("FACT Meats(Steak,Chicken)");
 
   //  Then makes a Rule and stores it
-  sri.parseInput("RULE Food:- OR Fruits($X,$Y) Meats($X,$Y)");
+  sri.parseInput("RULE Food($X,$Y):- OR Fruits($X,$Y) Meats($X,$Y)");
 
 	//  Then Infers the rule!
 	sri.inference("Food", 2);
 
   sri.parseInput("FACT Drinks(Pepsi,MtnDew)");
-  sri.parseInput("RULE Food_And_Drink:- OR Food($X,$Y) Drinks($X,$Y)");
+  sri.parseInput("RULE Food_And_Drink($X,$Y):- OR Food($X,$Y) Drinks($X,$Y)");
 
 	sri.inference("Fruits", 3);
-   sri.dump();
+  sri.dump();
 	// Fact fact3("Drinks", drinks);
 	// sri.storeFact("Drinks", fact3);
 

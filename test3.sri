@@ -1,0 +1,5 @@
+FACT Drinks(Pepsi,MtnDew)
+FACT Fruits(Apple,Orange)
+FACT Meats(Steak,Chicken)
+RULE Food:- OR Fruits($A,$A):- AND 
+RULE Food_And_Drink:- OR Food($A,$A):- AND 
