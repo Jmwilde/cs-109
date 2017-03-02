@@ -343,20 +343,20 @@ void RuleEngine::printRb()
 	return;
 }
 
-void RuleEngine::drop()
+void RuleEngine::drop(string input)
 {
-   string tbd;
-   cout << "Name of fact/rule to drop?" <<endl;
-   cin >> tbd;
+   string tbd = input;
+   //cout << "Name of fact/rule to drop?" <<endl;
+   //cin >> tbd;
    kb.erase(tbd);
    rb.erase(tbd);
 }
 
-void RuleEngine::dump()
+void RuleEngine::dump(string input)
 {
-   string filename;
-   cout << "Insert a file name 'filename.sri'" << endl;
-   cin >> filename;
+   string filename = input;
+   //cout << "Insert a file name 'filename.sri'" << endl;
+   //cin >> filename;
    ofstream ofile (filename);
    for(map<string, vector<Fact>>::iterator it = kb.begin(); it!=kb.end(); ++it)//Iterating through KB
    {
