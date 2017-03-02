@@ -44,7 +44,9 @@ void testEdgeCases(){
 	RuleEngine sri;
 	cout << "Testing edge cases" << endl;
 
-	sri.load("test2.sri");
-	sri.inference("GrandFather", 2);
+	sri.load("test4.sri");
+	sri.inference("Parent", 2, "PAR");
+	sri.printKb();
+	sri.printRb();
 
 }

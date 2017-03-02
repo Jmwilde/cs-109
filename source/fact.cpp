@@ -54,4 +54,10 @@ string Fact::lastPredicate()
 	return this->predicates[num_predicates-1];
 }
 
+vector<string> Fact::getPredicateVector()
+{
+	return this->predicates;
+}
+
+
 Fact::~Fact(){}

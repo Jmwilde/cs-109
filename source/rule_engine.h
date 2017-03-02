@@ -24,6 +24,7 @@ public:
 	~RuleEngine();
 	void parseInput(string commandLine);
 	void inference(string query, int num_predicates);
+	void inference(string query, int num_predicates, string name);
 	void inferRule(string name);
 	void storeRule(string name, logical_op_t op, vector<string> predicates);
 	void storeFact(string name, vector<string> predicates);
@@ -34,11 +35,11 @@ public:
 	void printRb();
 	void filter(Rule rule, int pred_index, vector<string> output, int num_params, vector<string>& last_values);
 private:
-	void searchKnowledgeBase(string query, int num_params);
-	void searchRuleBase(string query, int num_params);
-	void executeRule(Rule rule, int num_params);
-	void executeOr(Rule rule, int num_params);
-	void executeAnd(Rule rule, int num_params);
+	void searchKnowledgeBase(string query, int num_params, bool add, string name);
+	void searchRuleBase(string query, int num_params, bool add, string name);
+	void executeRule(Rule rule, int num_params, bool add, string name);
+	void executeOr(Rule rule, int num_params, bool add, string name);
+	void executeAnd(Rule rule, int num_params, bool add, string name);
 	string input;
 	map<string, vector<Fact>> kb;
 	map<string, vector<Rule>> rb;
