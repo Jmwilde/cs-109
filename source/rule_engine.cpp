@@ -52,6 +52,7 @@ void RuleEngine::parseInput(string commandLine)
   string pred = "";
   string sriFile = "";
   string temp = "";
+	int count = 1;
 	logical_op_t op;
 	vector<string> paramVec;
 	vector<string> predVec;
@@ -101,19 +102,26 @@ void RuleEngine::parseInput(string commandLine)
       cout << "Error: Invalid command line argument" << endl;
     }
     getline(iss, query, '(');
-		int count = 1;
-		while(getline(iss, temp, ',')){
-			count++;
+		getline(iss, temp, ')');
+		for(int i=0; i<temp.size(); i++){
+			if(temp.at(i) == ',') count++;
 		}
-		this->inference(query, 2);
+		getline(iss, temp, ' ');
+		getline(iss, pred);
+		if(pred != ""){
+			this->inference(query, count, pred);
+		}
+		else{
+			this->inference(query, count);
+		}
   }else if(name == "LOAD"){
-    getline(iss, sriFile, ' ');
+    getline(iss, sriFile);
 		this->load(sriFile);
   }else if(name == "DUMP"){
-    getline(iss, sriFile, ' ');
+    getline(iss, sriFile);
 		this->dump(sriFile);
   }else if(name == "DROP"){
-    getline(iss, pred, ' ');
+    getline(iss, pred);
 		this->drop(pred);
   }else{
 		cout << "\nError: Invalid command line argument" << endl;
@@ -158,24 +166,24 @@ void RuleEngine::executeRule(Rule rule, int num_params, bool add, string name)
 void RuleEngine::executeOr(Rule rule, int num_params, bool add, string name)
 {
 	int num_elems = rule.getNumPredicates();
-	cout << "There are " << num_elems << " predicates in "
-	<< rule.getName() << ":\n";
+	// cout << "There are " << num_elems << " predicates in "
+	// << rule.getName() << ":\n";
 
 	// For each predicate
 	for (int i=0; i<num_elems; i++)
 	{
 		string predicate = rule.getPredicate(i);
-		cout << "- Predicate " << i << ": " << predicate << endl;
+		// cout << "- Predicate " << i << ": " << predicate << endl;
 		searchKnowledgeBase(predicate, num_params, add, name);
 		searchRuleBase(predicate, num_params, add, name);
 	}
-	cout << "Finished executeOr(" << rule.getName() << ")\n";
+	// cout << "Finished executeOr(" << rule.getName() << ")\n";
 	return;
 }
 
 void RuleEngine::executeAnd(Rule rule, int num_params, bool add, string name)
 {
-	cout << "Numner of predicates to look for: " << num_params << endl;
+	// cout << "Numner of predicates to look for: " << num_params << endl;
 
 
 	// Get the first predicate
@@ -214,7 +222,6 @@ void RuleEngine::executeAnd(Rule rule, int num_params, bool add, string name)
 			//cout << "Calling filter() with filter=" << filters.back() << " & value=" << first_value << " from predicate " << rule.getPredicate(pred_index) << endl;
 			filter(rule, pred_index+1, filters, num_params, last_vals);
 			//cout << "First value:  " << first_value << endl;m
-
 			// May want to move this inside of filter
 			// Unless last_vals is always zero if filter didn't find anything?
 			for (int i=0; i<last_vals.size(); i++)
@@ -249,7 +256,7 @@ void RuleEngine::executeAnd(Rule rule, int num_params, bool add, string name)
 	} else {
 		cout << predicate << " not found in RB!\n";
 	}
-	cout << "End of executeAnd()" << endl;
+	// cout << "End of executeAnd()" << endl;
 
 }
 
@@ -263,11 +270,8 @@ void RuleEngine::executeAnd(Rule rule, int num_params, bool add, string name)
 
 void RuleEngine::filter(Rule rule, int pred_index, vector<string> filters, int num_params, vector<string>& last_values)
 {
-	cout << "Predicate index: " << pred_index << endl;
-	cout << rule.getNumPredicates() << endl;
+	// cout << "Predicate index: " << pred_index << endl;
 	// Base case
-	cout << pred_index << endl;
-	cout << rule.getNumPredicates() << endl;
 	if (pred_index == rule.getNumPredicates() )
 	{
 		cout << "Base case!" << endl;
@@ -292,7 +296,7 @@ void RuleEngine::filter(Rule rule, int pred_index, vector<string> filters, int n
 
 			//cout << fact_vect[i].firstPredicate() << " = " << filters.back() << "?\n";
 
-			cout << "The current filter is: " << filters.back() << endl;
+			// cout << "The current filter is: " << filters.back() << endl;
 			// Collect the filters
 			if (fact_vect[i].firstPredicate() == filters.back())
 			{
@@ -378,7 +382,7 @@ void RuleEngine::searchRuleBase(string query, int num_params, bool add, string n
 			//if (rule_vect[i].getNumPredicates() != num_params) continue;
 
 			// Execute the current rule
-			cout << "Called execRule\n";
+			// cout << "Called execRule\n";
 			executeRule(rule_vect[i], num_params, add, name);
 		}
 	} else cout << query << " rule not found in RB.\n";
