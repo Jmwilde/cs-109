@@ -125,17 +125,25 @@ void RuleEngine::inference(string query, int num_params)
 	// And num_params == 2 in this case
 
 	cout << "** Called inference() on " << query << " **\n\n";
-	searchKnowledgeBase(query, num_params);
-	searchRuleBase(query, num_params);
+	searchKnowledgeBase(query, num_params, false, "");
+	searchRuleBase(query, num_params, false, "");
 }
 
-void RuleEngine::executeRule(Rule rule, int num_params)
+void RuleEngine::inference(string query, int num_params, string name)
+{
+	cout << "** Called inference() on " << query << " **\n\n";
+	searchKnowledgeBase(query, num_params, true, name);
+	searchRuleBase(query, num_params, true, name);
+}
+
+
+void RuleEngine::executeRule(Rule rule, int num_params, bool add, string name)
 {
 	logical_op_t op = rule.getOp();
 	if(op == OR) {
-		executeOr(rule, num_params);
+		executeOr(rule, num_params, add, name);
 	} else if (op == AND) {
-		executeAnd(rule, num_params);
+		executeAnd(rule, num_params, add, name);
 	}
 	else {
 		cout << "Invalid rule. Does not have a proper [OR,AND] operation.\n";
@@ -143,7 +151,7 @@ void RuleEngine::executeRule(Rule rule, int num_params)
 	return;
 }
 
-void RuleEngine::executeOr(Rule rule, int num_params)
+void RuleEngine::executeOr(Rule rule, int num_params, bool add, string name)
 {
 	int num_elems = rule.getNumPredicates();
 	cout << "There are " << num_elems << " predicates in "
@@ -154,14 +162,14 @@ void RuleEngine::executeOr(Rule rule, int num_params)
 	{
 		string predicate = rule.getPredicate(i);
 		cout << "- Predicate " << i << ": " << predicate << endl;
-		searchKnowledgeBase(predicate, num_params);
-		searchRuleBase(predicate, num_params);
+		searchKnowledgeBase(predicate, num_params, add, name);
+		searchRuleBase(predicate, num_params, add, name);
 	}
 	cout << "Finished executeOr(" << rule.getName() << ")\n";
 	return;
 }
 
-void RuleEngine::executeAnd(Rule rule, int num_params)
+void RuleEngine::executeAnd(Rule rule, int num_params, bool add, string name)
 {
 	cout << "Numner of predicates to look for: " << num_params << endl;
 
@@ -208,6 +216,13 @@ void RuleEngine::executeAnd(Rule rule, int num_params)
 			for (int i=0; i<last_vals.size(); i++)
 			{
 				cout << first_value << " : " << last_vals[i] << endl;
+				if(add)
+				{
+					cout << "fact name: " << name << " predicates: " << first_value
+					<< " ... " << last_vals[i] << endl;
+					vector<string> temp = {first_value, last_vals[i]};
+					storeFact(name, temp);
+				}
 			}
 		}
 	}
@@ -304,7 +319,7 @@ void RuleEngine::filter(Rule rule, int pred_index, vector<string> filters, int n
 	}
 }
 
-void RuleEngine::searchKnowledgeBase(string query, int num_params)
+void RuleEngine::searchKnowledgeBase(string query, int num_params, bool add, string name)
 {
 	//  Look in the KB
 	auto kb_search = this->kb.find(query);
@@ -330,12 +345,20 @@ void RuleEngine::searchKnowledgeBase(string query, int num_params)
 				param_var++;
 			}
 			cout << endl;
+    	cout << fact_vect[i].getPredicate(j) << endl;
+			if(add)
+			{
+				cout << "fact name: " << name << " predicates: "
+				<< fact_vect[i].firstPredicate() << " ... "
+				<< fact_vect[i].lastPredicate() << endl;
+				storeFact(name, fact_vect[i].getPredicateVector());
+			}
 		}
 		cout << endl;
 	} else cout << query << " fact not found in KB.\n";
 }
 
-void RuleEngine::searchRuleBase(string query, int num_params)
+void RuleEngine::searchRuleBase(string query, int num_params, bool add, string name)
 {
 	// Look in the RB
 	auto rb_search = this->rb.find(query);
@@ -353,7 +376,7 @@ void RuleEngine::searchRuleBase(string query, int num_params)
 
 			// Execute the current rule
 			cout << "Called execRule\n";
-			executeRule(rule_vect[i], num_params);
+			executeRule(rule_vect[i], num_params, add, name);
 		}
 	} else cout << query << " rule not found in RB.\n";
 }
