@@ -42,7 +42,7 @@ void RuleEngine::storeRule(string name, logical_op_t op, vector<string> predicat
 		{
 			if(iter->getPredicateVector() == predicates)
 			{
-				cout << "Input is duplicate" << endl;
+				// cout << "Input is duplicate" << endl;
 				return;
 			}
 		}
@@ -60,7 +60,7 @@ void RuleEngine::storeFact(string name, vector<string> predicates)
 		{
 			if(iter->getPredicateVector() == predicates)
 			{
-				cout << "Input is duplicate" << endl;
+				// cout << "Input is duplicate" << endl;
 				return;
 			}
 		}
