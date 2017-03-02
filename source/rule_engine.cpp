@@ -318,11 +318,6 @@ void RuleEngine::searchRuleBase(string query, int num_params)
 	} else cout << query << " rule not found in RB.\n";
 }
 
-void RuleEngine::dump()
-{
-  return;
-}
-
 void RuleEngine::load(string testFile)
 {
 	string line;
@@ -346,4 +341,100 @@ void RuleEngine::printKb()
 void RuleEngine::printRb()
 {
 	return;
+}
+
+void RuleEngine::dump()
+{
+   string filename;
+   cout << "Insert a file name 'filename.sri'" << endl;
+   cin >> filename;
+   ofstream ofile (filename);
+   for(map<string, vector<Fact>>::iterator it = kb.begin(); it!=kb.end(); ++it)
+   {
+      ofile << "FACT " << it->first << "(";
+      vector<Fact> facts = kb[it->first];
+      for(uint i = 0; i<facts.size();i++)
+      {
+         int preds = facts[i].getNumPredicates();
+         for(int j = 0; j<preds;j++)
+         {
+            if(j + 1 == preds)
+            {
+               ofile << facts[i].getPredicate(j);
+               break;
+            }
+            ofile << facts[i].getPredicate(j) << ",";
+         }
+         ofile << ")" << endl;
+      }
+   }
+   for(map<string, vector<Rule>>::iterator it = rb.begin(); it!= rb.end(); ++it)
+   {
+      //ofile << "RULE " << it->first << "(";
+      vector<Rule> rules = rb[it->first];
+      //rules[y].getNumPredicates
+      for(uint i = 0; i<rules.size();i++)
+      {
+         ofile << "RULE " << it->first << "("; //it->first is the key/string vector name
+         int preds = rules[i].getNumPredicates();
+         string oper;
+         int ascii = 65;
+         int asciii = 67;
+
+         if( rules[i].getOp() == 0){
+            oper = "OR";
+            ofile << "$" << (char)ascii << ",$" << (char)(ascii+preds-1) << "):- " << oper << " ";
+         }
+         else{
+            oper = "AND";
+            ascii = 65;
+            ofile << "$" << (char)ascii << ",$" << (char)(ascii+preds) << "):- " << oper << " ";
+         }
+         //need getPredicate on preds another for loop?
+         ascii = 65;
+         for(int j = 0; j<preds; j++)
+         {
+            //ofile << rules[i].getPredicate(j)<< "(";
+            if(oper == "OR")
+            {
+               ofile << rules[i].getPredicate(j)<< "(";
+               ascii = 65;
+               for(int k = 0; k<preds; k++)
+               {
+                  if(k + 1 == preds)
+                  {
+                     ofile << "$" << (char)ascii << ") "; // There is a space "($X) "<here
+                     break;
+                  }
+                  ofile << "$" << (char)ascii <<  ",";
+                  ascii++;
+               }
+            }
+            else
+            {
+               ascii = 65;
+               for(int j = 0; j<preds; j++)//+2 because it iterates through two params at a time
+               {
+                  ofile << rules[i].getPredicate(j) << "(";
+                  ofile << "$" << (char)ascii << ",$" << (char)asciii << ") ";
+                  ascii++;
+                  j++;
+                  if(j == preds)
+                  {
+                     break;
+                  }
+                  else
+                  {
+                     ofile << rules[i].getPredicate(j) << "(";
+                     ofile << "$" << (char)asciii << ",$" << (char)ascii << ") ";
+                     asciii++;
+                  }
+               }
+               break;
+            }
+         }
+      }
+      ofile << endl;
+   }
+   ofile.close();
 }

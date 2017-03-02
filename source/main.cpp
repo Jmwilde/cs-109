@@ -37,6 +37,11 @@ int main(int argc, char const *argv[])
   sri.parseInput("FACT Drinks(Pepsi,MtnDew)");
   sri.parseInput("RULE Food_And_Drink:- OR Food($X,$Y) Drinks($X,$Y)");
 
+	sri.inference("Fruits", 3);
+   sri.dump();
+	// Fact fact3("Drinks", drinks);
+	// sri.storeFact("Drinks", fact3);
+
 	sri.inference("Food_And_Drink", 2);
 
   // user inputs a command, and hits Enter/Return
