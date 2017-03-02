@@ -59,5 +59,4 @@ vector<string> Fact::getPredicateVector()
 	return this->predicates;
 }
 
-
 Fact::~Fact(){}

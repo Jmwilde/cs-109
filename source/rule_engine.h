@@ -32,7 +32,8 @@ public:
    void drop(string input);
 	void printKb();
 	void printRb();
-	void filter(Rule rule, int pred_index, vector<string> output, int num_params, vector<string>& last_values);
+	void printResults(vector<string> results, bool add, string name);
+	void filter(Rule rule, int pred_index, string filter_value, int num_params, vector<string>& last_values, vector<string>& output);
 private:
 	void searchKnowledgeBase(string query, int num_params, bool add, string name);//added new params
 	void searchRuleBase(string query, int num_params, bool add, string name);// added new params
