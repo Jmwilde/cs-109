@@ -9,11 +9,12 @@
 #include "rule.h"
 #include <vector>
 #include <string>
+#include <iostream>
 
 using namespace std;
 
 
-// Precondition: predicates passed to a Rule must be strings
+// Precondition: predicates passed to a Rule MUST be strings
 // that exist in KB or RB
 Rule::Rule(logical_op_t logical_op, vector<string> predicates)
 {
@@ -44,6 +45,10 @@ string Rule::getName()
 
 string Rule::getPredicate(int index)
 {
+	if (index >= num_predicates)
+	{
+		cout << "ERROR: Index out of bounds on getPredicate().\n";
+	}
 	return this->predicates[index];
 }
 

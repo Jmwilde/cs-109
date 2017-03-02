@@ -31,7 +31,7 @@ public:
 	void load(string testFile);
 	void printKb();
 	void printRb();
-	void filter(Rule rule, int pred_index, vector<string> output, int num_params, int filter_count);
+	void filter(Rule rule, int pred_index, vector<string> output, int num_params, vector<string>& last_values);
 private:
 	void searchKnowledgeBase(string query, int num_params);
 	void searchRuleBase(string query, int num_params);

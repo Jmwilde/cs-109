@@ -8,6 +8,7 @@
 
 #include <vector>
 #include <string>
+#include <iostream>
 #include "fact.h"
 
 using namespace std;
@@ -36,6 +37,10 @@ int Fact::getNumPredicates()
 
 string Fact::getPredicate(int index)
 {
+	if (index >= num_predicates)
+	{
+		cout << "ERROR: Index out of bounds on getPredicate().\n";
+	}
     return this->predicates[index];
 }
 

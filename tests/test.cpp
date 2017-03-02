@@ -23,7 +23,7 @@ void testEdgeCases();
 
 int main(int argc, char const *argv[])
 {
-	RuleEngine sri; // Declare a new rule engine
+	//RuleEngine sri; // Declare a new rule engine
 
 	cout << "Welcome to the Simple Rule Inference Engine!\n";
 	cout << "Please input a command.\n\n";
