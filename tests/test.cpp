@@ -130,20 +130,9 @@ int main(int argc, char const *argv[])
 	// sri.storeFact("Colors", string4);
 
 
-	sri.load("test2.sri");
-	sri.inference("Parent", 2, "PAR");
-	sri.printKb();
-	sri.printRb();
-
-	// sri.inference("Animals_And_Colors", 2);
-
-
-
-	// user inputs a command, and hits Enter/Return
-
-	// the line of text is passed to the parseInput() method
-
-	// sri.parseInput()
-
-	return 0;
+	sri.load("testcase1.sri");
+	sri.inference("GrandFather", 2, "GF");
+	//sri.printKb();
+	//sri.printRb();
+	sri.dump();
 }

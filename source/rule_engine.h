@@ -34,11 +34,11 @@ public:
 	void printRb();
 	void filter(Rule rule, int pred_index, vector<string> output, int num_params, vector<string>& last_values);
 private:
-	void searchKnowledgeBase(string query, int num_params, bool add, string name);
-	void searchRuleBase(string query, int num_params, bool add, string name);
-	void executeRule(Rule rule, int num_params, bool add, string name);
-	void executeOr(Rule rule, int num_params, bool add, string name);
-	void executeAnd(Rule rule, int num_params, bool add, string name);
+	void searchKnowledgeBase(string query, int num_params, bool add, string name);//added new params
+	void searchRuleBase(string query, int num_params, bool add, string name);// added new params
+	void executeRule(Rule rule, int num_params, bool add, string name);// added new params
+	void executeOr(Rule rule, int num_params, bool add, string name);// add new params
+	void executeAnd(Rule rule, int num_params, bool add, string name);// added new params
 	string input;
 	map<string, vector<Fact>> kb;
 	map<string, vector<Rule>> rb;

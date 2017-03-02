@@ -35,12 +35,36 @@ RuleEngine::~RuleEngine(){}
 void RuleEngine::storeRule(string name, logical_op_t op, vector<string> predicates)
 {
 	Rule new_rule(name, op, predicates);
+	if(rb.find(name) != rb.end())
+	{
+		vector<Rule> temp = rb[name];
+		for(vector<Rule>::iterator iter = temp.begin();iter != temp.end(); iter++)
+		{
+			if(iter->getPredicateVector() == predicates)
+			{
+				cout << "Input is duplicate" << endl;
+				return;
+			}
+		}
+	}
 	this->rb[name].push_back(new_rule);
 }
 
 void RuleEngine::storeFact(string name, vector<string> predicates)
 {
 	Fact new_fact(name, predicates);
+	if(kb.find(name) != kb.end())
+	{
+		vector<Fact> temp = kb[name];
+		for(vector<Fact>::iterator iter = temp.begin();iter != temp.end(); iter++)
+		{
+			if(iter->getPredicateVector() == predicates)
+			{
+				cout << "Input is duplicate" << endl;
+				return;
+			}
+		}
+	}
 	this->kb[name].push_back(new_fact);
 }
 
