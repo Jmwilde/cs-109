@@ -40,8 +40,8 @@ int main(int argc, char const *argv[])
 	sri.inference("Fruits", 3);
 
    //sri.dump();
-  //  sri.drop();
-   sri.dump();
+   sri.drop("lol");
+   sri.dump("test.sri");
 
 	// Fact fact3("Drinks", drinks);
 	// sri.storeFact("Drinks", fact3);
@@ -50,5 +50,18 @@ int main(int argc, char const *argv[])
 
   // user inputs a command, and hits Enter/Return
 
+   /*string input;
+   cout << "Welcome to the Simple Rule Inference Engine! :)" << endl;
+   while(input != "x")
+   {
+      cout << "Input any of the following commands..." << endl;
+      cout << "- LOAD 'filename.sri'";
+      cout << "- DUMP ";
+      cout << "- FACT 'FactName($A,$B)'" ;
+      cout << "- RULE 'RuleName($A,$B)'";
+      cout << "- INFERENCE ''";
+      cout << "- DROP"
+   }
+*/
 	return 0;
 };
