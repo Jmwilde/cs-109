@@ -32,7 +32,7 @@ int main(int argc, char const *argv[])
   sri.parseInput("RULE Food($X,$Y):- AND Fruits($X,$Y) Meats($X,$Y) Drinks($X,$Y)");
 
 	//  Then Infers the rule!
-	sri.inference("Food", 2);
+	//sri.inference("Food", 2);
 
   sri.parseInput("FACT Drinks(Pepsi,MtnDew)");
   sri.parseInput("RULE Food_And_Drink($X,$Y):- OR Food($X,$Y) Drinks($X,$Y)");
@@ -64,4 +64,4 @@ int main(int argc, char const *argv[])
    }
 */
 	return 0;
-};
+}
