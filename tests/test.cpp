@@ -81,7 +81,7 @@ void testExecOr()
 
 int main(int argc, char const *argv[])
 {
-	//RuleEngine sri; // Declare a new rule engine
+	RuleEngine sri; // Declare a new rule engine
 
 	cout << "Welcome to the Simple Rule Inference Engine!\n";
 	cout << "Please input a command.\n\n";
@@ -130,15 +130,10 @@ int main(int argc, char const *argv[])
 	// sri.storeFact("Colors", string4);
 
 
-<<<<<<< HEAD
-	// vector<string> rule_preds = {"Animals", "Colors"};
-	// sri.storeRule("Animals_And_Colors", AND, rule_preds);
-=======
-	sri.load("test4.sri");
+	sri.load("test2.sri");
 	sri.inference("Parent", 2, "PAR");
 	sri.printKb();
 	sri.printRb();
->>>>>>> nori_temp
 
 	// sri.inference("Animals_And_Colors", 2);
 

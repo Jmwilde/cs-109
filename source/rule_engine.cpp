@@ -345,7 +345,6 @@ void RuleEngine::searchKnowledgeBase(string query, int num_params, bool add, str
 				param_var++;
 			}
 			cout << endl;
-    	cout << fact_vect[i].getPredicate(j) << endl;
 			if(add)
 			{
 				cout << "fact name: " << name << " predicates: "

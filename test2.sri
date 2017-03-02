@@ -5,8 +5,4 @@ FACT Parent(Marry,Adam)
 FACT Parent(Marry,Albert)
 FACT Parent(Margret,Robert)
 FACT Parent(Margret,Bob)
-<<<<<<< HEAD
 RULE GrandFather($X,$Y):- AND Father($X,$Z) Parent($Z,$Y)
-=======
-RULE GrandFather($X,$Y):- AND Father($X,$Z) Parent(x,e)
->>>>>>> nori_temp
