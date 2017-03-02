@@ -103,10 +103,13 @@ void RuleEngine::parseInput(string commandLine)
     getline(iss, query, '(');
   }else if(name == "LOAD"){
     getline(iss, sriFile);
+		this->load(sriFile);
   }else if(name == "DUMP"){
     getline(iss, sriFile);
+		this->dump(sriFile);
   }else if(name == "DROP"){
     getline(iss, pred);
+		this->drop(pred);
   }
   return;
 }
@@ -190,7 +193,7 @@ void RuleEngine::executeAnd(Rule rule, int num_params)
 
 			// Call the recursive filter
 			cout << "Calling filter() with filter=" << filters.back() << " & value=" << first_value << " from predicate " << rule.getPredicate(pred_index) << endl;
-			filter(rule, pred_index, filters, num_params, last_vals);
+			filter(rule, pred_index+1, filters, num_params, last_vals);
 			cout << "First value:  " << first_value << endl;
 			for (int i=0; i<last_vals.size(); i++)
 			{
