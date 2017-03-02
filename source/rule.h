@@ -25,6 +25,7 @@ public:
 	logical_op_t getOp();
 	string getPredicate(int index);
 	int getNumPredicates();
+	vector<string> getPredicateVector();
 	string getName();
 private:
 	string name; //  Helps with testing

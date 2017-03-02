@@ -56,3 +56,9 @@ int Rule::getNumPredicates()
 {
 	return this->num_predicates;
 }
+
+vector<string> Rule::getPredicateVector()
+{
+	return this->predicates;
+}
+
