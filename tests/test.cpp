@@ -35,17 +35,23 @@ void testExecAnd()
 	vector<string> str7 = {"Margret", "Bob"};
 
 	vector<string> str8 = {"Bob", "Angela"};
+	vector<string> str9 = {"Bob", "Joe"};
+	vector<string> str10 = {"Robert", "Jack"};
 
 	vector<string> rule_preds = {"Father", "Parent", "Child"};
 
 	sri.storeFact("Father", str1);
 	sri.storeFact("Father", str2);
 	sri.storeFact("Father", str3);
+
 	sri.storeFact("Parent", str4);
 	sri.storeFact("Parent", str5);
 	sri.storeFact("Parent", str6);
 	sri.storeFact("Parent", str7);
+
 	sri.storeFact("Child", str8);
+	sri.storeFact("Child", str9);
+	sri.storeFact("Child", str10);
 	sri.storeRule("Grandfather", AND, rule_preds);
 
 	sri.inference("Grandfather", 2); // The value 2 refers to # of predicates to look for
