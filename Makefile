@@ -13,10 +13,14 @@ SHELL = /bin/bash
 
 SRCDIR = source
 OBJDIR = objects
+TESTDIR = tests
 
 SRC := $(wildcard $(SRCDIR)/*.cpp)
 DEPS := $(wildcard $(SRCDIR)/*.h)
 OBJS := $(patsubst $(SRCDIR)/%.cpp, $(OBJDIR)/%.o, $(SRC))
+
+TESTSRC := $(wildcard $(TSTDIR)/*.cpp)
+TESTOBJ := $(patsubst $(TESTDIR)/%.cpp, $(TESTDIR)/%.o, $(TESTSRC))
 
 CC = g++
 DEBUG = -g
@@ -28,6 +32,12 @@ all: output
 output: $(OBJS)
 	$(CC) $(LFLAGS) $^ -o $@
 
+test: $(TESTDIR)/test.o $(OBJDIR)/rule.o $(OBJDIR)/fact.o $(OBJDIR)/rule_engine.o
+	$(CC) $(LFLAGS) $^ -o $@
+
+test.o: $(TESTDIR)/test.cpp $(DEPS)
+	$(CC) $(CXXFLAGS) $< -o $@
+
 $(OBJS): $(OBJDIR)/%.o: $(SRCDIR)/%.cpp $(DEPS)
 	mkdir -p $(@D)
 	$(CC) $(CXXFLAGS) $< -o $@
@@ -35,6 +45,9 @@ $(OBJS): $(OBJDIR)/%.o: $(SRCDIR)/%.cpp $(DEPS)
 clean:
 	rm objects/*.o
 	rm output
+
+test_run: test
+	./test
 
 run: output
 	./output

@@ -8,6 +8,7 @@
 
 #include <vector>
 #include <string>
+#include <iostream>
 #include "fact.h"
 
 using namespace std;
@@ -34,9 +35,23 @@ int Fact::getNumPredicates()
 	return this->num_predicates;
 }
 
-string Fact::getPredicate(const int index)
+string Fact::getPredicate(int index)
 {
+	if (index >= num_predicates)
+	{
+		cout << "ERROR: Index out of bounds on getPredicate().\n";
+	}
     return this->predicates[index];
+}
+
+string Fact::firstPredicate()
+{
+	return this->predicates[0];
+}
+
+string Fact::lastPredicate()
+{
+	return this->predicates[num_predicates-1];
 }
 
 Fact::~Fact(){}

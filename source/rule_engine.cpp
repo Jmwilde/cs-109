@@ -12,6 +12,8 @@
 #include <map>
 #include <vector>
 #include <iostream>
+#include <fstream>
+#include <sstream>
 
 using namespace std;
 
@@ -25,31 +27,97 @@ RuleEngine::RuleEngine()
 
 RuleEngine::RuleEngine(string sri_file)
 {
-	// Build the KB and RB from the given .sri file
+  // Build the KB and RB from the given .sri file
 }
 
 RuleEngine::~RuleEngine(){}
 
-void RuleEngine::storeRule(string name, Rule rule)
+void RuleEngine::storeRule(string name, logical_op_t op, vector<string> predicates)
 {
-	this->rb[name].push_back(rule);
+	Rule new_rule(name, op, predicates);
+	this->rb[name].push_back(new_rule);
 }
 
-void RuleEngine::storeFact(string name, Fact fact)
+void RuleEngine::storeFact(string name, vector<string> predicates)
 {
-	this->kb[name].push_back(fact);
+	Fact new_fact(name, predicates);
+	this->kb[name].push_back(new_fact);
 }
 
-void parseInput()
+void RuleEngine::parseInput(string commandLine)
 {
-	return;
+	string name = "";
+	string query = "";
+	string stringOp = "";
+  string pred = "";
+  string sriFile = "";
+  string temp = "";
+	logical_op_t op;
+	vector<string> paramVec;
+	vector<string> predVec;
+  stringstream iss(commandLine);
+  getline(iss, name, ' ');
+  if(name == "FACT"){
+    try{
+      if(commandLine.find('(') == -1) throw 0;
+      if(commandLine.find(')') == -1) throw 0;
+    }catch(int e){
+      cout << "Error: Invalid command line argument" << endl;
+    }
+    getline(iss, query, '(');
+    while(getline(iss, temp, ',')){
+      if(temp.back() == ')') temp.pop_back();
+      paramVec.push_back(temp);
+    }
+		this->storeFact(query, paramVec);
+  }else if(name == "RULE"){
+    try{
+      if(commandLine.find(":-") == -1) throw 0;
+    }catch(int e){
+      cout << "Error: Invalid command line argument" << endl;
+    }
+    getline(iss, query, '(');
+    getline(iss, temp, ' ');
+    getline(iss, stringOp, ' ');
+    if(stringOp == "OR") op = OR;
+		else if(stringOp == "AND") op = AND;
+		else cout << "Error: Invalid command line argument" << endl;
+    while(getline(iss, pred, '(')){
+      predVec.push_back(pred);
+      iss.putback('(');
+      getline(iss, temp, ' ');
+      try{
+        if(temp.find('(') == -1 || temp.find(')') == -1) throw 0;
+      }catch(int e){
+        cout << "Error: Invalid command line argument" << endl;
+      }
+    }
+		this->storeRule(query, op, predVec);
+  }else if(name == "INFERENCE"){
+    try{
+      if(commandLine.find('(') == -1) throw 0;
+      if(commandLine.find(')') == -1) throw 0;
+    }catch(int e){
+      cout << "Error: Invalid command line argument" << endl;
+    }
+    getline(iss, query, '(');
+  }else if(name == "LOAD"){
+    getline(iss, sriFile);
+  }else if(name == "DUMP"){
+    getline(iss, sriFile);
+  }else if(name == "DROP"){
+    getline(iss, pred);
+  }
+  return;
 }
 
 void RuleEngine::inference(string query, int num_params)
 {
-	// Inference needs to know what parameter letters to print out
+	// TODO: Inference needs to properly format the outputs
 	// Like if user says INFERENCE Parent($X, $Y)
 	// The output should print X: foo Y: bar
+	// And num_params == 2 in this case
+
 	cout << "** Called inference() on " << query << " **\n\n";
 	searchKnowledgeBase(query, num_params);
 	searchRuleBase(query, num_params);
@@ -59,12 +127,12 @@ void RuleEngine::executeRule(Rule rule, int num_params)
 {
 	logical_op_t op = rule.getOp();
 	if(op == OR) {
-		this->executeOr(rule, num_params);
+		executeOr(rule, num_params);
 	} else if (op == AND) {
-		this->executeAnd(rule, num_params);
+		executeAnd(rule, num_params);
 	}
 	else {
-		cout << "Ivalid rule. Does not have an OR or an AND operation.\n";
+		cout << "Invalid rule. Does not have a proper [OR,AND] operation.\n";
 	}
 	return;
 }
@@ -72,7 +140,8 @@ void RuleEngine::executeRule(Rule rule, int num_params)
 void RuleEngine::executeOr(Rule rule, int num_params)
 {
 	int num_elems = rule.getNumPredicates();
-	cout << "There are " << num_elems << " predicates in " << rule.getName() << ":\n";
+	cout << "There are " << num_elems << " predicates in "
+	<< rule.getName() << ":\n";
 
 	// For each predicate
 	for (int i=0; i<num_elems; i++)
@@ -88,8 +157,118 @@ void RuleEngine::executeOr(Rule rule, int num_params)
 
 void RuleEngine::executeAnd(Rule rule, int num_params)
 {
-	cout << "Called executeAnd() method.\n";
-	return;
+	// Get the first predicate
+	string predicate = rule.getPredicate(0);
+
+	// Find query in KB
+	auto kb_search = this->kb.find(predicate);
+	if(kb_search != kb.end())
+	{
+		// Found in the KB
+		vector<Fact> fact_vect = kb_search->second;
+
+		int pred_index = 0;
+
+		// For each FACT
+		for (int i=0; i<fact_vect.size(); i++)
+		{
+			// Check if the current Fact has the correct # of predicates
+			if (fact_vect[i].getNumPredicates() != num_params){
+				continue;
+			}
+
+			// Make sure filters is empty for each filter call
+			vector<string> filters;
+			vector<string> last_vals;
+
+			// Get the first value
+			string first_value = fact_vect[i].firstPredicate();
+			cout << "First value: " << first_value << endl;
+
+			// Set the first filter value
+			filters.push_back(fact_vect[i].lastPredicate());
+
+			// Call the recursive filter
+			cout << "Calling filter() with filter=" << filters.back() << " & value=" << first_value << " from predicate " << rule.getPredicate(pred_index) << endl;
+			filter(rule, pred_index, filters, num_params, last_vals);
+			cout << "First value:  " << first_value << endl;
+			for (int i=0; i<last_vals.size(); i++)
+			{
+				cout << first_value << " : " << last_vals[i] << endl;
+			}
+		}
+	}
+}
+
+// Filter needs to know the name of the Rule/Fact to be filtered
+// As well as the filter value
+// And which position that filter is occupying
+// Ex: Parent(John, $B).
+// Parent is the query
+// John is the value
+// John is occupying index 0
+
+void RuleEngine::filter(Rule rule, int pred_index, vector<string> filters, int num_params, vector<string>& last_values)
+{
+	// Base case
+	cout << pred_index << endl;
+	cout << rule.getNumPredicates() << endl;
+	if (pred_index == rule.getNumPredicates() )
+	{
+		// Print out first value
+		// And corresponding last values
+		cout << "Finished filter execution!\n";
+		return;
+	}
+
+	// Search for the predicate in KB
+	auto kb_search = this->kb.find(rule.getPredicate(pred_index));
+	if(kb_search != kb.end())
+	{
+		// Found in the KB
+		vector<Fact> fact_vect = kb_search->second;
+		vector<string> current_filters;
+		//vector<string> last_vals;
+
+		// For each FACT
+		for (int i=0; i<fact_vect.size(); i++)
+		{
+			// Check if the current Fact has the correct # of predicates
+			if (fact_vect[i].getNumPredicates() != num_params) continue;
+
+			cout << fact_vect[i].firstPredicate() << " = " << filters.back() << "?\n";
+
+			// Collect the filters
+			if (fact_vect[i].firstPredicate() == filters.back())
+			{
+				cout << fact_vect[i].firstPredicate() << " matches " << filters.back() << endl;
+				current_filters.push_back(fact_vect[i].lastPredicate());
+				cout << "Storing " << fact_vect[i].lastPredicate() << " in last_values.\n";
+				//last_vals.push_back(fact_vect[i].lastPredicate());
+			}
+		}
+
+		last_values = current_filters;
+
+		int next_pred = pred_index+1;
+
+		// For every current_filter value
+		for (int i=0; i<current_filters.size(); i++)
+		{
+			filters.push_back(current_filters[i]);
+			filter(rule, next_pred, filters, num_params, current_filters);
+		}
+
+	} else {
+		cout << rule.getPredicate(pred_index) << " not found in KB!\n";
+	}
+
+	// Initial filters call
+	cout << "Done with filter execution!\n";
+	for (int i=0; i<last_values.size(); i++)
+	{
+		cout << last_values[i] << endl;
+	}
 }
 
 void RuleEngine::searchKnowledgeBase(string query, int num_params)
@@ -105,7 +284,7 @@ void RuleEngine::searchKnowledgeBase(string query, int num_params)
 		// For each Fact in the vector
 		for (int i=0; i<fact_vect.size(); i++)
 		{
-			// Check if the current Fact has the correct number of predicates
+			// Check if the current Fact has the correct # of predicates
 			if (fact_vect[i].getNumPredicates() != num_params) continue;
 
 			// Print corresponding list of strings
@@ -115,7 +294,6 @@ void RuleEngine::searchKnowledgeBase(string query, int num_params)
 		}
 		cout << endl;
 	} else cout << query << " fact not found in KB.\n";
-
 }
 
 void RuleEngine::searchRuleBase(string query, int num_params)
@@ -131,8 +309,8 @@ void RuleEngine::searchRuleBase(string query, int num_params)
 		// For each Rule in the vector
 		for (int i=0; i<rule_vect.size(); i++)
 		{
-			// Check if the current Rule has the correct number of predicates
-			if (rule_vect[i].getNumPredicates() != num_params) continue;
+			// Check if the current Rule has the correct # of predicates
+			//if (rule_vect[i].getNumPredicates() != num_params) continue;
 
 			// Execute the current rule
 			executeRule(rule_vect[i], num_params);
@@ -142,12 +320,22 @@ void RuleEngine::searchRuleBase(string query, int num_params)
 
 void RuleEngine::dump()
 {
-	return;
+  return;
 }
 
-void RuleEngine::load()
+void RuleEngine::load(string testFile)
 {
-	return;
+	string line;
+	ifstream sriFile(testFile);
+	if(sriFile.is_open()){
+		while(getline(sriFile, line)){
+			parseInput(line);
+		}
+		sriFile.close();
+	}else{
+		cout << "Error: Unable to open file" << endl;
+	}
+  return;
 }
 
 void RuleEngine::printKb()

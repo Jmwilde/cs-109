@@ -22,18 +22,19 @@ public:
 	RuleEngine();
 	RuleEngine(string sri_file);
 	~RuleEngine();
-	void parseInput();
+	void parseInput(string commandLine);
 	void inference(string query, int num_predicates);
 	void inferRule(string name);
-	void storeRule(string name, Rule rule);
-	void storeFact(string name, Fact fact);
-	void searchKnowledgeBase(string query, int num_params);
-	void searchRuleBase(string query, int num_params);
+	void storeRule(string name, logical_op_t op, vector<string> predicates);
+	void storeFact(string name, vector<string> predicates);
 	void dump();
-	void load();
+	void load(string testFile);
 	void printKb();
 	void printRb();
+	void filter(Rule rule, int pred_index, vector<string> output, int num_params, vector<string>& last_values);
 private:
+	void searchKnowledgeBase(string query, int num_params);
+	void searchRuleBase(string query, int num_params);
 	void executeRule(Rule rule, int num_params);
 	void executeOr(Rule rule, int num_params);
 	void executeAnd(Rule rule, int num_params);
