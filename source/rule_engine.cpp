@@ -395,7 +395,13 @@ void RuleEngine::dump()
          else{
             oper = "AND";
             ascii = 65;
-            ofile << "$" << (char)ascii << ",$" << (char)(ascii+preds) << "):- " << oper << " ";
+            if(preds == 2)
+            {
+               ofile << "$" << (char)ascii << ",$" << (char)(ascii+preds-1) << "):- " << oper << " ";
+            }
+            else{
+               ofile << "$" << (char)ascii << ",$" << (char)(ascii+preds) << "):- " << oper << " ";
+            }
          }
          ascii = 65;
          for(int j = 0; j<preds; j++) //iterating for OR Rules
