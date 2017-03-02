@@ -101,13 +101,19 @@ void RuleEngine::parseInput(string commandLine)
       cout << "Error: Invalid command line argument" << endl;
     }
     getline(iss, query, '(');
+		this->inference(query, 2);
   }else if(name == "LOAD"){
-    getline(iss, sriFile);
+    getline(iss, sriFile, ' ');
+		this->load(sriFile);
   }else if(name == "DUMP"){
-    getline(iss, sriFile);
+    getline(iss, sriFile, ' ');
+		this->dump(sriFile);
   }else if(name == "DROP"){
-    getline(iss, pred);
-  }
+    getline(iss, pred, ' ');
+		this->drop(pred);
+  }else{
+		cout << "\nError: Invalid command line argument" << endl;
+	}
   return;
 }
 
@@ -362,7 +368,7 @@ void RuleEngine::load(string testFile)
 		}
 		sriFile.close();
 	}else{
-		cout << "Error: Unable to open file" << endl;
+		cout << "\nError: Unable to open file" << endl;
 	}
   return;
 }

@@ -20,48 +20,27 @@ using namespace std;
 int main(int argc, char const *argv[])
 {
   RuleEngine sri; // Declare a new rule engine
+  string commandLine;
 
-	cout << "Welcome to the Simple Rule Inference Engine!\n";
-	cout << "Please input a command.\n\n";
-
-	//  User creates & stores some Facts
-  sri.parseInput("FACT Fruits(Apple,Orange)");
-  sri.parseInput("FACT Meats(Steak,Chicken)");
-
-  //  Then makes a Rule and stores it
-  sri.parseInput("RULE Food($X,$Y):- AND Fruits($X,$Y) Meats($X,$Y) Drinks($X,$Y)");
-
-	//  Then Infers the rule!
-	//sri.inference("Food", 2);
-
-  sri.parseInput("FACT Drinks(Pepsi,MtnDew)");
-  sri.parseInput("RULE Food_And_Drink($X,$Y):- OR Food($X,$Y) Drinks($X,$Y)");
-
-	sri.inference("Fruits", 3);
-
-   //sri.dump();
-   sri.drop("lol");
-   sri.dump("test.sri");
-
-	// Fact fact3("Drinks", drinks);
-	// sri.storeFact("Drinks", fact3);
-
-	sri.inference("Food_And_Drink", 2);
+	cout << "\nWelcome to the Simple Rule Inference Engine!\n";
 
   // user inputs a command, and hits Enter/Return
+  // terminates when user inputs 'x'
 
-   /*string input;
-   cout << "Welcome to the Simple Rule Inference Engine! :)" << endl;
-   while(input != "x")
-   {
-      cout << "Input any of the following commands..." << endl;
-      cout << "- LOAD 'filename.sri'";
-      cout << "- DUMP ";
-      cout << "- FACT 'FactName($A,$B)'" ;
-      cout << "- RULE 'RuleName($A,$B)'";
-      cout << "- INFERENCE ''";
-      cout << "- DROP"
-   }
-*/
+  while(commandLine != "x"){
+    cout << "\nInput any of the following commands:" << endl;
+    cout << "- LOAD 'filename.sri'" << endl;
+    cout << "- DUMP 'filename.sri'" << endl;
+    cout << "- FACT 'FactName(A,B)'" << endl;
+    cout << "- RULE 'RuleName($A,$B)'" << endl;
+    cout << "- INFERENCE 'Query($A,$B)'" << endl;
+    cout << "- DROP 'Query'" << endl;
+    cout << "- Enter 'x' to terminate\n" << endl;
+    getline(cin, commandLine);
+    sri.parseInput(commandLine);
+  }
+
+  cout << "\nBye!" << endl;
+
 	return 0;
 }
