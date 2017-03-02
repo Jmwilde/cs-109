@@ -13,21 +13,11 @@
 
 using namespace std;
 
-// Default constructor copies the predicates into an array
-// Takes an array of predicates and stores them
-// This is better than making the constructor variadic
-
-// template <typename ...ArgsT>
-// Fact::Fact(ArgsT ...strings)
-// {
-//     Fact({strings...});
-// }
-
 Fact::Fact(string name, vector<string> predicates)
 {
 	this->name = name;
 	this->num_predicates = predicates.size();
-	this->predicates = predicates; // copy by value??
+	this->predicates = predicates;
 }
 
 int Fact::getNumPredicates()
@@ -52,6 +42,11 @@ string Fact::firstPredicate()
 string Fact::lastPredicate()
 {
 	return this->predicates[num_predicates-1];
+}
+
+vector<string> Fact::getAllPredicates()
+{
+	return this->predicates;
 }
 
 Fact::~Fact(){}
