@@ -24,16 +24,13 @@ public:
 	~RuleEngine();
 	void parseInput(string commandLine);
 	void inference(string query, int num_predicates);
-	void inferRule(string name);
 	void storeRule(string name, logical_op_t op, vector<string> predicates);
 	void storeFact(string name, vector<string> predicates);
 	void dump(string input);
 	void load(string testFile);
   	void drop(string input);
-	void printKb();
-	void printRb();
-	void filter(Rule rule, int pred_index, string filter_value, int num_params, vector<string>& last_values, vector<string>& output);
 private:
+	void filter(Rule rule, int pred_index, string filter_value, int num_params, vector<string>& last_values, vector<string>& output);
 	void searchKnowledgeBase(string query, int num_params);
 	void searchRuleBase(string query, int num_params);
 	void executeRule(Rule rule, int num_params);

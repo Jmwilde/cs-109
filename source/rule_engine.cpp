@@ -241,8 +241,6 @@ void RuleEngine::executeAnd(Rule rule, int num_params)
 void RuleEngine::filter(Rule rule, int pred_index, string filter_value, int num_params, vector<string>& next_values, vector<string>& output)
 {
 	// Base case
-	cout << pred_index << endl;
-	cout << rule.getNumPredicates() << endl;
 	if (pred_index == rule.getNumPredicates() )
 	{
 		for (int i=0; i<next_values.size(); i++)
@@ -334,16 +332,6 @@ void RuleEngine::load(string testFile)
 		cout << "\nError: Unable to open file" << endl;
 	}
   return;
-}
-
-void RuleEngine::printKb()
-{
-	return;
-}
-
-void RuleEngine::printRb()
-{
-	return;
 }
 
 void RuleEngine::drop(string input)
