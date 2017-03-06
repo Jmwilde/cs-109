@@ -1,7 +1,7 @@
 #ifndef PRODUCER_H
 #define PRODUCER_H
 
-#include "Thread.h"
+#include "thread.h"
 #include "bounded_buffer.h"
 #include "util.h"
 

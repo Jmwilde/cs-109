@@ -9,10 +9,11 @@ OBJS := $(patsubst %.cpp, %.o, $(SRC))
 
 CC = g++
 DEBUG = -g
+PTHREAD = -pthread
 NOSIGN = -Wno-sign-compare
 NOUNUSED = -Wno-unused-variable
-CXXFLAGS = -Wall $(NOSIGN) $(NOUNUSED) -std=c++14 -c $(DEBUG)
-LFLAGS = -Wall -std=c++11 $(DEBUG)
+CXXFLAGS = -Wall $(NOSIGN) $(NOUNUSED) -std=c++11 -c $(DEBUG)
+LFLAGS = -Wall -std=c++11 $(PTHREAD) $(DEBUG)
 
 all: output
 
