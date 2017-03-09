@@ -26,8 +26,8 @@ TESTOBJ := $(patsubst $(TESTDIR)/%.cpp, $(TESTOBJDIR)/%.o, $(TESTSRC))
 CC = g++
 DEBUG = -g
 NOSIGN = -Wno-sign-compare
-CXXFLAGS = -Wall $(NOSIGN) -std=c++14 -c $(DEBUG)
-LFLAGS = -Wall -std=c++14 $(DEBUG)
+CXXFLAGS = -W -Wall -Werror -pedantic $(NOSIGN) -std=c++14 -c $(DEBUG)
+LFLAGS = -W -Wall -Werror -pedantic -std=c++14 $(DEBUG)
 
 all: output
 
@@ -46,10 +46,10 @@ $(OBJS): $(OBJDIR)/%.o: $(SRCDIR)/%.cpp $(DEPS)
 	$(CC) $(CXXFLAGS) $< -o $@
 
 clean:
-	rm output
-	rm test
 	rm objects/*.o
 	rm test_obj/*.o
+	rm output
+	rm test
 
 test_run: test
 	./test

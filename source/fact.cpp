@@ -13,40 +13,40 @@
 
 using namespace std;
 
-Fact::Fact(string name, vector<string> predicates)
+Fact::Fact(string name, vector<string> values)
 {
 	this->name = name;
-	this->num_predicates = predicates.size();
-	this->predicates = predicates;
+	this->num_values = values.size();
+	this->values = values;
 }
 
-int Fact::getNumPredicates()
+int Fact::getNumValues()
 {
-	return this->num_predicates;
+	return this->num_values;
 }
 
-string Fact::getPredicate(int index)
+string Fact::getValue(int index)
 {
-	if (index >= num_predicates)
+	if (index >= num_values)
 	{
-		cout << "ERROR: Index out of bounds on getPredicate().\n";
+		cout << "ERROR: Index out of bounds on getValue().\n";
 	}
-    return this->predicates[index];
+    return this->values[index];
 }
 
-string Fact::firstPredicate()
+string Fact::firstValue()
 {
-	return this->predicates[0];
+	return this->values[0];
 }
 
-string Fact::lastPredicate()
+string Fact::lastValue()
 {
-	return this->predicates[num_predicates-1];
+	return this->values[num_values-1];
 }
 
-vector<string> Fact::getPredicateVector()
+vector<string> Fact::getValueVector()
 {
-	return this->predicates;
+	return this->values;
 }
 
 Fact::~Fact(){}

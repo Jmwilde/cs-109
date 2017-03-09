@@ -16,24 +16,7 @@
 #include <sstream>
 #include <algorithm>
 
-
 using namespace std;
-
-void RuleEngine::printResults(vector<string> results, bool add, string name)
-{
-	char letter = 'A';
-	for (int i=0; i<results.size(); i++)
-	{
-		cout << char(letter) << ":" << results[i];
-		if (i+1 != results.size()) cout << ", ";
-		letter++;
-	}
-	if(add)
-	{
-		this->storeFact(name, results);
-	}
-	cout << endl;
-}
 
 RuleEngine::RuleEngine()
 {
@@ -43,38 +26,127 @@ RuleEngine::RuleEngine()
 
 RuleEngine::~RuleEngine(){}
 
-void RuleEngine::storeRule(string name, logical_op_t op, vector<string> predicates)
+void RuleEngine::printResults(vector<string> results)
 {
-	Rule new_rule(name, op, predicates);
-	if(rb.find(name) != rb.end())
+	char letter = 'A';
+	for (int i=0; i<results.size(); i++)
 	{
-		vector<Rule> temp = rb[name];
-		for(vector<Rule>::iterator iter = temp.begin();iter != temp.end(); iter++)
-		{
-			if(iter->getPredicateVector() == predicates)
-			{
-				return;
-			}
-		}
+		cout << char(letter) << ":" << results[i];
+		if (i+1 != results.size()) cout << ", ";
+		letter++;
 	}
-	this->rb[name].push_back(new_rule);
+	cout << endl;
 }
 
-void RuleEngine::storeFact(string name, vector<string> predicates)
+void RuleEngine::printRb(string name)
 {
-	Fact new_fact(name, predicates);
+	vector<Rule> v = this->rb[name];
+	for(int i=0; i<v.size(); i++)
+	{
+		vector<string> vect = v[i].getValueVector();
+		for(int j=0; j<vect.size(); j++) cout << vect.at(j) << endl;
+	}
+}
+
+bool RuleEngine::inKB(string name)
+{
+	if(kb.find(name) != kb.end()) return true;
+	else return false;
+}
+
+bool RuleEngine::inRB(string name)
+{
+	if(rb.find(name) != rb.end()) return true;
+	else return false;
+}
+
+void RuleEngine::storeFact(string name, vector<string> values)
+{
+	Fact new_fact(name, values);
 	if(kb.find(name) != kb.end())
 	{
 		vector<Fact> temp = kb[name];
 		for(vector<Fact>::iterator iter = temp.begin();iter != temp.end(); iter++)
 		{
-			if(iter->getPredicateVector() == predicates)
+			if(iter->getValueVector() == values)
 			{
 				return;
 			}
 		}
 	}
 	this->kb[name].push_back(new_fact);
+}
+
+void RuleEngine::storeRule(string rule_name, logical_op_t op, vector<string> predicates)
+{
+	// Store rule now depends on the operator
+	if(op == OR)
+	{
+		cout << "Beginning OR storeRule\n";
+		storeOr(rule_name, predicates);
+	}else if(op == AND){
+		cout << "Beginning AND storeRule\n";
+		//storeAnd(rule_name, op, predicates);
+	}else
+		cout << "Error: No operator given!\n";
+}
+
+// void RuleEngine::storeAnd(string rule_name, logical_op_t op, vector<string> predicates)
+// {
+// 	Should do the full execution of And like normal
+// 	Except instead of print results, it stores them under
+// 	the "rule_name" inside the RB as RULE objs
+
+// 	Also, it needs a table of predicate names & positions
+// 	so it knows what to compare for each round of filtering
+//   return;
+// }
+
+void RuleEngine::storeOr(string rule_name, vector<string> predicates)
+{
+	// NOTE: Could replace this for loop with parallel threads!
+
+	// For each predicate name
+	for(int i=0; i<predicates.size(); i++)
+	{
+		cout << "Storing values from " << predicates[i] << "\n";
+		storeValues(rule_name, OR, predicates, predicates[i]);
+	}
+}
+
+// NOTE: Does not check for # of parameters when storing
+// storeValues finds predicates in KB, RB or both
+// and stores their values under the given rule_name in the RB
+
+void RuleEngine::storeValues(string rule_name, logical_op_t op, vector<string> predicate_names, string predicate)
+{
+	if(inRB(predicate))
+	{
+		// Get the vector of RULES associated with the predicate/key
+		vector<Rule> rule_vect = rb[predicate];
+
+		// For each RULE
+		for (int i=0; i<rule_vect.size(); i++)
+		{
+			// Create a new rule using the current rule's values
+			Rule new_rule(rule_name, op, predicate_names, rule_vect[i].getValueVector());
+
+			// Store it in the RB
+			rb[rule_name].push_back(new_rule);
+		}
+	}
+
+	if(inKB(predicate))
+	{
+		vector<Fact> fact_vect = kb[predicate];
+
+		// For each FACT
+		for (int i=0; i<fact_vect.size(); i++)
+		{
+			Rule new_rule(rule_name, op, predicate_names, fact_vect[i].getValueVector());  // Create a new rule
+			rb[rule_name].push_back(new_rule);  // Store it in the RB
+		}
+	}
 }
 
 void RuleEngine::parseInput(string commandLine)
@@ -104,7 +176,7 @@ void RuleEngine::parseInput(string commandLine)
    	 	while(getline(iss, temp, ',')){
       	if(temp.back() == ')') temp.pop_back();
       	paramVec.push_back(temp);
-    }
+    	}
 	this->storeFact(query, paramVec);
 
   	}else if(name == "RULE"){
@@ -168,251 +240,112 @@ void RuleEngine::parseInput(string commandLine)
   	return;
 }
 
-void RuleEngine::inference(string query, int num_params)
+void RuleEngine::inference(string query, int num_sub_vars, string name)
 {
-	searchKnowledgeBase(query, num_params, false, "");
-	searchRuleBase(query, num_params, false, "");
+	searchKnowledgeBase(query, num_sub_vars, true, name);
+	searchRuleBase(query, num_sub_vars, true, name);
 }
 
-void RuleEngine::inference(string query, int num_params, string name)
+void RuleEngine::inference(string query, int num_sub_vars)
 {
-	searchKnowledgeBase(query, num_params, true, name);
-	searchRuleBase(query, num_params, true, name);
+	searchKnowledgeBase(query, num_sub_vars, false, "");
+	searchRuleBase(query, num_sub_vars, false, "");
 }
 
-
-void RuleEngine::executeRule(Rule rule, int num_params, bool add, string name)
-{
-	logical_op_t op = rule.getOp();
-	if(op == OR) {
-		executeOr(rule, num_params, add, name);
-	} else if (op == AND) {
-		executeAnd(rule, num_params, add, name);
-	}
-	else {
-		cout << "Invalid rule. Does not have a proper [OR,AND] operation.\n";
-	}
-	return;
-}
-
-void RuleEngine::executeOr(Rule rule, int num_params, bool add, string name)
-{
-	int num_elems = rule.getNumPredicates();
-
-	// For each predicate
-	for (int i=0; i<num_elems; i++)
-	{
-		string predicate = rule.getPredicate(i);
-		searchKnowledgeBase(predicate, num_params, add, name);
-		searchRuleBase(predicate, num_params, add, name);
-	}
-	return;
-}
-
-void RuleEngine::executeAnd(Rule rule, int num_params, bool add, string name)
-{
-	// Get the first predicate
-	string predicate = rule.getPredicate(0);
-
-	// Find query in KB
-	auto kb_search = this->kb.find(predicate);
-	if(kb_search != kb.end())
-	{
-		// Found in the KB
-		vector<Fact> fact_vect = kb_search->second;
-
-		// Declare variables for filter function
-		int pred_index = 0;
-		string first_value;
-		string filter_value;
-		vector<string> next_values;
-
-		// For each FACT
-		for (int i=0; i<fact_vect.size(); i++)
-		{
-			// Check if the current Fact has the correct # of predicates
-			if (fact_vect[i].getNumPredicates() != num_params){
-				continue;
-			}
-			// Get intial value
-			first_value = fact_vect[i].firstPredicate();
-			// Set intial filter value
-			filter_value = fact_vect[i].lastPredicate();
-
-			// Call the recursive filter
-			vector<string> output;
-			filter(rule, pred_index+1, filter_value, num_params, next_values, output);
-			// Print out the final results
-			char letter = 'A';
-			for (int i=0; i<output.size(); i++)
-			{
-				cout << char(letter) << ":" << first_value << ", " << char(letter+1) << ":" << output[i] << endl;
-				if(add)
-				{
-					vector<string> temp = {first_value, output[i]};
-					storeFact(name, temp);
-				}
-			}
-		}
-	}
-
-	// TODO: Get And working for rules!!
-	auto rb_search = this->rb.find(predicate);
-	if(rb_search != rb.end())
-	{
-		// Found in the KB
-		vector<Fact> fact_vect = kb_search->second;
-
-		// int pred_index = 0;
-
-		// For each FACT
-		for (int i=0; i<fact_vect.size(); i++)
-		{
-			// Check if the current Fact has the correct # of predicates
-			if (fact_vect[i].getNumPredicates() != num_params){
-				continue;
-			}
-		}
-	}
-}
-
-// Filter needs to know the name of the Rule/Fact to be filtered
-// As well as the filter value
-// And which position that filter is occupying
-// Ex: Parent(John, $B).
-// Parent is the query
-// John is the value
-// John is occupying index 0
-
-void RuleEngine::filter(Rule rule, int pred_index, string filter_value, int num_params, vector<string>& next_values, vector<string>& output)
-{
-	// Base case
-	if (pred_index == rule.getNumPredicates() )
-	{
-		for (int i=0; i<next_values.size(); i++)
-		{
-			// Search the output to avoid duplicates
-			if (find(output.begin(), output.end(), next_values[i]) != output.end()) continue;
-			output.push_back(next_values[i]);
-		}
-		return;
-	}
-
-	// Search for the predicate in KB
-	auto kb_search = this->kb.find(rule.getPredicate(pred_index));
-	if(kb_search != kb.end())
-	{
-		// Found in the KB
-		vector<Fact> fact_vect = kb_search->second;
-		vector<string> current_filters;
-
-		// For each FACT
-		for (int i=0; i<fact_vect.size(); i++)
-		{
-			// Check if the current Fact has the correct # of predicates
-			if (fact_vect[i].getNumPredicates() != num_params) continue;
-
-			// Collect the filters for the next round
-			if (fact_vect[i].firstPredicate() == filter_value)
-			{
-				current_filters.push_back(fact_vect[i].lastPredicate());
-			}
-		}
-
-		// For every current_filter value
-		for (int i=0; i<current_filters.size(); i++)
-		{
-			next_values = current_filters;
-			filter(rule, pred_index+1, current_filters[i], num_params, next_values, output);
-		}
-		return;
-	}
-}
-
-void RuleEngine::searchKnowledgeBase(string query, int num_params, bool add, string name)
+void RuleEngine::searchKnowledgeBase(string query, int num_values, bool add, string name)
 {
 	//  Look in the KB
 	auto kb_search = this->kb.find(query);
 	if(kb_search != kb.end())
 	{
 		// Found in the KB
-		vector<Fact> fact_vect = kb_search->second;
+		vector<Fact> fact_vect = kb[query];
 
 		// For each Fact in the vector
 		for (int i=0; i<fact_vect.size(); i++)
 		{
-			// Check if the current Fact has the correct # of predicates
-			if (fact_vect[i].getNumPredicates() != num_params) continue;
+			// Check if the current Fact has the correct # of values
+			if (fact_vect[i].getNumValues() != num_values) continue;
 
 			// Print corresponding list of strings
-			printResults(fact_vect[i].getPredicateVector(), add, name);
+			std::vector<string> results = fact_vect[i].getValueVector();
+			printResults(results);
+
+			if(add) storeFact(name, results);
 		}
 	}
 }
 
-void RuleEngine::searchRuleBase(string query, int num_params, bool add, string name)
+void RuleEngine::searchRuleBase(string query, int num_values, bool add, string name)
 {
-	// Look in the RB
-	auto rb_search = this->rb.find(query);
-	if (rb_search != rb.end())
+	//  Look in the RB
+	if(inRB(query))
 	{
 		// Found in the RB
-		vector<Rule> rule_vect = rb_search->second;
+		vector<Rule> rule_vect = rb[query];
 
 		// For each Rule in the vector
 		for (int i=0; i<rule_vect.size(); i++)
 		{
-			executeRule(rule_vect[i], num_params, add, name);
-		}
-	}
-}
+			// Check if the current Rule has the correct # of values
+			if (rule_vect[i].getNumValues() != num_values) continue;
 
-void RuleEngine::load(string testFile)
-{
-	string line;
-	ifstream sriFile(testFile);
-	if(sriFile.is_open()){
-		while(getline(sriFile, line)){
-				parseInput(line);
+			// Print corresponding list of strings
+			vector<string> results = rule_vect[i].getValueVector();
+			printResults(results);
+
+			if(add) storeFact(name, results);
 		}
-		sriFile.close();
-	}else{
-		cout << "\nError: Unable to open file" << endl;
 	}
-  	return;
 }
 
 void RuleEngine::drop(string input)
 {
-   string tbd = input;
-   //cout << "Name of fact/rule to drop?" <<endl;
-   //cin >> tbd;
-   kb.erase(tbd);
-   rb.erase(tbd);
+    if(!inKB(input) && !inRB(input))
+    {
+        cout << input << " does not exist!\n";
+        return;
+    }
+    if(inKB(input)) kb.erase(input);
+    if(inRB(input)) rb.erase(input);
+}
+
+void RuleEngine::load(string testFile)
+{
+ string line;
+ ifstream sriFile(testFile);
+ if(sriFile.is_open()){
+   while(getline(sriFile, line)){
+       parseInput(line);
+   }
+   sriFile.close();
+ }else{
+   cout << "\nError: Unable to open file" << endl;
+ }
+   return;
 }
 
 void RuleEngine::dump(string input)
 {
    string filename = input;
    string prev;
-   //cout << "Insert a file name 'filename.sri'" << endl;
-   //cin >> filename;
    ofstream ofile (filename);
+
    for(map<string, vector<Fact>>::iterator it = kb.begin(); it!=kb.end(); ++it)//Iterating through KB
    {
       vector<Fact> facts = kb[it->first];
       for(uint i = 0; i<facts.size();i++)
       {
          ofile << "FACT " << it->first << "(";
-         int preds = facts[i].getNumPredicates();
+         int preds = facts[i].getNumValues();
          for(int j = 0; j<preds;j++)
          {
             if(j + 1 == preds)
             {
-               ofile << facts[i].getPredicate(j);
+               ofile << facts[i].getValue(j);
                break;
             }
-            ofile << facts[i].getPredicate(j) << ",";
+            ofile << facts[i].getValue(j) << ",";
          }
          ofile << ")" << endl;
       }

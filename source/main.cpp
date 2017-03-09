@@ -17,7 +17,7 @@
 
 using namespace std;
 
-int main(int argc, char const *argv[])
+int main()
 {
   RuleEngine sri; // Declare a new rule engine
   string commandLine;
@@ -37,6 +37,7 @@ int main(int argc, char const *argv[])
     cout << "- DROP 'Query'" << endl;
     cout << "- Enter 'x' to terminate\n" << endl;
     getline(cin, commandLine);
+    if(commandLine == "x") break;
     sri.parseInput(commandLine);
   }
 
