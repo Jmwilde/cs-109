@@ -13,7 +13,10 @@ void ThreadManager::addThread (Thread * p_thread)
 void ThreadManager::start()
 {
 	// Loop on all vector threads and start them
-	for(int i=0; i < threads.size(); i++) threads[i]->start();
+	for(int i=0; i < threads.size(); i++){
+		cout << "Starting Thread " << i << endl;
+		threads[i]->start();
+	}
 }
 
 // Wait on barrier on all threads

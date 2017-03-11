@@ -9,7 +9,7 @@
 #ifndef RULE_ENGINE_H
 #define RULE_ENGINE_H
 
-#include "helpStoreOr.h"
+
 #include "fact.h"
 #include "rule.h"
 #include "thread.h"
@@ -27,7 +27,7 @@ public:
 	void printRb(string name);
 	bool inKB(string name);
 	bool inRB(string name);
-	void storeOr(string rule_name, vector<string> predicates);
+	// void storeOr(string rule_name, vector<string> predicates);
 	//void storeAnd(string rule_name, logical_op_t op, vector<string> predicates);
 	void parseInput(string commandLine);
 	void inference(string query, int num_predicates);
@@ -45,7 +45,7 @@ public:
 private:
 	void searchKnowledgeBase(string query, int num_params, bool add, string name);
 	void searchRuleBase(string query, int num_params, bool add, string name);
-   void storeHelper(string rule_name, vector<string> predicates);
+   void storeHelper(string rule_name, logical_op_t op, vector<string> predicates);
 	//void executeRule(Rule rule, int num_params, bool add, string name);
 	//void executeOr(Rule rule, int num_params, bool add, string name);
 	//void executeAnd(Rule rule, int num_params, bool add, string name);

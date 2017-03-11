@@ -4,14 +4,20 @@
 
 using namespace std;
 
-helpStoreOr::helpStoreOr(string rule_name, logical_op_t OR, 
-                        vector<string> predicates, int i){}
+helpStoreOr::helpStoreOr(RuleEngine* sri, string rule_name, logical_op_t op,
+                        vector<string> predicates, string predicate){
+                          this->sri = sri;
+                          this->rule_name = rule_name;
+                          this->op = op;
+                          this->predicates = predicates;
+                          this->predicate = predicate;
+                        }
 
 void * helpStoreOr::threadMainBody(void * arg)
 {
-   storeValues(rule_name, OR, predicates, predicates[i]);
-}
-
+   arg = NULL;
+   sri->storeValues(rule_name, op, predicates, predicate);
    return NULL;
+}
 
 helpStoreOr::~helpStoreOr(){}

@@ -25,7 +25,7 @@ class Thread    // Thread Class
       void setRunning (bool _running);    // Sets the running flag data member of the thread
       static void cleanup(void * target_thread); // A static method that performs house keeping after the thread terminates
    public:
-      Thread(void *(*_threadRoutine) (void *) =NULL); // Constructor 
+      Thread(void *(*_threadRoutine) (void *) =NULL); // Constructor
       bool isRunning ();      // Check if thread is running
       pthread_t * getThreadHandler(); // Returns a pointer to the thread identifier
       void start ();                  // A jacket wrapper method that fork the thread execution
@@ -38,4 +38,3 @@ class Thread    // Thread Class
 };
 
 #endif // THREAD_H
-

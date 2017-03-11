@@ -10,7 +10,7 @@
 #include "fact.h"
 #include "rule.h"
 #include "rule_engine.h"
-//#include "util.h"
+#include "helpStoreOr.h"
 #include <utility>
 #include <map>
 #include <vector>
@@ -80,7 +80,7 @@ void RuleEngine::storeFact(string name, vector<string> values)
     this->kb[name].push_back(new_fact);
 }
 
-void RuleEngine::storeRule(string rule_name, logical_op_t op, 
+void RuleEngine::storeRule(string rule_name, logical_op_t op,
                            vector<string> predicates)
 {
     // Store rule now depends on the operator
@@ -88,7 +88,7 @@ void RuleEngine::storeRule(string rule_name, logical_op_t op,
     {
         cout << "Beginning OR storeRule\n";
         //storeOr(rule_name, predicates);
-        storeHelper(rule_name, predicates);
+        storeHelper(rule_name, op, predicates);
     }else if(op == AND){
         cout << "Beginning AND storeRule\n";
         //storeAnd(predicates);
@@ -99,7 +99,7 @@ void RuleEngine::storeRule(string rule_name, logical_op_t op,
 // ****--------------BETTER VERSION NOT FINISHED--------------*******
 // void RuleEngine::storeAnd(string rule_name, logical_op_t op,
 //                           vector<string> predicates,
-//                           map<string,vector<string>> var_map, 
+//                           map<string,vector<string>> var_map,
 //                           string start_letter, string end_letter)
 //{
     // Should do the full execution of And like normal
@@ -136,7 +136,7 @@ void RuleEngine::storeRule(string rule_name, logical_op_t op,
 
 // ****--------------BETTER VERSION NOT FINISHED--------------*******
 // RuleEngine::filter_letters(string predicate, string prev_match,
-//                            map<string,vector<string>> var_map, int index, 
+//                            map<string,vector<string>> var_map, int index,
 //                            &vector<vector<pair<string,int>>> filter_table)
 // {
 //     // Filter should look at the current predicate's letters
@@ -195,7 +195,7 @@ void RuleEngine::storeRule(string rule_name, logical_op_t op,
     if(inKB(predicate))
     {
         cout << "Found " << predicate << " in the KB!\n";
-        
+
         // Found in the KB
         vector<Fact> fact_vect = kb[predicate];
 
@@ -283,7 +283,7 @@ void RuleEngine::storeRule(string rule_name, logical_op_t op,
     // NOTE: Could replace this for loop with parallel threads!
 
     // For x = predicates.size() number of predicates, create producers
-    // 
+    //
 
     // For each predicate name
 
@@ -293,14 +293,15 @@ void RuleEngine::storeRule(string rule_name, logical_op_t op,
         storeValues(rule_name, OR, predicates, predicates[i]);
     }
 }*/
-void RuleEngine::storeHelper(string rule_name, vector<string> predicates){
+void RuleEngine::storeHelper(string rule_name, logical_op_t op, vector<string> predicates){
    ThreadManager * threadManager = new ThreadManager();
-   for(int i = 0; i < predicates.size(); i++)
-      threadManager->addThread(new helpStoreOr(rule_name, OR, predicates, i));
+ for(int i = 0; i < predicates.size(); i++){
+  cout << "Adding thread " << i << endl;
+  threadManager->addThread(new helpStoreOr(this, rule_name, op, predicates, predicates[i]));
+ }
    threadManager->start();
    threadManager->barrier();
    delete(threadManager);
-
 }
 
 // NOTE: Does not check for # of parameters when storing
@@ -383,6 +384,7 @@ void RuleEngine::parseInput(string commandLine)
         else cout << "Error: Invalid command line argument" << endl;
 
         while(getline(iss, pred, '(')){
+            // if(pred == " ") cout << "There was a space here" << endl;
             predVec.push_back(pred);
             iss.putback('(');
             getline(iss, temp, ' ');
@@ -392,6 +394,11 @@ void RuleEngine::parseInput(string commandLine)
                 cout << "Error: Invalid command line argument" << endl;
             }
         }
+        // cout << predVec.size() << endl;
+        // for(int i = 0; i < predVec.size(); i++){
+        //   cout << predVec[i] << " ";
+        // }
+        // cout << endl;
         this->storeRule(query, op, predVec);
   }else if(name == "INFERENCE"){
     try{
@@ -437,6 +444,7 @@ void RuleEngine::inference(string query, int num_sub_vars, string name)
 
 void RuleEngine::inference(string query, int num_sub_vars)
 {
+    cout << "Callling second inference" << endl;
     searchKnowledgeBase(query, num_sub_vars, false, "");
     searchRuleBase(query, num_sub_vars, false, "");
 }
