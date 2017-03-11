@@ -192,6 +192,8 @@ void RuleEngine::storeAnd(vector<string> predicates)
     // Find query in KB
     if(inKB(predicate))
     {
+        cout << "Found " << predicate << " in the KB!\n";
+        
         // Found in the KB
         vector<Fact> fact_vect = kb[predicate];
 
