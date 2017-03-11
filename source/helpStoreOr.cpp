@@ -4,6 +4,8 @@
 
 using namespace std;
 
+helpStoreOr::helpStoreOr(string rule_name, logical_op_t OR, 
+                        vector<string> predicates, int i){}
 
 void * helpStoreOr::threadMainBody(void * arg)
 {

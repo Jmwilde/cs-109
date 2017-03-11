@@ -6,6 +6,7 @@
 // Tako Takeda - katakeda
 // Noriaki Nakano - nnakano
 
+#include "thread_manager.h"
 #include "fact.h"
 #include "rule.h"
 #include "rule_engine.h"
@@ -86,10 +87,11 @@ void RuleEngine::storeRule(string rule_name, logical_op_t op,
     if(op == OR)
     {
         cout << "Beginning OR storeRule\n";
-        storeOr(rule_name, predicates);
+        //storeOr(rule_name, predicates);
+        storeHelper(rule_name, predicates);
     }else if(op == AND){
         cout << "Beginning AND storeRule\n";
-        storeAnd(predicates);
+        //storeAnd(predicates);
     }else
         cout << "Error: No operator given!\n";
 }
@@ -184,7 +186,7 @@ void RuleEngine::storeRule(string rule_name, logical_op_t op,
 // }
 // ****--------------BETTER VERSION NOT FINISHED--------------*******
 
-void RuleEngine::storeAnd(vector<string> predicates)
+/*void RuleEngine::storeAnd(vector<string> predicates)
 {
     // Get the first predicate
     string predicate = predicates[0];
@@ -227,9 +229,9 @@ void RuleEngine::storeAnd(vector<string> predicates)
             }
         }
     }
-}
+}*/
 
-void RuleEngine::filter(vector<string> predicates, int pred_index, string filter_value, vector<string>& next_values, vector<string>& output)
+/*void RuleEngine::filter(vector<string> predicates, int pred_index, string filter_value, vector<string>& next_values, vector<string>& output)
 {
     // Base case
     if (pred_index == predicates.size() )
@@ -274,9 +276,9 @@ void RuleEngine::filter(vector<string> predicates, int pred_index, string filter
         }
         return;
     }
-}
+}*/
 
-void RuleEngine::storeOr(string rule_name, OR, vector<string> predicates)
+/*void RuleEngine::storeOr(string rule_name, OR, vector<string> predicates)
 {
     // NOTE: Could replace this for loop with parallel threads!
 
@@ -290,8 +292,9 @@ void RuleEngine::storeOr(string rule_name, OR, vector<string> predicates)
         cout << "Storing values from " << predicates[i] << "\n";
         storeValues(rule_name, OR, predicates, predicates[i]);
     }
-}
+}*/
 void RuleEngine::storeHelper(string rule_name, vector<string> predicates){
+   ThreadManager * threadManager = new ThreadManager();
    for(int i = 0; i < predicates.size(); i++)
       threadManager->addThread(new helpStoreOr(rule_name, OR, predicates, i));
    threadManager->start();

@@ -9,10 +9,11 @@
 
 using namespace std;
 
-class helpStoreOr
+class helpStoreOr: public Thread
 {
 public:
-   helpStoreOr(string rule_name,logical_op_t OR, vector predicates, string predicates[i]);
+
+   helpStoreOr(string rule_name,logical_op_t OR, vector<string> predicates, int i);
    
 //private:
  

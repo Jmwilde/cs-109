@@ -9,6 +9,7 @@
 #ifndef RULE_ENGINE_H
 #define RULE_ENGINE_H
 
+#include "helpStoreOr.h"
 #include "fact.h"
 #include "rule.h"
 #include "thread.h"
@@ -44,7 +45,7 @@ public:
 private:
 	void searchKnowledgeBase(string query, int num_params, bool add, string name);
 	void searchRuleBase(string query, int num_params, bool add, string name);
-   void storeHelper(string rule_name,logical_op_t OR, vector<string> predicates, int i);
+   void storeHelper(string rule_name, vector<string> predicates);
 	//void executeRule(Rule rule, int num_params, bool add, string name);
 	//void executeOr(Rule rule, int num_params, bool add, string name);
 	//void executeAnd(Rule rule, int num_params, bool add, string name);
