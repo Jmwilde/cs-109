@@ -92,8 +92,6 @@ void testStoreAnd()
 	// vector<string> preds = {"Apples", "Oranges", "Bananas"};
 	// sri.storeRule("Fruits", AND, preds); // ANDS together 3 facts
 
-
-
 	vector<string> str8 = {"John", "Joe", "Margret"};
 	sri.storeFact("Father", str8);
 
@@ -120,10 +118,6 @@ void testStoreAnd()
 
 	vector<string> preds2 = {"Father", "Parent", "Child"};
 	sri.storeRule("Grandfather", AND, preds2); // ANDS together 3 facts
-
-
-
-
 
 }
 

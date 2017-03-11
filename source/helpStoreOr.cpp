@@ -15,7 +15,6 @@ helpStoreOr::helpStoreOr(RuleEngine* sri, string rule_name, logical_op_t op,
 
 void * helpStoreOr::threadMainBody(void * arg)
 {
-   arg = NULL;
    sri->storeValues(rule_name, op, predicates, predicate);
    return NULL;
 }

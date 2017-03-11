@@ -25,8 +25,9 @@ TESTOBJ := $(patsubst $(TESTDIR)/%.cpp, $(TESTOBJDIR)/%.o, $(TESTSRC))
 
 CC = g++
 DEBUG = -g
+PTHREAD = -pthread
 NOSIGN = -Wno-sign-compare
-CXXFLAGS = -W -Wall -Werror -pedantic $(NOSIGN) -std=c++14 -c $(DEBUG)
+CXXFLAGS = -W -Wall -pedantic -Wno-unused-parameter $(PTHREAD) $(NOSIGN) -std=c++14 -c $(DEBUG)
 LFLAGS = -W -Wall -Werror -pedantic -std=c++14 $(DEBUG)
 
 all: output
