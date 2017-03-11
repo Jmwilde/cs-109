@@ -288,8 +288,6 @@ void RuleEngine::filter(vector<string> predicates, int pred_index, string filter
         return;
     }
 
-    string predicate = predicates[pred_index];
-
     // Search for the predicate in KB
     if(inKB(predicate))
     {
@@ -352,7 +350,7 @@ void RuleEngine::filter(vector<string> predicates, int pred_index, string filter
     return;
 }
 
-void RuleEngine::storeOr(string rule_name, logical_op_t, vector<string> predicates)
+void RuleEngine::storeOr(string rule_name, logical_op_t op, vector<string> predicates)
 {
     storeHelper(rule_name, op, predicates);
 }
