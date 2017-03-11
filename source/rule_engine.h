@@ -26,7 +26,7 @@ public:
 	bool inKB(string name);
 	bool inRB(string name);
 	void storeOr(string rule_name, vector<string> predicates);
-	//void storeAnd(string rule_name, logical_op_t op, vector<string> predicates);
+	void storeAnd(vector<string> predicates);
 	void parseInput(string commandLine);
 	void inference(string query, int num_predicates);
 	void inference(string query, int num_predicates, string name);
@@ -39,7 +39,7 @@ public:
 	void printKb();
 	void printRb();
 	void printResults(vector<string> results);
-	void filter(Rule rule, int pred_index, string filter_value, int num_params, vector<string>& last_values, vector<string>& output);
+	void filter(vector<string> predicates, int pred_index, string filter_value, vector<string>& next_values, vector<string>& output);
 private:
 	void searchKnowledgeBase(string query, int num_params, bool add, string name);
 	void searchRuleBase(string query, int num_params, bool add, string name);

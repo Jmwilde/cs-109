@@ -9,7 +9,7 @@
 #include "fact.h"
 #include "rule.h"
 #include "rule_engine.h"
-#include "util.h"
+//#include "util.h"
 #include <utility>
 #include <map>
 #include <vector>
@@ -80,8 +80,7 @@ void RuleEngine::storeFact(string name, vector<string> values)
 }
 
 void RuleEngine::storeRule(string rule_name, logical_op_t op, 
-                           vector<string> predicates, 
-                           map<string,vector<string>> var_map)
+                           vector<string> predicates)
 {
     // Store rule now depends on the operator
     if(op == OR)
@@ -90,7 +89,7 @@ void RuleEngine::storeRule(string rule_name, logical_op_t op,
         storeOr(rule_name, predicates);
     }else if(op == AND){
         cout << "Beginning AND storeRule\n";
-        storeAnd(rule_name, op, predicates, var_map);
+        storeAnd(predicates);
     }else
         cout << "Error: No operator given!\n";
 }
@@ -185,7 +184,7 @@ void RuleEngine::storeRule(string rule_name, logical_op_t op,
 // }
 // ****--------------BETTER VERSION NOT FINISHED--------------*******
 
-void RuleEngine::storeAnd(string rule_name, logical_op_t op, vector<string> predicates, int num_params)
+void RuleEngine::storeAnd(vector<string> predicates)
 {
     // Get the first predicate
     string predicate = predicates[0];
@@ -194,7 +193,7 @@ void RuleEngine::storeAnd(string rule_name, logical_op_t op, vector<string> pred
     if(inKB(predicate))
     {
         // Found in the KB
-        vector<Fact> fact_vect = kb_search->second;
+        vector<Fact> fact_vect = kb[predicate];
 
         // Declare variables for filter function
         int pred_index = 0;
@@ -206,9 +205,9 @@ void RuleEngine::storeAnd(string rule_name, logical_op_t op, vector<string> pred
         for (int i=0; i<fact_vect.size(); i++)
         {
             // Check if the current Fact has the correct # of predicates
-            if (fact_vect[i].getNumValues() != num_params){
-                continue;
-            }
+            // if (fact_vect[i].getNumValues() != num_params){
+            //     continue;
+            // }
             // Get intial value
             first_value = fact_vect[i].firstValue();
             // Set intial filter value
@@ -216,24 +215,19 @@ void RuleEngine::storeAnd(string rule_name, logical_op_t op, vector<string> pred
 
             // Call the recursive filter
             vector<string> output;
-            filter(predicates, pred_index+1, filter_value, num_params, next_values, output);
+            filter(predicates, pred_index+1, filter_value, next_values, output);
 
             // Print out the final results
             char letter = 'A';
             for (int i=0; i<output.size(); i++)
             {
                 cout << char(letter) << ":" << first_value << ", " << char(letter+1) << ":" << output[i] << endl;
-                if(add)
-                {
-                    vector<string> temp = {first_value, output[i]};
-                    storeFact(name, temp);
-                }
             }
         }
     }
 }
 
-void RuleEngine::filter(vector<string> predicates, int pred_index, string filter_value, int num_params, vector<string>& next_values, vector<string>& output)
+void RuleEngine::filter(vector<string> predicates, int pred_index, string filter_value, vector<string>& next_values, vector<string>& output)
 {
     // Base case
     if (pred_index == predicates.size() )
@@ -247,24 +241,26 @@ void RuleEngine::filter(vector<string> predicates, int pred_index, string filter
         return;
     }
 
+    string predicate = predicates[pred_index];
+
     // Search for the predicate in KB
-    if(inKB(predicates[pred_index]))
+    if(inKB(predicate))
     {
         // Found in the KB
-        cout << "Found " << predicates[index] << " in the KB!\n";
-        vector<Fact> fact_vect = kb_search->second;
+        cout << "Found " << predicate << " in the KB!\n";
+        vector<Fact> fact_vect = kb[predicate];
         vector<string> current_filters;
 
         // For each FACT
         for (int i=0; i<fact_vect.size(); i++)
         {
             // Check if the current Fact has the correct # of predicates
-            if (fact_vect[i].getNumPredicates() != num_params) continue;
+            //if (fact_vect[i].getNumPredicates() != num_params) continue;
 
             // Collect the filters for the next round
-            if (fact_vect[i].firstPredicate() == filter_value)
+            if (fact_vect[i].firstValue() == filter_value)
             {
-                current_filters.push_back(fact_vect[i].lastPredicate());
+                current_filters.push_back(fact_vect[i].lastValue());
             }
         }
 
@@ -272,7 +268,7 @@ void RuleEngine::filter(vector<string> predicates, int pred_index, string filter
         for (int i=0; i<current_filters.size(); i++)
         {
             next_values = current_filters;
-            filter(predicates, pred_index+1, current_filters[i], num_params, next_values, output);
+            filter(predicates, pred_index+1, current_filters[i], next_values, output);
         }
         return;
     }
@@ -530,7 +526,7 @@ void RuleEngine::dump(string input)
          ofile << ")" << endl;
       }
    }
-   
+
    for(map<string, vector<Rule>>::iterator it = rb.begin(); it!= rb.end(); ++it) //Iterating through RB
    {
       vector<Rule> rules = rb[it->first];
