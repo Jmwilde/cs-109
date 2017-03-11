@@ -360,7 +360,7 @@ void RuleEngine::parseInput(string commandLine)
             if(commandLine.find('(') == -1) throw 0;
             if(commandLine.find(')') == -1) throw 0;
         }catch(int e){
-        cout << "Error: Invalid command line argument" << endl;
+        cout << "Error: Invalid command line argument4" << endl;
         }
         getline(iss, query, '(');
         while(getline(iss, temp, ',')){
@@ -373,7 +373,7 @@ void RuleEngine::parseInput(string commandLine)
         try{
             if(commandLine.find(":-") == -1) throw 0;
         }catch(int e){
-            cout << "Error: Invalid command line argument" << endl;
+            cout << "Error: Invalid command line argument3" << endl;
         }
         getline(iss, query, '(');
         getline(iss, temp, ' ');
@@ -381,31 +381,26 @@ void RuleEngine::parseInput(string commandLine)
 
         if(stringOp == "OR") op = OR;
         else if(stringOp == "AND") op = AND;
-        else cout << "Error: Invalid command line argument" << endl;
+        else cout << "Error: Invalid command line argument2" << endl;
 
         while(getline(iss, pred, '(')){
-            // if(pred == " ") cout << "There was a space here" << endl;
+            if(pred == " ") break;
             predVec.push_back(pred);
             iss.putback('(');
             getline(iss, temp, ' ');
             try{
                 if(temp.find('(') == -1 || temp.find(')') == -1) throw 0;
             }catch(int e){
-                cout << "Error: Invalid command line argument" << endl;
+                cout << "Error: Invalid command line argument1" << endl;
             }
         }
-        // cout << predVec.size() << endl;
-        // for(int i = 0; i < predVec.size(); i++){
-        //   cout << predVec[i] << " ";
-        // }
-        // cout << endl;
         this->storeRule(query, op, predVec);
   }else if(name == "INFERENCE"){
     try{
       if(commandLine.find('(') == -1) throw 0;
       if(commandLine.find(')') == -1) throw 0;
     }catch(int e){
-      cout << "Error: Invalid command line argument" << endl;
+      cout << "Error: Invalid command line argument6" << endl;
     }
     getline(iss, query, '(');
         getline(iss, temp, ')');
@@ -431,7 +426,7 @@ void RuleEngine::parseInput(string commandLine)
     getline(iss, pred);
         this->drop(pred);
     }else{
-        cout << "\nError: Invalid command line argument" << endl;
+        cout << "\nError: Invalid command line argument7" << endl;
     }
     return;
 }
