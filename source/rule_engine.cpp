@@ -9,7 +9,7 @@
 #include "fact.h"
 #include "rule.h"
 #include "rule_engine.h"
-#include "util.h"
+//#include "util.h"
 #include <utility>
 #include <map>
 #include <vector>
@@ -279,7 +279,7 @@ void RuleEngine::filter(vector<string> predicates, int pred_index, string filter
     }
 }
 
-void RuleEngine::storeOr(string rule_name, vector<string> predicates)
+void RuleEngine::storeOr(string rule_name, OR, vector<string> predicates)
 {
     // NOTE: Could replace this for loop with parallel threads!
 
@@ -296,7 +296,7 @@ void RuleEngine::storeOr(string rule_name, vector<string> predicates)
 }
 void RuleEngine::storeHelper(string rule_name, vector<string> predicates){
    for(int i = 0; i < predicates.size(); i++)
-      threadManager->addThread(new helpStoreOr(rule_name, OR, predicates, predicates[i]));
+      threadManager->addThread(new helpStoreOr(rule_name, OR, predicates, i));
    threadManager->start();
    threadManager->barrier();
    delete(threadManager);

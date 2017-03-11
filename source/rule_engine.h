@@ -44,7 +44,7 @@ public:
 private:
 	void searchKnowledgeBase(string query, int num_params, bool add, string name);
 	void searchRuleBase(string query, int num_params, bool add, string name);
-   void storeHelper(string rule_name,logical_op_t OR, vector predicates, string predicates[i])
+   void storeHelper(string rule_name,logical_op_t OR, vector<string> predicates, int i);
 	//void executeRule(Rule rule, int num_params, bool add, string name);
 	//void executeOr(Rule rule, int num_params, bool add, string name);
 	//void executeAnd(Rule rule, int num_params, bool add, string name);
