@@ -27,11 +27,11 @@ int main()
 			TRANSACTION_COUNT, boundedBuffer));
 
 		threadManager->start(); // Start all threads
-		threadManager->barrier(); // Block on barrier until all threads terminate 
+		threadManager->barrier(); // Block on barrier until all threads terminate
 		delete (threadManager); // Delete thread manager
-		
+
 	} catch (int){ // If exception caught
-		cout << "Exception caught here\n"; // Print message 
+		cout << "Exception caught here\n"; // Print message
 		boundedBuffer=NULL; //set boundedBuffer to NULL to avoid destruction
 	}
 

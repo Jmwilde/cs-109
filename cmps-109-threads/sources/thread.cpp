@@ -7,7 +7,7 @@ void Thread::setRunning (bool _running)
 }
 /* Static clean up method. It is defined as private as it need to be only invoked from within the object data members
 Since it is static it received a void pointer that represent a pointer to the invoking object */
-void Thread::cleanup(void * target_thread) 
+void Thread::cleanup(void * target_thread)
 {
     Thread * me = (Thread *) target_thread; // Cast target_thread to a Thread *
     me->setRunning(false);  // Set the thread as not running
@@ -18,12 +18,12 @@ void Thread::cleanup(void * target_thread)
 // Thread Constructor: Allows for overriding the pthread_create start routine parameters with another static method than "run" if needed
 Thread::Thread(void *(*_threadRoutine) (void *))
 {
-    size_t stacksize = 1024*1024*4;  // Set stack to 4 MB   
+    size_t stacksize = 1024*1024*4;  // Set stack to 4 MB
     running = false;    // Set running to false
     started = false;    // Set started to false
     termination_request = false;    // Set termination request to false
     pthread_mutex_init (&mutex,NULL);// Initialize execution control mutex
-    if ( _threadRoutine != NULL ) threadRoutine=_threadRoutine; // Set the pthread start routine to _threadRoutine if not NULL 
+    if ( _threadRoutine != NULL ) threadRoutine=_threadRoutine; // Set the pthread start routine to _threadRoutine if not NULL
     else threadRoutine = &run;  // Else use the default static method run
     pthread_attr_init(&pthread_attr);   // Initialize pthread attributes
     pthread_attr_setdetachstate (&pthread_attr,PTHREAD_CREATE_DETACHED); // Set thread as dettached at creation time
@@ -64,7 +64,7 @@ void Thread::start()
         else if (created == ENOMEM) printf ("ENOMEM generated\n");
         started= false; // Set started to false
     }
-    else setRunning(true); // Else thread is marked running 
+    else setRunning(true); // Else thread is marked running
 }
 
 // Static method passed to pthread_create
@@ -87,7 +87,7 @@ char * Thread::getThreadIdentifier ()
 {
 	return identifier;  // return thread readable identifier
 }
-// Selector: Check if thread is started 
+// Selector: Check if thread is started
 bool Thread::isAlive ()
 {
     if ( !started ) return false;
@@ -96,7 +96,7 @@ bool Thread::isAlive ()
 // Destructor
 Thread::~Thread()
 {
-    pthread_attr_destroy(&pthread_attr);    // Destroy pthread attributes    
+    pthread_attr_destroy(&pthread_attr);    // Destroy pthread attributes
     if ( started ) pthread_join (pthread,NULL); // Join on pthread if started
     pthread_mutex_destroy(&mutex);  //Destroy execution control mutex
 }
