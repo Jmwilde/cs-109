@@ -25,6 +25,8 @@ public:
 	logical_op_t getOp();
 	vector<string> getValueVector();
 	string getValue(int index);
+	string firstValue();
+	string lastValue();
 	int getNumValues();
 	string getPredicate(int index);
 	int getNumPredicates();

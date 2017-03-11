@@ -62,6 +62,16 @@ string Rule::getValue(int index)
 	return this->values[index];
 }
 
+string Rule::lastValue()
+{
+	return this->values[num_values-1];
+}
+
+string Rule::firstValue()
+{
+	return this->values[0];
+}
+
 int Rule::getNumValues()
 {
 	return this->num_values;

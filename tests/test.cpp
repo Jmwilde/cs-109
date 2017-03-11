@@ -68,24 +68,68 @@ void testStoreAnd()
 {
 	RuleEngine sri;
 
-	vector<string> str1 = {"Red", "Green", "Pink"};
-	sri.storeFact("Apples", str1);
+	// vector<string> str1 = {"Red", "Green", "Pink"};
+	// sri.storeFact("Apples", str1);
 
-	vector<string> str2 = {"Pink", "Orange", "Yellow"};
-	sri.storeFact("Oranges", str2);
+	// vector<string> str2 = {"Rose", "Green", "Yellow"};
+	// sri.storeFact("Apples", str2);
 
-	vector<string> str3 = {"Yellow", "Green"};
-	sri.storeFact("Bananas", str3);
+	// vector<string> str3 = {"Pink", "Orange", "Yellow"};
+	// sri.storeFact("Oranges", str3);
 
-	vector<string> preds = {"Apples", "Oranges", "Bananas"};
-	sri.storeRule("Fruits", AND, preds); // ANDS together 3 facts
+	// vector<string> str4 = {"Yellow", "Orange", "Green"};
+	// sri.storeFact("Oranges", str4);
+
+	// vector<string> str5 = {"Yellow", "Green"};
+	// sri.storeFact("Bananas", str5);
+
+	// vector<string> str6 = {"Green", "Gold"};
+	// sri.storeFact("Bananas", str6);
+
+	// vector<string> str7 = {"Green", "Gold"};
+	// sri.storeFact("Bananas", str7);
+
+	// vector<string> preds = {"Apples", "Oranges", "Bananas"};
+	// sri.storeRule("Fruits", AND, preds); // ANDS together 3 facts
+
+
+
+	vector<string> str8 = {"John", "Joe", "Margret"};
+	sri.storeFact("Father", str8);
+
+	vector<string> str9 = {"Jim", "Jeff", "George"};
+	sri.storeFact("Father", str9);
+
+	vector<string> str10 = {"George", "Kim", "Joanne"};
+	sri.storeFact("Mother", str10);
+
+	vector<string> str11 = {"Margret", "Marry", "Julia"};
+	sri.storeFact("Mother", str11);
+
+	vector<string> str12 = {"Margret", "Marry", "Bob"};
+	sri.storeFact("Mother", str12);
+
+	vector<string> str13 = {"Julia", "Marry", "Smith"};
+	sri.storeFact("Child", str13);
+
+	vector<string> str14 = {"Bob", "Marry", "Beastmode!"};
+	sri.storeFact("Child", str14);
+
+	vector<string> str15 = {"Father", "Mother"};
+	sri.storeRule("Parent", OR, str15);
+
+	vector<string> preds2 = {"Father", "Parent", "Child"};
+	sri.storeRule("Grandfather", AND, preds2); // ANDS together 3 facts
+
+
+
+
+
 }
-
 
 int main()
 {
 	cout << "*** Running test file! ***\n";
 	//testStoreRule();
 	testStoreAnd();
-
 }
