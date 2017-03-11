@@ -87,7 +87,8 @@ void RuleEngine::storeRule(string rule_name, logical_op_t op,
     if(op == OR)
     {
         cout << "Beginning OR storeRule\n";
-        storeOr(rule_name, predicates);
+        //storeOr(rule_name, predicates);
+        helpStoreOr(rule_name,predicates);
     }else if(op == AND){
         cout << "Beginning AND storeRule\n";
         storeAnd(rule_name, op, predicates, var_map);
@@ -221,6 +222,14 @@ void RuleEngine::storeOr(string rule_name, vector<string> predicates)
         cout << "Storing values from " << predicates[i] << "\n";
         storeValues(rule_name, OR, predicates, predicates[i]);
     }
+}
+void RuleEngine::storeHelper(string rule_name, vector<string> predicates){
+   for(int i = 0; i < predicates.size(); i++)
+      threadManager->addThread(new helpStoreOr(rule_name, OR, predicates, predicates[i]));
+   threadManager->start();
+   threadManager->barrier();
+   delete(threadManager);
+
 }
 
 // NOTE: Does not check for # of parameters when storing
