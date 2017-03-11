@@ -6,10 +6,12 @@
 // Tako Takeda - katakeda
 // Noriaki Nakano - nnakano
 
+#include "thread_manager.h"
 #include "fact.h"
 #include "rule.h"
 #include "rule_engine.h"
 //#include "util.h"
+#include "helpStoreOr.h"
 #include <utility>
 #include <map>
 #include <vector>
@@ -79,14 +81,13 @@ void RuleEngine::storeFact(string name, vector<string> values)
     this->kb[name].push_back(new_fact);
 }
 
-void RuleEngine::storeRule(string rule_name, logical_op_t op, 
-                           vector<string> predicates)
+void RuleEngine::storeRule(string rule_name, logical_op_t op, vector<string> predicates)
 {
     // Store rule now depends on the operator
     if(op == OR)
     {
         cout << "Beginning OR storeRule\n";
-        storeOr(rule_name, predicates);
+        storeOr(rule_name, op, predicates);
     }else if(op == AND){
         cout << "Beginning AND storeRule\n";
         storeAnd(predicates);
@@ -97,7 +98,7 @@ void RuleEngine::storeRule(string rule_name, logical_op_t op,
 // ****--------------BETTER VERSION NOT FINISHED--------------*******
 // void RuleEngine::storeAnd(string rule_name, logical_op_t op,
 //                           vector<string> predicates,
-//                           map<string,vector<string>> var_map, 
+//                           map<string,vector<string>> var_map,
 //                           string start_letter, string end_letter)
 //{
     // Should do the full execution of And like normal
@@ -134,7 +135,7 @@ void RuleEngine::storeRule(string rule_name, logical_op_t op,
 
 // ****--------------BETTER VERSION NOT FINISHED--------------*******
 // RuleEngine::filter_letters(string predicate, string prev_match,
-//                            map<string,vector<string>> var_map, int index, 
+//                            map<string,vector<string>> var_map, int index,
 //                            &vector<vector<pair<string,int>>> filter_table)
 // {
 //     // Filter should look at the current predicate's letters
@@ -287,6 +288,8 @@ void RuleEngine::filter(vector<string> predicates, int pred_index, string filter
         return;
     }
 
+    string predicate = predicates[pred_index];
+
     // Search for the predicate in KB
     if(inKB(predicate))
     {
@@ -349,20 +352,20 @@ void RuleEngine::filter(vector<string> predicates, int pred_index, string filter
     return;
 }
 
-void RuleEngine::storeOr(string rule_name, vector<string> predicates)
+void RuleEngine::storeOr(string rule_name, logical_op_t, vector<string> predicates)
 {
-    // NOTE: Could replace this for loop with parallel threads!
+    storeHelper(rule_name, op, predicates);
+}
 
-    // For x = predicates.size() number of predicates, create producers
-    // 
-
-    // For each predicate name
-
-    for(int i=0; i<predicates.size(); i++)
-    {
-        cout << "Storing values from " << predicates[i] << "\n";
-        storeValues(rule_name, OR, predicates, predicates[i]);
-    }
+void RuleEngine::storeHelper(string rule_name, logical_op_t op, vector<string> predicates){
+   ThreadManager * threadManager = new ThreadManager();
+ for(int i = 0; i < predicates.size(); i++){
+  cout << "Adding thread " << i << endl;
+  threadManager->addThread(new helpStoreOr(this, rule_name, op, predicates, predicates[i]));
+ }
+   threadManager->start();
+   threadManager->barrier();
+   delete(threadManager);
 }
 
 // NOTE: Does not check for # of parameters when storing
@@ -421,7 +424,7 @@ void RuleEngine::parseInput(string commandLine)
             if(commandLine.find('(') == -1) throw 0;
             if(commandLine.find(')') == -1) throw 0;
         }catch(int e){
-        cout << "Error: Invalid command line argument" << endl;
+        cout << "Error: Invalid command line argument4" << endl;
         }
         getline(iss, query, '(');
         while(getline(iss, temp, ',')){
@@ -434,7 +437,7 @@ void RuleEngine::parseInput(string commandLine)
         try{
             if(commandLine.find(":-") == -1) throw 0;
         }catch(int e){
-            cout << "Error: Invalid command line argument" << endl;
+            cout << "Error: Invalid command line argument3" << endl;
         }
         getline(iss, query, '(');
         getline(iss, temp, ' ');
@@ -442,16 +445,17 @@ void RuleEngine::parseInput(string commandLine)
 
         if(stringOp == "OR") op = OR;
         else if(stringOp == "AND") op = AND;
-        else cout << "Error: Invalid command line argument" << endl;
+        else cout << "Error: Invalid command line argument2" << endl;
 
         while(getline(iss, pred, '(')){
+            if(pred == " ") break;
             predVec.push_back(pred);
             iss.putback('(');
             getline(iss, temp, ' ');
             try{
                 if(temp.find('(') == -1 || temp.find(')') == -1) throw 0;
             }catch(int e){
-                cout << "Error: Invalid command line argument" << endl;
+                cout << "Error: Invalid command line argument1" << endl;
             }
         }
         this->storeRule(query, op, predVec);
@@ -460,7 +464,7 @@ void RuleEngine::parseInput(string commandLine)
       if(commandLine.find('(') == -1) throw 0;
       if(commandLine.find(')') == -1) throw 0;
     }catch(int e){
-      cout << "Error: Invalid command line argument" << endl;
+      cout << "Error: Invalid command line argument6" << endl;
     }
     getline(iss, query, '(');
         getline(iss, temp, ')');
@@ -486,7 +490,7 @@ void RuleEngine::parseInput(string commandLine)
     getline(iss, pred);
         this->drop(pred);
     }else{
-        cout << "\nError: Invalid command line argument" << endl;
+        cout << "\nError: Invalid command line argument7" << endl;
     }
     return;
 }
@@ -499,6 +503,7 @@ void RuleEngine::inference(string query, int num_sub_vars, string name)
 
 void RuleEngine::inference(string query, int num_sub_vars)
 {
+    cout << "Callling second inference" << endl;
     searchKnowledgeBase(query, num_sub_vars, false, "");
     searchRuleBase(query, num_sub_vars, false, "");
 }
