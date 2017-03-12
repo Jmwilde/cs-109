@@ -1,12 +1,7 @@
 #ifndef HELPSTOREOR_H
 #define HELPSTOREOR_H
 
-
-#include "rule.h"
 #include "rule_engine.h"
-#include "thread.h"
-#include <vector>
-#include <string>
 
 using namespace std;
 

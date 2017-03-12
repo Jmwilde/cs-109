@@ -5,20 +5,9 @@
 // Nathaniel Suriawijaya - nsuriawi
 // Tako Takeda - katakeda
 // Noriaki Nakano - nnakano
-
-#include "thread_manager.h"
-#include "fact.h"
-#include "rule.h"
 #include "rule_engine.h"
-//#include "util.h"
 #include "helpStoreOr.h"
-#include <utility>
-#include <map>
-#include <vector>
-#include <iostream>
-#include <fstream>
-#include <sstream>
-#include <algorithm>
+#include "util.h"
 
 using namespace std;
 
@@ -96,93 +85,89 @@ void RuleEngine::storeRule(string rule_name, logical_op_t op, vector<string> pre
 }
 
 // ****--------------BETTER VERSION NOT FINISHED--------------*******
-// void RuleEngine::storeAnd(string rule_name, logical_op_t op,
-//                           vector<string> predicates,
-//                           map<string,vector<string>> var_map,
-//                           string start_letter, string end_letter)
-//{
-    // Should do the full execution of And like normal
-    // Except instead of print results, it stores them under
-    // the "rule_name" inside the RB as RULE objs
 
-    // Also, it needs a table of predicate names & positions
-    // so it knows what to compare for each round of filtering
-
+void RuleEngine::buildFilterTable(string rule_name, logical_op_t op,
+                          vector<string> predicates,
+                          map<string,vector<string>> var_map, 
+                          vector<vector<pair<string,int>>> filter_table,
+                          string start_letter, string end_letter)
+{
     // Step 1: Search for the start letter (and make sure the end letter is in the map too)
     // EX: start == $A, end == $Z
-    // NOTE: This assumes there's only ONE start letter, and one end letter
+    // NOTE: This assumes there's only ONE start letter, and ONE end letter
 
-    // vector<vector<pair<string,int>>> filter_table;
-    // string first_predicate = findValue(var_map, start_letter);
-    // if(start == NULL){
-    //     cout << "Invalid AND RULE!\n";
-    //     return;
-    // }
-    // string last_predicate = findValue(var_map, end_letter);
-    // if(start == NULL){
-    //     cout << "Invalid AND RULE!\n";
-    //     return;
-    // }
+    string first_predicate = util::findValue(var_map, start_letter);
+    if(first_predicate == ""){
+        cout << "Invalid AND RULE!\n";
+        return;
+    }
 
-    // // Step 2: For each letter associated with the first_predicate
-    // int table_index = 0;
+    // Step 2: For each letter associated with the first_predicate
+    int table_index = 0;
 
-    // // Just call the recursion here like this instead?
-    // filter_letters(first_predicate, start_letter, var_map, table_index, &filter_table);
-//}
+    // Just call the recursion here like this instead?
+    filter_letters(first_predicate, start_letter, var_map, table_index, filter_table);
+}
 
-// ****--------------BETTER VERSION NOT FINISHED--------------*******
+void RuleEngine::filter_letters(string predicate, string prev_match,
+                           map<string,vector<string>> var_map, int table_index,
+                           vector<vector<pair<string,int>>>& filter_table)
+{
+    // Filter should look at the current predicate's letters
+    vector<string> letters = var_map[predicate];  // Vector associated with the predicate
 
-// ****--------------BETTER VERSION NOT FINISHED--------------*******
-// RuleEngine::filter_letters(string predicate, string prev_match,
-//                            map<string,vector<string>> var_map, int index,
-//                            &vector<vector<pair<string,int>>> filter_table)
-// {
-//     // Filter should look at the current predicate's letters
-//     vector<string> filter_letters = var_map[predicate];  // Vector associated with the predicate
+    for(int i=0; i<letters.size(); i++)
+    {
+        if(letters[i] == prev_match) continue;  // Skip the previously matched letter
 
-//     for(int i=0; i<filter_letters.size(); i++)
-//     {
-//         if(filter_letters[i] == prev_match) continue;  // Skip the previously matched letter
+        bool match = false;
 
-//         // Search for a matching letter in the map of predicates-to-letters (var_map)
-//         for(map<string,vector<Fact>>::iterator it = var_map.begin(); it!=var_map.end(); ++it)
-//         {
-//             string current_predicate = it->first;  // Current predicate
-//             vector<string> curr_letters = it->second;  // Get the current vector of letters
+        // Search for a matching letter in the map of predicates-to-letters (var_map)
+        for(map<string,vector<string>>::iterator it = var_map.begin(); it!=var_map.end(); ++it)
+        {
+            string current_predicate = it->first;  // Current predicate
+            vector<string> curr_letters = it->second;  // Get the current vector of letters
+            if(predicate == current_predicate) continue;
 
-//             for(int j=0; j<curr_letters.size(); j++)
-//             {
-//                 if(filter_letters[i] == curr_letters[j])
-//                 {
-//                     // A match is found!
-//                     // Store it in the table
+            for(int j=0; j<curr_letters.size(); j++)
+            {
+                if(letters[i] == curr_letters[j])
+                {
+                    match = true;
+                    // Name and position stored as pairs
+                    pair<string,int> filter(predicate,i);
+                    pair<string,int> position(current_predicate, j);
 
-//                     // Name and position stored as pairs
-//                     pair<string,int> filter(predicate,i);
-//                     pair<string,int> position(current_predicate, j);
+                    // Store them in a table, where each row is a vector of these pairs
+                    filter_table[table_index].push_back(filter);
+                    filter_table[table_index].push_back(position);
 
-//                     // Store them in a table, where each row is a vector of these pairs
-//                     filter_table[table_index].push_back(filter);
-//                     filter_table[table_index].push_back(position);
+                    filter_letters(current_predicate, letters[i], var_map, table_index, filter_table);
+                    // Call it again for the next round of finding matching letters!
 
-//                     // Call it again for the next round of finding matching letters!
+                    // TODO: Fix the incrementation of table_index!
+                    // The index should only be incremented when we know there's no matches
+                    // OR we know the current row is complete
 
-//                     // TODO: Fix the incrementation of table_index!
-//                     // The index should only be incremented when we know there's no matches
-//                     // OR we know the current row is complete
+                    //filter_letters(current_predicate, letters[i], var_map, ++table_index, &filter_table);
+                }
+            }
+        }
 
-//                     filter_letters(current_predicate, filter_letters[i], var_map, ++table_index, &filter_table);
-//                 }
-//             }
-//         }
-//     }
 
-//     // In the base case we did not find any matching letters
-//     // Set the current row of the filter table to NULL
-//     filter_table[table_index] == NULL;
-//     return;
-// }
+        if(match == false)
+        {
+            cout << "There were no matches of the letter " << letters[i] << endl;
+            table_index++;
+        }
+
+    }
+    // In the base case we did not find any matching letters
+    // Set the current row of the filter table to NULL
+    filter_table[table_index].clear();
+    return;
+}
+
 // ****--------------BETTER VERSION NOT FINISHED--------------*******
 
 void RuleEngine::storeAnd(vector<string> predicates)
@@ -209,13 +194,8 @@ void RuleEngine::storeAnd(vector<string> predicates)
         // For each FACT
         for (int i=0; i<fact_vect.size(); i++)
         {
-            // Check if the current Fact has the correct # of predicates
-            // if (fact_vect[i].getNumValues() != num_params){
-            //     continue;
-            // }
 
             cout << "Looking at FACT " << i << endl;
-
             // Get intial value
             first_value = fact_vect[i].firstValue();
             // Set intial filter value
@@ -299,9 +279,6 @@ void RuleEngine::filter(vector<string> predicates, int pred_index, string filter
         // For each FACT
         for (int i=0; i<fact_vect.size(); i++)
         {
-            // Check if the current Fact has the correct # of predicates
-            //if (fact_vect[i].getNumPredicates() != num_params) continue;
-
             // Collect the filters for the next round
             if (fact_vect[i].firstValue() == filter_value)
             {

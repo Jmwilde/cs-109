@@ -9,12 +9,19 @@
 #ifndef RULE_ENGINE_H
 #define RULE_ENGINE_H
 
-
 #include "fact.h"
 #include "rule.h"
 #include "thread.h"
+#include "thread_manager.h"
+// #include "util.h"
+#include <utility>
 #include <map>
 #include <vector>
+#include <string>
+#include <iostream>
+#include <fstream>
+#include <sstream>
+#include <algorithm>
 
 using namespace std;
 
@@ -28,6 +35,8 @@ public:
 	bool inKB(string name);
 	bool inRB(string name);
 	void storeOr(string rule_name, logical_op_t, vector<string> predicates);
+	void buildFilterTable(string rule_name, logical_op_t op, vector<string> predicates, map<string,vector<string>> var_map, vector<vector<pair<string,int>>> filter_table, string start_letter, string end_letter);
+	void filter_letters(string predicate, string prev_match, map<string,vector<string>> var_map, int index, vector<vector<pair<string,int>>>& filter_table);
 	void storeAnd(vector<string> predicates);
 	void parseInput(string commandLine);
 	void inference(string query, int num_predicates);
