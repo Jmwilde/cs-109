@@ -11,8 +11,8 @@ CC = g++
 DEBUG = -g
 NOSIGN = -Wno-sign-compare
 NOUNUSED = -Wno-unused-variable
-CXXFLAGS = -Wall $(NOSIGN) $(NOUNUSED) -std=c++11 -c $(DEBUG)
-LFLAGS = -Wall -std=c++11 $(DEBUG)
+CXXFLAGS = -Wall $(NOSIGN) $(NOUNUSED) -pthread -std=c++11 -c $(DEBUG) 
+LFLAGS = -Wall -std=c++11 $(DEBUG) -lpthread
 
 all: output
 
