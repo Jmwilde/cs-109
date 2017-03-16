@@ -33,62 +33,9 @@ void testStoreRule()
 	sri.printRb("Parent");
 }
 
-// void testStoreAnd()
-// {
-// 	RuleEngine sri;
-
-// 	// Setup a mapping of each of the rule's predicates
-// 	// to it's respective substituion variables
-// 	string begin = "A";
-// 	string end = "Z";
-
-// 	// This will normally be generated via the parser
-// 	// And passed to the storeAnd() function
-// 	map<string, vector<string>> variables_map;
-// 	variables_map["Apples"] = {"X", "A", "B"};
-// 	variables_map["Oranges"] = {"Q", "B", "H"};
-// 	variables_map["Bananas"] = {"H", "Z"};
-
-// 	vector<string> str1 = {"Red", "Green", "Pink"};
-// 	sri.storeFact("Apples", str1);
-
-// 	vector<string> str2 = {"Orange", "Pink", "Yellow"};
-// 	sri.storeFact("Oranges", str2);
-
-// 	vector<string> str3 = {"Yellow", "Green"};
-// 	sri.storeFact("Bananas", str3);
-
-// 	vector<string> preds = {"Apples", "Oranges", "Bananas"};
-// 	sri.storeRule("Fruits", AND, preds);
-// }
-
 void testStoreAnd()
 {
 	RuleEngine sri;
-
-	// vector<string> str1 = {"Red", "Green", "Pink"};
-	// sri.storeFact("Apples", str1);
-
-	// vector<string> str2 = {"Rose", "Green", "Yellow"};
-	// sri.storeFact("Apples", str2);
-
-	// vector<string> str3 = {"Pink", "Orange", "Yellow"};
-	// sri.storeFact("Oranges", str3);
-
-	// vector<string> str4 = {"Yellow", "Orange", "Green"};
-	// sri.storeFact("Oranges", str4);
-
-	// vector<string> str5 = {"Yellow", "Green"};
-	// sri.storeFact("Bananas", str5);
-
-	// vector<string> str6 = {"Green", "Gold"};
-	// sri.storeFact("Bananas", str6);
-
-	// vector<string> str7 = {"Green", "Gold"};
-	// sri.storeFact("Bananas", str7);
-
-	// vector<string> preds = {"Apples", "Oranges", "Bananas"};
-	// sri.storeRule("Fruits", AND, preds); // ANDS together 3 facts
 
 	vector<string> str8 = {"John", "Joe", "Margret"};
 	sri.storeFact("Father", str8);
@@ -119,54 +66,9 @@ void testStoreAnd()
 
 }
 
-void testBuildFilterTable()
-{
-	cout << "Testing BuildFilterTable()\n";
-	RuleEngine sri;
-
-	// Setup a mapping of each of the rule's predicates
-	// to it's respective substituion variables
-	// 	string begin = "A";
-	// 	string end = "Z";
-
-	// 	This will normally be generated via the parser
-	// 	And passed to the storeAnd() function
-
-	map<string, vector<string>> variables_map;
-	variables_map["Apples"] = {"X", "A", "B"};
-	variables_map["Oranges"] = {"Q", "B", "H"};
-	variables_map["Bananas"] = {"H", "Z"};
-
-	vector<vector<pair<string,int>>> filter_table;
-	//filter_table.resize(1);  // Resize allocates space and initializes the space with empty values
-
-	//filter_table.reserve(5);
-	//vector<vector<pair<string,int>>> * ptr = filter_table;
-	string start = "A";
-	string end = "Z";
-	sri.buildFilterTable(variables_map, filter_table, start, end);
-
-	// vector<string> str1 = {"Red", "Green", "Pink"};
-	// sri.storeFact("Apples", str1);
-
-	// vector<string> str2 = {"Orange", "Pink", "Yellow"};
-	// sri.storeFact("Oranges", str2);
-
-	// vector<string> str3 = {"Yellow", "Green"};
-	// sri.storeFact("Bananas", str3);
-
-	//vector<string> preds = {"Apples", "Oranges", "Bananas"};
-	//sri.storeRule("Fruits", AND, preds);
-
-
-
-	return;
-}
-
 int main()
 {
 	cout << "*** Running test file! ***\n";
-	testBuildFilterTable();
 	//testStoreRule();
 	//testStoreAnd();
 }
