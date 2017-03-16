@@ -17,42 +17,31 @@
 
 using namespace std;
 
-int main(int argc, char const *argv[])
+int main()
 {
-	RuleEngine sri; // Declare a new rule engine
+  RuleEngine sri; // Declare a new rule engine
+  string commandLine;
 
-	cout << "Welcome to the Simple Rule Inference Engine!\n";
-	cout << "Please input a command.\n\n";
-	
-	vector<string> fruits = {"Apple", "Orange"};
-	vector<string> meats = {"Steak", "Chicken"};
-	vector<string> foods = {"Fruits", "Meats"};
-	vector<string> drinks = {"Pepsi", "Mtn Dew"};
-	vector<string> food_and_drink {"Food", "Drinks"};
+	cout << "\nWelcome to the Simple Rule Inference Engine!\n";
 
-	//  User creates & stores some Facts
-	sri.storeFact("Fruits", fruits);
-	sri.storeFact("Meats", meats);
+  // user inputs a command, and hits Enter/Return
+  // terminates when user inputs 'x'
 
-	//  Then makes a Rule and stores it
-	sri.storeRule("Food", OR, foods);
+  while(commandLine != "x"){
+    cout << "\nInput any of the following commands:" << endl;
+    cout << "- LOAD 'filename.sri'" << endl;
+    cout << "- DUMP 'filename.sri'" << endl;
+    cout << "- FACT 'FactName(A,B)'" << endl;
+    cout << "- RULE 'RuleName($A,$B)'" << endl;
+    cout << "- INFERENCE 'Query($A,$B)'" << endl;
+    cout << "- DROP 'Query'" << endl;
+    cout << "- Enter 'x' to terminate\n" << endl;
+    getline(cin, commandLine);
+    if(commandLine == "x") break;
+    sri.parseInput(commandLine);
+  }
 
-	//  Then Infers the rule!
-	//sri.inference("Food", 2);
-
-	sri.storeFact("Drinks", drinks);
-
-	cout << "\nBeginning 2nd Test!\n\n";
-
-	sri.storeRule("Food and Drink", OR, food_and_drink);
-
-	sri.inference("Food and Drink", 2);
-
-	// user inputs a command, and hits Enter/Return
-
-	// the line of text is passed to the parseInput() method
+  cout << "\nBye!" << endl;
 
 	return 0;
 }
-
-

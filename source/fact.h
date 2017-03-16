@@ -17,17 +17,17 @@ using namespace std;
 class Fact
 {
 public:
-	Fact(string name, vector<string> predicates);
+	Fact(string name, vector<string> values);
 	~Fact();
-	int getNumPredicates();
-	string getPredicate(int index);
-	string firstPredicate();
-	string lastPredicate();
-	vector<string> getAllPredicates();
+	int getNumValues();
+	string getValue(int index);
+	string firstValue();
+	string lastValue();
+	vector<string> getValueVector();
 private:
 	string name;
-	int num_predicates;
-	vector<string> predicates;
+	int num_values;
+	vector<string> values;
 };
 
 #endif  // FACT_H

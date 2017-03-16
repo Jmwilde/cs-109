@@ -14,28 +14,33 @@ SHELL = /bin/bash
 SRCDIR = source
 OBJDIR = objects
 TESTDIR = tests
+TESTOBJDIR = test_obj
 
 SRC := $(wildcard $(SRCDIR)/*.cpp)
 DEPS := $(wildcard $(SRCDIR)/*.h)
 OBJS := $(patsubst $(SRCDIR)/%.cpp, $(OBJDIR)/%.o, $(SRC))
 
-TESTSRC := $(wildcard $(TSTDIR)/*.cpp)
-TESTOBJ := $(patsubst $(TESTDIR)/%.cpp, $(TESTDIR)/%.o, $(TESTSRC))
+TESTSRC := $(wildcard $(TESTDIR)/*.cpp)
+NOMAINS := $(filter-out $(OBJDIR)/main.o, $(OBJS))
 
 CC = g++
 DEBUG = -g
-CXXFLAGS = -Wall -std=c++14 -c $(DEBUG)
-LFLAGS = -Wall -std=c++14 $(DEBUG)
+PTHREAD = -pthread
+NOSIGN = -Wno-sign-compare
+UNUSED = -Wno-unused-parameter
+CXXFLAGS = -W -Wall -pedantic $(UNUSED) $(PTHREAD) $(NOSIGN) -std=c++14 -c $(DEBUG)
+LFLAGS = -W -Wall -Werror -pedantic -std=c++14 $(DEBUG)
 
 all: output
 
 output: $(OBJS)
 	$(CC) $(LFLAGS) $^ -o $@
 
-test: $(TESTDIR)/test.o $(OBJDIR)/rule.o $(OBJDIR)/fact.o $(OBJDIR)/rule_engine.o
+test: $(TESTOBJDIR)/test.o $(NOMAINS)
 	$(CC) $(LFLAGS) $^ -o $@
 
-test.o: $(TESTDIR)/test.cpp $(DEPS)
+$(TESTOBJDIR)/test.o: tests/test.cpp $(DEPS)
+	mkdir -p $(@D)
 	$(CC) $(CXXFLAGS) $< -o $@
 
 $(OBJS): $(OBJDIR)/%.o: $(SRCDIR)/%.cpp $(DEPS)
@@ -44,7 +49,9 @@ $(OBJS): $(OBJDIR)/%.o: $(SRCDIR)/%.cpp $(DEPS)
 
 clean:
 	rm objects/*.o
+	rm test_obj/*.o
 	rm output
+	rm test
 
 test_run: test
 	./test
