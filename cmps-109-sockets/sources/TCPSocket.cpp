@@ -7,15 +7,15 @@ TCPSocket::TCPSocket (int _sock,char * _address, int _port ,int readBufferSize,i
     peerDisconnected = false;   // Set peerDisconnected to false
     memset (remote_address ,0 , 128);   // initialize remote_address
     memset (my_address ,0 , 128);       // initialize my address
-    
+
     if ( _address != NULL) strcpy(remote_address,_address); // If _address is not NULL copy it to remote_address data member
     port = _port; // Set the port number
     // Setting receive and send socket buffers if the parameters readBufferSize and writeBufferSize are nit set to -1 respectively
     if ( readBufferSize != -1 && setsockopt(sock, SOL_SOCKET, SO_RCVBUF,(void*) &readBufferSize,sizeof(int)) == -1)
-        printf ("Error setting receive buffer\n");
+        printf ("Error setting receive buffer1\n");
     if ( writeBufferSize != -1 &&  setsockopt(sock, SOL_SOCKET, SO_SNDBUF,(void*) &writeBufferSize,sizeof(int)) == -1)
-        printf ("Error setting send buffer\n");
-    
+        printf ("Error setting send buffer1\n");
+
     // Disable the Nagle's algorithm
     int flag = 0;
     setsockopt(sock,
@@ -46,7 +46,7 @@ TCPSocket::TCPSocket (char * _address, int port ,int readBufferSize,int writeBuf
     struct hostent *server; // A pointer to a structure to store host specific information about the server
     server = gethostbyname(remote_address);
     // Check if server information is available
-    if ( server == NULL ||  server->h_addr == NULL) 
+    if ( server == NULL ||  server->h_addr == NULL)
         printf ("Cannot retrieve server address information\n");
     else { // initialize serve_addr and set it up
         bzero((char *) &serv_addr, sizeof(serv_addr));
@@ -70,7 +70,7 @@ TCPSocket::TCPSocket (char * _address, int port ,int readBufferSize,int writeBuf
             perror ("Connection error\n");  // Print error using perror
             peerDisconnected = true; // set peerDisconnected to true
             rshutdown = true;
-            wshutdown= true;            
+            wshutdown= true;
         }
         else { // Get local socket information and loaded into data members
             socklen_t my_sock_size = sizeof(struct sockaddr);

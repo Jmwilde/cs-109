@@ -2,7 +2,7 @@
 // Constructor
 TCPServerSocket::TCPServerSocket (const char * _address, int _port, int _backlog )
 {
-        // Allocate and initialize address 
+        // Allocate and initialize address
 	if ( _address != NULL && strcmp (_address,"") != 0)
 	{
 		address = (char *) calloc (strlen(_address)+1,sizeof(char));
@@ -82,7 +82,7 @@ TCPSocket * TCPServerSocket::getConnection (int timeoutSec, int timeoutMilli,int
 
 	}
 	else { // Set up time out timeval and file descriptors set
-                fd_set fds; 
+                fd_set fds;
                 struct timeval tv;
 		tv.tv_sec = timeoutSec;
 		tv.tv_usec = timeoutMilli;
@@ -90,7 +90,7 @@ TCPSocket * TCPServerSocket::getConnection (int timeoutSec, int timeoutMilli,int
 		FD_SET(sock, &fds);
                 // wait on activity on the socket for a timeout
 		select(sock+1, &fds, NULL, NULL, &tv);
-		if (FD_ISSET(sock, &fds)) // if sock is changed 
+		if (FD_ISSET(sock, &fds)) // if sock is changed
 		{
                         // call accept on sock to get the pending connection
 			newsock = accept(sock, (struct sockaddr *)&clientAddr,&sin_size);
@@ -101,7 +101,7 @@ TCPSocket * TCPServerSocket::getConnection (int timeoutSec, int timeoutMilli,int
             perror("ERROR on accept");
             return NULL;
         }
-        else{ // Else instantiate a TCPSocket object and return a pointer to it 
+        else{ // Else instantiate a TCPSocket object and return a pointer to it
                 TCPSocket * tcpSocket = new TCPSocket(newsock,(char *)inet_ntoa(clientAddr.sin_addr),clientAddr.sin_port,readBufferSize,writeBufferSize);
                 return tcpSocket;
         }
