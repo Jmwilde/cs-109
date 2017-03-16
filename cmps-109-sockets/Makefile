@@ -6,17 +6,24 @@ DEPSDIR = headers
 SRC := $(wildcard *.cpp)
 DEPS := $(wildcard *.h)
 OBJS := $(patsubst %.cpp, %.o, $(SRC))
+CLIENTOBJS := 
+SERVEROBJS :=
 
 CC = g++
 DEBUG = -g
+PTHREAD = -pthread
+LPTHREAD = -lpthread
 NOSIGN = -Wno-sign-compare
 NOUNUSED = -Wno-unused-variable
-CXXFLAGS = -Wall $(NOSIGN) $(NOUNUSED) -std=c++11 -c $(DEBUG)
-LFLAGS = -Wall -std=c++11 $(DEBUG)
+CXXFLAGS = -Wall -pedantic $(PTHREAD)$(NOSIGN) $(NOUNUSED) -std=c++11 -c $(DEBUG)
+LFLAGS = -Wall -std=c++11 $(LPTHREAD) $(DEBUG)
 
-all: output
+all: 
 
-output: $(OBJS)
+client: $(CLIENTOBJS)
+	$(CC) $(LFLAGS) $^ -o $@
+
+server: $(SERVEROBJS)
 	$(CC) $(LFLAGS) $^ -o $@
 
 %.o: %.cpp $(DEPS)
