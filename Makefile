@@ -26,10 +26,11 @@ NOMAINS := $(filter-out $(OBJDIR)/main.o, $(OBJS))
 CC = g++
 DEBUG = -g
 PTHREAD = -pthread
+LPTHREAD = -lpthread
 NOSIGN = -Wno-sign-compare
 UNUSED = -Wno-unused-parameter
 CXXFLAGS = -W -Wall -pedantic $(UNUSED) $(PTHREAD) $(NOSIGN) -std=c++14 -c $(DEBUG)
-LFLAGS = -W -Wall -Werror -pedantic -std=c++14 $(DEBUG)
+LFLAGS = -W -Wall -Werror -pedantic $(LPTHREAD) -std=c++14 $(DEBUG)
 
 all: output
 
