@@ -1,5 +1,5 @@
-#ifndef HELPSTOREOR_H
-#define HELPSTOREOR_H
+#ifndef HELP_STORE_OR_H
+#define HELP_STORE_OR_H
 
 #include "rule_engine.h"
 
@@ -15,10 +15,10 @@ private:
   string predicate;
 public:
 
-   helpStoreOr(RuleEngine* sri, string rule_name,logical_op_t OR, vector<string> predicates, string predicate);
+   helpStoreOr(RuleEngine* sri, string rule_name, logical_op_t op, vector<string> predicates, string predicate);
    ~helpStoreOr();
    void * threadMainBody(void * arg);
 
 
 };
- #endif  //
+ #endif  // HELP_STORE_OR_H

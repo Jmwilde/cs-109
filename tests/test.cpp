@@ -8,14 +8,12 @@
 
 // The testing file
 
+#include "../source/rule_engine.h"
+
 #include <vector>
 #include <string>
 #include <iostream>
 #include <map>
-
-#include "../source/rule_engine.h"
-#include "../source/fact.h"
-#include "../source/rule.h"
 
 using namespace std;
 
@@ -121,9 +119,54 @@ void testStoreAnd()
 
 }
 
+void testBuildFilterTable()
+{
+	cout << "Testing BuildFilterTable()\n";
+	RuleEngine sri;
+
+	// Setup a mapping of each of the rule's predicates
+	// to it's respective substituion variables
+	// 	string begin = "A";
+	// 	string end = "Z";
+
+	// 	This will normally be generated via the parser
+	// 	And passed to the storeAnd() function
+
+	map<string, vector<string>> variables_map;
+	variables_map["Apples"] = {"X", "A", "B"};
+	variables_map["Oranges"] = {"Q", "B", "H"};
+	variables_map["Bananas"] = {"H", "Z"};
+
+	vector<vector<pair<string,int>>> filter_table;
+	//filter_table.resize(1);  // Resize allocates space and initializes the space with empty values
+
+	//filter_table.reserve(5);
+	//vector<vector<pair<string,int>>> * ptr = filter_table;
+	string start = "A";
+	string end = "Z";
+	sri.buildFilterTable(variables_map, filter_table, start, end);
+
+	// vector<string> str1 = {"Red", "Green", "Pink"};
+	// sri.storeFact("Apples", str1);
+
+	// vector<string> str2 = {"Orange", "Pink", "Yellow"};
+	// sri.storeFact("Oranges", str2);
+
+	// vector<string> str3 = {"Yellow", "Green"};
+	// sri.storeFact("Bananas", str3);
+
+	//vector<string> preds = {"Apples", "Oranges", "Bananas"};
+	//sri.storeRule("Fruits", AND, preds);
+
+
+
+	return;
+}
+
 int main()
 {
 	cout << "*** Running test file! ***\n";
+	testBuildFilterTable();
 	//testStoreRule();
-	testStoreAnd();
+	//testStoreAnd();
 }

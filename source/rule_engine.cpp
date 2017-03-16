@@ -6,7 +6,7 @@
 // Tako Takeda - katakeda
 // Noriaki Nakano - nnakano
 #include "rule_engine.h"
-#include "helpStoreOr.h"
+#include "help_store_or.h"
 #include "util.h"
 
 using namespace std;
@@ -84,28 +84,27 @@ void RuleEngine::storeRule(string rule_name, logical_op_t op, vector<string> pre
         cout << "Error: No operator given!\n";
 }
 
-// ****--------------BETTER VERSION NOT FINISHED--------------*******
-
-void RuleEngine::buildFilterTable(string rule_name, logical_op_t op,
-                          vector<string> predicates,
-                          map<string,vector<string>> var_map, 
-                          vector<vector<pair<string,int>>> filter_table,
-                          string start_letter, string end_letter)
+void RuleEngine::buildFilterTable(map<string,vector<string>> var_map, 
+                                  vector<vector<pair<string,int>>>& filter_table,
+                                  string start_letter, string end_letter)
 {
-    // Step 1: Search for the start letter (and make sure the end letter is in the map too)
-    // EX: start == $A, end == $Z
-    // NOTE: This assumes there's only ONE start letter, and ONE end letter
-
     string first_predicate = util::findValue(var_map, start_letter);
     if(first_predicate == ""){
         cout << "Invalid AND RULE!\n";
         return;
     }
+    vector<string> v = var_map[first_predicate];
+    cout << "First predicate: " << first_predicate << endl;
+    cout << first_predicate << " has " << v.size() << " associated letters.\n";
+    cout << first_predicate << " - ";
 
-    // Step 2: For each letter associated with the first_predicate
+    for(auto i = v.begin(); i != v.end(); ++i)
+    {
+        cout << *i << " ";
+    }
+    cout << endl;
+
     int table_index = 0;
-
-    // Just call the recursion here like this instead?
     filter_letters(first_predicate, start_letter, var_map, table_index, filter_table);
 }
 
@@ -118,31 +117,46 @@ void RuleEngine::filter_letters(string predicate, string prev_match,
 
     for(int i=0; i<letters.size(); i++)
     {
-        if(letters[i] == prev_match) continue;  // Skip the previously matched letter
+        cout << "Searching for " << letters[i] << endl;
+        if(letters[i] == prev_match)
+        {
+            cout << "Skipping " << letters[i] << endl;
+            continue;  // Skip the previously matched letter
+        }
 
         bool match = false;
 
         // Search for a matching letter in the map of predicates-to-letters (var_map)
         for(map<string,vector<string>>::iterator it = var_map.begin(); it!=var_map.end(); ++it)
         {
+
             string current_predicate = it->first;  // Current predicate
             vector<string> curr_letters = it->second;  // Get the current vector of letters
-            if(predicate == current_predicate) continue;
-
+            cout << "Current predicate: " << current_predicate << endl;
+            if(predicate == current_predicate)
+            {
+                cout << "Skipping " << current_predicate << endl;
+                continue;
+            }
             for(int j=0; j<curr_letters.size(); j++)
             {
                 if(letters[i] == curr_letters[j])
                 {
+                    cout << "Found a match!\n";
+                    cout << letters[i] << " matches " << curr_letters[j] << endl;
+
                     match = true;
-                    // Name and position stored as pairs
-                    pair<string,int> filter(predicate,i);
-                    pair<string,int> position(current_predicate, j);
 
-                    // Store them in a table, where each row is a vector of these pairs
-                    filter_table[table_index].push_back(filter);
-                    filter_table[table_index].push_back(position);
+                    cout << "Storing pair: " << predicate << "," << i << endl;
+                    cout << "Storing pair: " << current_predicate << "," << j << endl;
+                    cout << "Pushing into table at index: " << table_index << "\n";
 
-                    filter_letters(current_predicate, letters[i], var_map, table_index, filter_table);
+                    filter_table.push_back( vector<pair<string,int>>() ); // Pushes an empty vector onto the table
+                    filter_table[table_index].emplace_back(predicate,i);
+                    filter_table[table_index].emplace_back(current_predicate,j);
+                    cout << "First pair: " << filter_table[table_index][0].first << "," << filter_table[table_index][0].second << endl;
+                    cout << "Second pair: " << filter_table[table_index][1].first << "," << filter_table[table_index][1].second << endl;
+                    
                     // Call it again for the next round of finding matching letters!
 
                     // TODO: Fix the incrementation of table_index!
@@ -153,22 +167,14 @@ void RuleEngine::filter_letters(string predicate, string prev_match,
                 }
             }
         }
-
-
-        if(match == false)
-        {
-            cout << "There were no matches of the letter " << letters[i] << endl;
-            table_index++;
-        }
-
+        cout << "Completed the search for " << letters[i] << endl;
     }
+    cout << "Completed the recursive filter_letters()" << endl;
     // In the base case we did not find any matching letters
     // Set the current row of the filter table to NULL
-    filter_table[table_index].clear();
+    //filter_table[table_index].clear();
     return;
 }
-
-// ****--------------BETTER VERSION NOT FINISHED--------------*******
 
 void RuleEngine::storeAnd(vector<string> predicates)
 {
