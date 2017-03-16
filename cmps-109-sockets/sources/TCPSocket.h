@@ -19,11 +19,14 @@ class TCPSocket // TCP Socket Class
             long stream_out_size;  // An integer representing the accumulated amount of data sent so far.
     public:
             // A constructor that allows creating a socket object after socket is created.
-            TCPSocket (int _sock ,char * _address=NULL,int _port=0,int readBufferSize=65536,int writeBufferSize=65536);
+            TCPSocket(int _sock ,char * _address=NULL,int _port=0,int readBufferSize=65536,int writeBufferSize=65536);
+
             // A constructor that performs all the client connection initialization to a server socket
-            TCPSocket (char * _address, int port,int readBufferSize=65536,int writeBufferSize=65536);
+            TCPSocket(char * _address, int port,int readBufferSize=65536,int writeBufferSize=65536);
+
             char * getRemoteAddress();  // Selector returning remote IP address
             char * getMyAddress();      // Selector returning local IP address
+            
             int readFromSocket (char * buffer, int maxBytes );  // Blocking read data from socket with an upperbound size
             // Blocking read data from socket with an upperbound size with a maximum timeout sec.milli-sec
             int readFromSocketWithTimeout (char * buffer, int maxBytes, long timeoutSec, long timeoutMilli);

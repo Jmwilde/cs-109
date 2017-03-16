@@ -19,6 +19,6 @@ int main(int argc, char** argv) {
     garbageCollector->addConnection(c); // Add the connection to the garbage collector to be cleaned up when expired
   }
   delete(garbageCollector); // Delete the garbage collector
-  delete (tcpServerSocket); // Terminate and delete the TCP server socket
+  delete(tcpServerSocket); // Terminate and delete the TCP server socket
   return 0;
 }

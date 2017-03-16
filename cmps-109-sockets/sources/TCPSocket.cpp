@@ -122,11 +122,11 @@ int TCPSocket::readFromSocketWithTimeout (char * buffer, int maxBytes, long time
 int TCPSocket::writeToSocket (const char * buffer, long maxBytes ) //Write data to socket
 {
     if ( buffer != NULL ) { // If buffer is not NULL
-        int wrote = send (sock,buffer,maxBytes,0); // user send system call to write data to socket
-        stream_out_size += wrote; // add  to stream_out_size the amount of data written
+        int wrote = send(sock,buffer,maxBytes,0); // user send system call to write data to socket
+        stream_out_size += wrote; // add to stream_out_size the amount of data written
         if ( wrote != maxBytes) perror("socket error"); // if wrote != maxBytes then an error occurred during writing
         return wrote; // return the number of bytes written
-    } else return -1; // else return 01
+    } else return -1; // else return -1
 }
 long TCPSocket::getStreamOutSize() {return stream_out_size;} // Selector returning number of bytes written so far
 void TCPSocket::setPeerDisconnected(bool value){peerDisconnected = value;} // Modifier setting peerDisconnected Flag

@@ -77,7 +77,7 @@ TCPSocket * TCPServerSocket::getConnection (int timeoutSec, int timeoutMilli,int
         int newsock = 0;
 	if (timeoutSec==0 && timeoutMilli == 0 )// Blocking mode
 	{
-                // Wait for connection indefinitely
+    // Wait for connection indefinitely
 		newsock = accept(sock, (struct sockaddr *)&clientAddr,&sin_size);
 
 	}
@@ -92,7 +92,7 @@ TCPSocket * TCPServerSocket::getConnection (int timeoutSec, int timeoutMilli,int
 		select(sock+1, &fds, NULL, NULL, &tv);
 		if (FD_ISSET(sock, &fds)) // if sock is changed
 		{
-                        // call accept on sock to get the pending connection
+      // call accept on sock to get the pending connection
 			newsock = accept(sock, (struct sockaddr *)&clientAddr,&sin_size);
 		}
 	}
