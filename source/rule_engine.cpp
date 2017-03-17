@@ -380,7 +380,7 @@ void RuleEngine::parseInput(string commandLine)
     getline(iss, pred);
         this->drop(pred);
     }else{
-        cout << "\nError: Invalid command line argument7" << endl;
+        cout << "Error: Invalid command line argument7" << endl;
     }
     return;
 }
@@ -507,15 +507,22 @@ void RuleEngine::dump(string input)
       vector<Rule> rules = rb[it->first];
       for(uint i = 0; i<rules.size();i++)
       {
-         ofile << "RULE " << it->first << "("; //it->first is the key/string vector name
          int preds = rules[i].getNumPredicates();
+         //cout << preds << it-> first << endl;
+
+         if (it->first == prev)                                  //checking for duplicate rule names
+         {
+            if(rules[i-1].getNumPredicates() == preds){        //checking if duplicate name has same predicates
+                break;
+            }
+            else{
+              continue;
+            }
+         }
          string oper;
          int ascii = 65;
          int asciii = 67;
-
-         if (it->first == prev){//checking for duplicate rule names
-            ofile << "duplicati" << endl;
-         }
+         ofile << "RULE " << it->first << "("; //it->first is the key/string vector name
 
          if( rules[i].getOp() == 0){ //checking for operator enum
             oper = "OR";
@@ -524,7 +531,7 @@ void RuleEngine::dump(string input)
          else{
             oper = "AND";
             ascii = 65;
-            if(preds == 2)
+            if(rules[i].getNumValues() == 2)
             {
                ofile << "$" << (char)ascii << ",$" << (char)(ascii+preds-1) << "):- " << oper << " ";
             }
@@ -539,9 +546,9 @@ void RuleEngine::dump(string input)
             {
                ofile << rules[i].getPredicate(j)<< "(";
                ascii = 65;
-               for(int k = 0; k<preds; k++)
+               for(int k = 0; k<rules[i].getNumValues(); k++)
                {
-                  if(k + 1 == preds)
+                  if(k + 1 == rules[i].getNumValues())
                   {
                      ofile << "$" << (char)ascii << ") "; // There is a space "($X) "<here
                      break;

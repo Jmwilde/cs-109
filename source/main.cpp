@@ -28,10 +28,6 @@ int main()
   // terminates when user inputs 'x'
 
   while(commandLine != "x"){
-    if (commandLine == "")
-    {
-      continue;
-    }
     cout << "\nInput any of the following commands:" << endl;
     cout << "- LOAD 'filename.sri'" << endl;
     cout << "- DUMP 'filename.sri'" << endl;
@@ -41,6 +37,10 @@ int main()
     cout << "- DROP 'Query'" << endl;
     cout << "- Enter 'x' to terminate\n" << endl;
     getline(cin, commandLine);
+    if (commandLine == "")
+    {
+      continue;
+    }
     if(commandLine == "x") break;
     sri.parseInput(commandLine);
   }
