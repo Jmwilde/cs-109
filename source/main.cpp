@@ -28,6 +28,10 @@ int main()
   // terminates when user inputs 'x'
 
   while(commandLine != "x"){
+    if (commandLine == "")
+    {
+      continue;
+    }
     cout << "\nInput any of the following commands:" << endl;
     cout << "- LOAD 'filename.sri'" << endl;
     cout << "- DUMP 'filename.sri'" << endl;
