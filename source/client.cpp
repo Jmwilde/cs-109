@@ -1,13 +1,14 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <iostream>
+#include <fstream>
 #include <string.h>
 #include <unistd.h>
 #include <sys/socket.h>
 #include <netinet/in.h>
 #include <arpa/inet.h>
 #include <netdb.h>
-#include "TCPSocket.h"
+#include "../headers/TCPSocket.h"
 
 using namespace std;
 
@@ -28,28 +29,39 @@ int main (int argc,char ** argv)
     }
 
     // Constructs a client socket
-    TCPSocket client("0.0.0.0", 9999);
+    char* remote_ip = (char*)"0.0.0.0";
+    int port = 9999;
+
+    TCPSocket client(remote_ip, port);
 
     // Prints the client's address
     cout << "My address is " << client.getMyAddress() << "." << endl;
     cout << "My server's address is " << client.getRemoteAddress() << "." << endl;
 
-    char * myBuffer = "test.txt";
+    ofstream output;
+    output.open("new.txt");
+    output << "Hello Cruel World!\n";
+    output.close();
+    
+    const char * myBuffer = "new.txt";
     client.writeToSocket(myBuffer, strlen(myBuffer));
 
-    char contents[1024]; // A buffer for holding the file name
-    memset(contents,0,1024); // Initialize the buffer
-    int read_bytes = client.readFromSocket(contents,1023); // read from socket the file name to be fetched
-    if( read_bytes > 0)
-    {
-        cout << "Received file contents: \n";
-        cout << contents << endl;
-    }
+    // NOTE: Both the server and the client have to be in the same directory
+    // for the server to be able to open the file...
 
-    while(true)
-    {
+    // char contents[1024]; // A buffer for holding the file name
+    // memset(contents,0,1024); // Initialize the buffer
+    // int read_bytes = client.readFromSocket(contents,1023); // read from socket the file name to be fetched
+    // if( read_bytes > 0)
+    // {
+    //     cout << "Received file contents: \n";
+    //     cout << contents << endl;
+    // }
+
+    // while(true)
+    // {
         
-    }
+    // }
    
 
 

@@ -1,4 +1,4 @@
-#include "Thread.h"
+#include "thread.h"
 #include "TCPSocket.h"
 
 // A class representing a single connection from a client

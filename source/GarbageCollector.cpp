@@ -1,4 +1,4 @@
-#include "GarbageCollector.h"
+#include "../headers/GarbageCollector.h"
 
 GarbageCollector::GarbageCollector(){ head= tail =NULL; } // Constructor sets head and tail to NULL
 

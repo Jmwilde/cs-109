@@ -1,4 +1,4 @@
-#include "Connection.h"
+#include "../headers/Connection.h"
 //Constructor: Call parent Thread Constructor
 
 Connection::Connection(TCPSocket * p_tcpSocket): Thread(){
@@ -51,7 +51,7 @@ void * Connection::threadMainBody(void * arg) { // Main thread body for serving 
         }
         else {
             perror("Error With File\n"); // Print an error message
-            tcpSocket->writeToSocket("Error\n",6);// Write error to the socket
+            tcpSocket->writeToSocket("Contents: Error\n",6);// Write error to the socket
         }
     }
     tcpSocket->shutDown(); // Shutdown the TCP Socket

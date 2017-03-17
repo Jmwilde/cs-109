@@ -1,5 +1,5 @@
-#include "GarbageCollector.h"
-#include "TCPServerSocket.h"
+#include "../headers/GarbageCollector.h"
+#include "../headers/TCPServerSocket.h"
 
 int main(int argc, char** argv)
 {

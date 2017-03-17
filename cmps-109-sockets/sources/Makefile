@@ -6,8 +6,8 @@ DEPSDIR = headers
 SRC := $(wildcard *.cpp)
 DEPS := $(wildcard *.h)
 OBJS := $(patsubst %.cpp, %.o, $(SRC))
-NOMAIN := $(filter-out main.o, $(OBJS))
-CLIENTOBJS := $(filter-out server_stream.o, $(NOMAIN))
+NOSERVER := $(filter-out server.o, $(OBJS))
+CLIENTOBJS := $(filter-out server_stream.o, $(NOSERVER))
 SERVEROBJS := $(filter-out client_stream.o, $(OBJS))
 
 CC = g++

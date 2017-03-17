@@ -20,9 +20,9 @@ TESTOBJDIR = test_obj
 SRC := $(wildcard $(SRCDIR)/*.cpp)
 DEPS := $(wildcard $(DEPSDIR)/*.h)
 OBJS := $(patsubst $(SRCDIR)/%.cpp, $(OBJDIR)/%.o, $(SRC))
-
+MAINS := $(OBJDIR)/client.o $(OBJDIR)/main.o $(OBJDIR)/server.o
+NOMAINS := $(filter-out $(MAINS), $(OBJS))
 TESTSRC := $(wildcard $(TESTDIR)/*.cpp)
-NOMAINS := $(filter-out $(OBJDIR)/main.o, $(OBJS))
 
 CC = g++
 DEBUG = -g
@@ -35,7 +35,13 @@ LFLAGS = -W -Wall -Werror -pedantic -std=c++14 $(DEBUG) $(LPTHREAD)
 
 all: output
 
-output: $(OBJS)
+client: $(OBJDIR)/client.o $(NOMAINS)
+	$(CC) $(LFLAGS) $^ -o $@
+
+server: $(OBJDIR)/server.o $(NOMAINS)
+	$(CC) $(LFLAGS) $^ -o $@ 
+
+output: main.o $(NOMAINS)
 	$(CC) $(LFLAGS) $^ -o $@
 
 test: $(TESTOBJDIR)/test.o $(NOMAINS)
@@ -55,10 +61,19 @@ clean:
 	rm output
 	rm test
 
+print:
+	@echo $(NOMAINS)
+
 test_run: test
 	./test
 
 run: output
 	./output
+
+run_client: client
+	./client localhost
+
+run_server: server
+	./server
 
 .PHONY: clean run

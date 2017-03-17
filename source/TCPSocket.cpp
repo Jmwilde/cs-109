@@ -1,4 +1,4 @@
-#include "TCPSocket.h"
+#include "../headers/TCPSocket.h"
 // Ths constructor is used when the socket is already created and established prior to object instantiation
 TCPSocket::TCPSocket (int _sock,char * _address, int _port ,int readBufferSize, int writeBufferSize)
 {
