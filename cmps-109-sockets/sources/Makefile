@@ -16,8 +16,8 @@ PTHREAD = -pthread
 LPTHREAD = -lpthread
 NOSIGN = -Wno-sign-compare
 NOUNUSED = -Wno-unused-variable
-CXXFLAGS = -Wall -pedantic $(PTHREAD) $(NOSIGN) $(NOUNUSED) -std=c++11 -c $(DEBUG)
-LFLAGS = -Wall -std=c++11 $(LPTHREAD) $(DEBUG)
+CXXFLAGS = -Wall -pedantic -std=c++11 -c $(DEBUG) $(PTHREAD) $(NOSIGN) $(NOUNUSED)  
+LFLAGS = -Wall -pedantic -std=c++11 $(DEBUG) $(LPTHREAD) $(DEBUG)
 
 all: 
 
