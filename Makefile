@@ -41,7 +41,7 @@ client: $(OBJDIR)/client.o $(NOMAINS)
 server: $(OBJDIR)/server.o $(NOMAINS)
 	$(CC) $(LFLAGS) $^ -o $@ 
 
-output: main.o $(NOMAINS)
+output: $(OBJDIR)/main.o $(NOMAINS)
 	$(CC) $(LFLAGS) $^ -o $@
 
 test: $(TESTOBJDIR)/test.o $(NOMAINS)
