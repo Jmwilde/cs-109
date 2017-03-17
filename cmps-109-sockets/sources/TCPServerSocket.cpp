@@ -17,7 +17,7 @@ bool TCPServerSocket::initializeSocket() // Initialize server socket
 {
     // Create a stream socket and return false on error
     if((sock = socket(AF_INET, SOCK_STREAM, 0)) == -1) return false;
-    
+
     // initialize serverAddr
     serverAddr.sin_family = AF_INET;
     serverAddr.sin_port = htons(port);
@@ -69,11 +69,12 @@ bool TCPServerSocket::initializeSocket() // Initialize server socket
     return true;
 }
 
- // Wait for a client connection. if timeoutSec and timeoutMilli are zeros the method will behave in a blocking mode
+// Wait for a client connection. if timeoutSec and timeoutMilli are zeros the method will behave in a blocking mode
 TCPSocket * TCPServerSocket::getConnection(int timeoutSec, int timeoutMilli, int readBufferSize, int writeBufferSize)
 {
 	socklen_t sin_size ;//= sizeof(struct sockaddr_in);
-        int newsock = 0;
+    int newsock = 0;
+
 	if (timeoutSec==0 && timeoutMilli == 0 )// Blocking mode
 	{
         // Wait for connection indefinitely
@@ -96,12 +97,13 @@ TCPSocket * TCPServerSocket::getConnection(int timeoutSec, int timeoutMilli, int
 		}
 	}
 
-    if ( newsock < 1 ) // if newsock is less than one then erroro
+    if ( newsock < 1 ) // if newsock is less than one then error
     {   // Print the error and return NULL
         perror("ERROR on accept");
         return NULL;
     }
     else{ // Else instantiate a TCPSocket object and return a pointer to it
+        cout << "Creating new TCPSocket Object and returning pointer to it.\n";
         TCPSocket * tcpSocket = new TCPSocket(newsock,(char *)inet_ntoa(clientAddr.sin_addr),clientAddr.sin_port,readBufferSize,writeBufferSize);
         return tcpSocket;
     }

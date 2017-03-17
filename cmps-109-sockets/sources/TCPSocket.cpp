@@ -1,6 +1,6 @@
 #include "TCPSocket.h"
 // Ths constructor is used when the socket is already created and established prior to object instantiation
-TCPSocket::TCPSocket (int _sock,char * _address, int _port ,int readBufferSize,int writeBufferSize)
+TCPSocket::TCPSocket (int _sock,char * _address, int _port ,int readBufferSize, int writeBufferSize)
 {
     stream_out_size = 0;    // Initialize stream_out_size to zero since nothing is sent yet
     sock = _sock;           // Set socket descriptor already created before instantiation
@@ -9,13 +9,13 @@ TCPSocket::TCPSocket (int _sock,char * _address, int _port ,int readBufferSize,i
     memset (my_address ,0 , 128);       // initialize my address
 
     if( _address != NULL) strcpy(remote_address,_address); // If _address is not NULL copy it to remote_address data member
-
     port = _port; // Set the port number
-    // Setting receive and send socket buffers if the parameters readBufferSize and writeBufferSize are nit set to -1 respectively
+
+    // Setting receive and send socket buffers if the parameters readBufferSize and writeBufferSize are not set to -1 respectively
     if( readBufferSize != -1 && setsockopt(sock, SOL_SOCKET, SO_RCVBUF,(void*) &readBufferSize,sizeof(int)) == -1)
-        printf ("Error setting receive buffer1\n");
+        printf("Error setting receive buffer1\n");
     if( writeBufferSize != -1 &&  setsockopt(sock, SOL_SOCKET, SO_SNDBUF,(void*) &writeBufferSize,sizeof(int)) == -1)
-        printf ("Error setting send buffer1\n");
+        printf("Error setting send buffer1\n");
 
     // Disable the Nagle's algorithm
     int flag = 0;
@@ -29,7 +29,7 @@ TCPSocket::TCPSocket (int _sock,char * _address, int _port ,int readBufferSize,i
     wshutdown= false; // Set wshutdown to false.
 }
 // This constructor is invoked to initialize and connect the socket to a server socket using remote address and port number
-TCPSocket::TCPSocket (char * _address, int port ,int readBufferSize,int writeBufferSize)
+TCPSocket::TCPSocket(char * _address, int port ,int readBufferSize,int writeBufferSize)
 {
     // Initialize some data members
     memset (remote_address, 0, 128);
@@ -61,7 +61,7 @@ TCPSocket::TCPSocket (char * _address, int port ,int readBufferSize,int writeBuf
         // Setting receive and send socket buffers if the parameters readBufferSize and writeBufferSize are nit set to -1 respectively
         if( readBufferSize != -1 && setsockopt(sock, SOL_SOCKET, SO_RCVBUF,(void*) &readBufferSize,sizeof(int)) == -1)
             printf ("Error setting receive buffer\n");
-        if( writeBufferSize != -1 &&  setsockopt(sock, SOL_SOCKET, SO_SNDBUF,(void*) &writeBufferSize,sizeof(int)) == -1)
+        if( writeBufferSize != -1 && setsockopt(sock, SOL_SOCKET, SO_SNDBUF,(void*) &writeBufferSize,sizeof(int)) == -1)
             printf ("Error setting send buffer\n");
 
         // Connect to remote server
