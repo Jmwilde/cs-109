@@ -26,7 +26,7 @@ string util::findValue(map<string,vector<string>> var_map, string value)
     return find;
 }
 
-bool isWhitespace(string str)
+bool util::isWhitespace(string str)
 {
     return (str.find_first_not_of(" \t\n\v\f\r") == string::npos);
 }
