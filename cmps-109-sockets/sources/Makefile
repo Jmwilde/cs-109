@@ -8,7 +8,7 @@ DEPS := $(wildcard *.h)
 OBJS := $(patsubst %.cpp, %.o, $(SRC))
 NOMAIN := $(filter-out main.o, $(OBJS))
 CLIENTOBJS := $(filter-out server_stream.o, $(NOMAIN))
-SERVEROBJS := $(filter-out client_stream.o, $(NOMAIN))
+SERVEROBJS := $(filter-out client_stream.o, $(OBJS))
 
 CC = g++
 DEBUG = -g
@@ -25,7 +25,7 @@ client: $(CLIENTOBJS)
 	$(CC) $(LFLAGS) $^ -o $@
 
 server: $(SERVEROBJS)
-	$(CC) $(LFLAGS) $^ -o $@
+	$(CC) $(LFLAGS) $^ -o $@ 
 
 %.o: %.cpp $(DEPS)
 	$(CC) $(CXXFLAGS) $<

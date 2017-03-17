@@ -34,7 +34,8 @@ int main (int argc,char ** argv)
     cout << "My address is " << client.getMyAddress() << "." << endl;
     cout << "My server's address is " << client.getRemoteAddress() << "." << endl;
 
-    char * myBuffer = "What's Up Dawg? \nBlaze to dis bitches!";
+    char * myBuffer = "What's Up Dawg?\n";
+    cout << strlen(myBuffer) << endl;
     client.writeToSocket(myBuffer, strlen(myBuffer));
 
     // int sock;
