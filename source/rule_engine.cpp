@@ -513,6 +513,7 @@ void RuleEngine::dump(string input)
          if (it->first == prev)                                  //checking for duplicate rule names
          {
             if(rules[i-1].getNumPredicates() == preds){        //checking if duplicate name has same predicates
+                cout<< "same one" << endl;
                 break;
             }
             else{
