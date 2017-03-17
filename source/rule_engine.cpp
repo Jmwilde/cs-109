@@ -462,7 +462,12 @@ void RuleEngine::load(string testFile)
  ifstream sriFile(testFile);
  if(sriFile.is_open()){
    while(getline(sriFile, line)){
+       if(line.empty() || util::isWhitespace(line))
+       {
+          cout << "Warning: empty line inserted" << endl;
+       }
        parseInput(line);
+       cout << "Success: line being parsed" << endl;
    }
    sriFile.close();
  }else{
@@ -502,14 +507,15 @@ void RuleEngine::dump(string input)
       vector<Rule> rules = rb[it->first];
       for(uint i = 0; i<rules.size();i++)
       {
-         if (it->first == prev){//checking for duplicate rule names
-            ofile << endl;
-         }
          ofile << "RULE " << it->first << "("; //it->first is the key/string vector name
          int preds = rules[i].getNumPredicates();
          string oper;
          int ascii = 65;
          int asciii = 67;
+
+         if (it->first == prev){//checking for duplicate rule names
+            ofile << "duplicati" << endl;
+         }
 
          if( rules[i].getOp() == 0){ //checking for operator enum
             oper = "OR";

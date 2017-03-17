@@ -1,0 +1,30 @@
+FACT Aunt(Roger,Gary)
+FACT Child(Penis,Bobby)
+FACT Father(Roger,John)
+FACT Father(Roger,Albert)
+FACT Father(Allen,Margret)
+FACT Mother(Marry,John)
+FACT Mother(Marry,Albert)
+FACT Mother(Margret,Robert)
+FACT Mother(Margret,Bob)
+FACT Yerba(Mate,Fuck)
+RULE GrandFather($A,$E):- OR Father($A,$B,$C,$D,$E) Parent($A,$B,$C,$D,$E) Child($A,$B,$C,$D,$E) Aunt($A,$B,$C,$D,$E) Yerba($A,$B,$C,$D,$E) duplicati
+RULE GrandFather($A,$E):- OR Father($A,$B,$C,$D,$E) Parent($A,$B,$C,$D,$E) Child($A,$B,$C,$D,$E) Aunt($A,$B,$C,$D,$E) Yerba($A,$B,$C,$D,$E) duplicati
+RULE GrandFather($A,$E):- OR Father($A,$B,$C,$D,$E) Parent($A,$B,$C,$D,$E) Child($A,$B,$C,$D,$E) Aunt($A,$B,$C,$D,$E) Yerba($A,$B,$C,$D,$E) duplicati
+RULE GrandFather($A,$E):- OR Father($A,$B,$C,$D,$E) Parent($A,$B,$C,$D,$E) Child($A,$B,$C,$D,$E) Aunt($A,$B,$C,$D,$E) Yerba($A,$B,$C,$D,$E) duplicati
+RULE GrandFather($A,$E):- OR Father($A,$B,$C,$D,$E) Parent($A,$B,$C,$D,$E) Child($A,$B,$C,$D,$E) Aunt($A,$B,$C,$D,$E) Yerba($A,$B,$C,$D,$E) duplicati
+RULE GrandFather($A,$E):- OR Father($A,$B,$C,$D,$E) Parent($A,$B,$C,$D,$E) Child($A,$B,$C,$D,$E) Aunt($A,$B,$C,$D,$E) Yerba($A,$B,$C,$D,$E) duplicati
+RULE GrandFather($A,$E):- OR Father($A,$B,$C,$D,$E) Parent($A,$B,$C,$D,$E) Child($A,$B,$C,$D,$E) Aunt($A,$B,$C,$D,$E) Yerba($A,$B,$C,$D,$E) duplicati
+RULE GrandFather($A,$E):- OR Father($A,$B,$C,$D,$E) Parent($A,$B,$C,$D,$E) Child($A,$B,$C,$D,$E) Aunt($A,$B,$C,$D,$E) Yerba($A,$B,$C,$D,$E) duplicati
+RULE GrandFather($A,$E):- OR Father($A,$B,$C,$D,$E) Parent($A,$B,$C,$D,$E) Child($A,$B,$C,$D,$E) Aunt($A,$B,$C,$D,$E) Yerba($A,$B,$C,$D,$E) duplicati
+RULE GrandFather($A,$E):- OR Father($A,$B,$C,$D,$E) Parent($A,$B,$C,$D,$E) Child($A,$B,$C,$D,$E) Aunt($A,$B,$C,$D,$E) Yerba($A,$B,$C,$D,$E) duplicati
+RULE GrandFather($A,$E):- OR Father($A,$B,$C,$D,$E) Parent($A,$B,$C,$D,$E) Child($A,$B,$C,$D,$E) Aunt($A,$B,$C,$D,$E) Yerba($A,$B,$C,$D,$E) duplicati
+RULE GrandFather($A,$E):- OR Father($A,$B,$C,$D,$E) Parent($A,$B,$C,$D,$E) Child($A,$B,$C,$D,$E) Aunt($A,$B,$C,$D,$E) Yerba($A,$B,$C,$D,$E) duplicati
+RULE GrandFather($A,$E):- OR Father($A,$B,$C,$D,$E) Parent($A,$B,$C,$D,$E) Child($A,$B,$C,$D,$E) Aunt($A,$B,$C,$D,$E) Yerba($A,$B,$C,$D,$E) 
+RULE Parent($A,$B):- OR Father($A,$B) Mother($A,$B) duplicati
+RULE Parent($A,$B):- OR Father($A,$B) Mother($A,$B) duplicati
+RULE Parent($A,$B):- OR Father($A,$B) Mother($A,$B) duplicati
+RULE Parent($A,$B):- OR Father($A,$B) Mother($A,$B) duplicati
+RULE Parent($A,$B):- OR Father($A,$B) Mother($A,$B) duplicati
+RULE Parent($A,$B):- OR Father($A,$B) Mother($A,$B) duplicati
+RULE Parent($A,$B):- OR Father($A,$B) Mother($A,$B) 
