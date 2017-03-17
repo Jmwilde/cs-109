@@ -34,9 +34,24 @@ int main (int argc,char ** argv)
     cout << "My address is " << client.getMyAddress() << "." << endl;
     cout << "My server's address is " << client.getRemoteAddress() << "." << endl;
 
-    char * myBuffer = "What's Up Dawg?\n";
-    cout << strlen(myBuffer) << endl;
+    char * myBuffer = "test.txt";
     client.writeToSocket(myBuffer, strlen(myBuffer));
+
+    char contents[1024]; // A buffer for holding the file name
+    memset(contents,0,1024); // Initialize the buffer
+    int read_bytes = client.readFromSocket(contents,1023); // read from socket the file name to be fetched
+    if( read_bytes > 0)
+    {
+        cout << "Received file contents: \n";
+        cout << contents << endl;
+    }
+
+    while(true)
+    {
+        
+    }
+   
+
 
     // int sock;
     // struct sockaddr_in serverAddr;

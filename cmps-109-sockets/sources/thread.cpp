@@ -24,7 +24,9 @@ Thread::Thread(void *(*_threadRoutine) (void *))
     termination_request = false;    // Set termination request to false
     pthread_mutex_init (&mutex,NULL);// Initialize execution control mutex
     if ( _threadRoutine != NULL ) threadRoutine=_threadRoutine; // Set the pthread start routine to _threadRoutine if not NULL
+
     else threadRoutine = &run;  // Else use the default static method run
+    
     pthread_attr_init(&pthread_attr);   // Initialize pthread attributes
     pthread_attr_setdetachstate (&pthread_attr,PTHREAD_CREATE_DETACHED); // Set thread as dettached at creation time
     pthread_attr_setstacksize(&pthread_attr, stacksize ); // Set new stack size
@@ -52,7 +54,7 @@ void Thread::start()
     pthread_mutex_lock(&mutex); // Acquire lock before forking the thread
     started=true; // Set started to true
     // Invoke pthread create and pass to the routine the current object as the start routine need to be static
-    int created = pthread_create (&pthread,&pthread_attr,threadRoutine,this);
+    int created = pthread_create(&pthread,&pthread_attr,threadRoutine,this);
     if ( created != 0 ) // If the return in not zero then pthread_create failed
     {
         // Print an error message with the return integer value

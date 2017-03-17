@@ -16,11 +16,11 @@ class TCPServerSocket // TCP Server Socket
 		int backlog; // Maximum length of the queue fo pending connections.
 	public:
         // Constructor
-		TCPServerSocket (const char * _address, int _port, int _backlog );
+		TCPServerSocket(const char * _address, int _port, int _backlog );
 		bool initializeSocket (); // Initailize server socket
-
         // Wait for a client connection and return a TCPSocket object that represents the client
-		TCPSocket * getConnection (int timeoutSec=0, int timeoutMilli=0,int readBufferSize=10*1024*1024,int writeBufferSize=10*1024*1024);
+		// TCPSocket * getConnection(int timeoutSec=0, int timeoutMilli=0,int readBufferSize=10*1024*1024,int writeBufferSize=10*1024*1024);
+		TCPSocket * getConnection(int timeoutSec=0, int timeoutMilli=0, int readBufferSize=65536, int writeBufferSize=65536);
 		~TCPServerSocket ( ); // Destructor
 };
 

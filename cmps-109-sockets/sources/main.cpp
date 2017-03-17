@@ -13,12 +13,12 @@ int main(int argc, char** argv)
     for ( ;; ) // Loop forever
     {
         // Wait for connection and return a TCPSocket object upon one
-        TCPSocket * clientSocket = tcpServerSocket->getConnection();
+        TCPSocket * tcpSocket = tcpServerSocket->getConnection();
 
-        if (clientSocket == NULL) break; // if clientTcpSocket is NULL then error occured and we break the loop
+        if (tcpSocket == NULL) break; // if tcpTcpSocket is NULL then error occured and we break the loop
         garbageCollector->cleanup(); // Invoke the garbage collector cleaner in case of expired connections
 
-        Connection * c = new Connection(clientSocket); // Instantiate a new Connection object and pass the returned TCP socket to it
+        Connection * c = new Connection(tcpSocket); // Instantiate a new Connection object and pass the returned TCP socket to it
         c->start(); // Start the connection thread to communicate with the client
         garbageCollector->addConnection(c); // Add the connection to the garbage collector to be cleaned up when expired
     }

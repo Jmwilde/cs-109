@@ -12,9 +12,9 @@ TCPSocket::TCPSocket (int _sock,char * _address, int _port ,int readBufferSize, 
     port = _port; // Set the port number
 
     // Setting receive and send socket buffers if the parameters readBufferSize and writeBufferSize are not set to -1 respectively
-    if( readBufferSize != -1 && setsockopt(sock, SOL_SOCKET, SO_RCVBUF,(void*) &readBufferSize,sizeof(int)) == -1)
+    if( readBufferSize != -1 && setsockopt(sock, SOL_SOCKET, SO_RCVBUF,(void*) &readBufferSize, sizeof(int)) == -1)
         printf("Error setting receive buffer1\n");
-    if( writeBufferSize != -1 &&  setsockopt(sock, SOL_SOCKET, SO_SNDBUF,(void*) &writeBufferSize,sizeof(int)) == -1)
+    if( writeBufferSize != -1 &&  setsockopt(sock, SOL_SOCKET, SO_SNDBUF,(void*) &writeBufferSize, sizeof(int)) == -1)
         printf("Error setting send buffer1\n");
 
     // Disable the Nagle's algorithm
@@ -31,6 +31,9 @@ TCPSocket::TCPSocket (int _sock,char * _address, int _port ,int readBufferSize, 
 // This constructor is invoked to initialize and connect the socket to a server socket using remote address and port number
 TCPSocket::TCPSocket(char * _address, int port ,int readBufferSize,int writeBufferSize)
 {
+    cout << "Read buffer is: " << readBufferSize << endl;
+    cout << "Write buffer is: " << writeBufferSize << endl;
+
     // Initialize some data members
     memset (remote_address, 0, 128);
     memset (my_address, 0, 128);
@@ -86,8 +89,8 @@ char * TCPSocket::getMyAddress() {return my_address;} // Selector returning the 
 
 int TCPSocket::readFromSocket (char * buffer, int maxBytes ) { // Blocking read data operation from socket
     if( buffer != NULL ) {
-            memset (buffer,0,maxBytes); // initialize buffer
-            int read = recv (sock,buffer,maxBytes,0); // invoke recv system call
+            memset(buffer,0,maxBytes); // initialize buffer
+            int read = recv(sock,buffer,maxBytes,0); // invoke recv system call
             return read; // return the number of bytes read
     }else return -1; // return -1 on error
 }
