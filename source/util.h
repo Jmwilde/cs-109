@@ -19,6 +19,7 @@ using namespace std;
 namespace util
 {
 	string findValue(map<string,vector<string>> var_map, string value);
+	bool isWhitespace(string str);
 }
 
 #endif  // UTIL_H

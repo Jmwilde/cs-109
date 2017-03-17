@@ -7,3 +7,5 @@ FACT Power(Stove,Electricity)
 FACT Power(Stove,Solar)
 RULE Spreadable($X,$Y):- OR Spread($X,$Y) Toast($X,$Y)
 INFERENCE Spreadable($X,$Y)
+
+
