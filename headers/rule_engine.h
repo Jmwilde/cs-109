@@ -46,6 +46,9 @@ public:
 	void storeRule(string rule_name, logical_op_t op, vector<string> predicates);
 	void storeValues(string rule_name, logical_op_t op, vector<string> predicate_names, string predicate);
 	void storeFact(string name, vector<string> predicates);
+	void socket_storeRule(string query, vector<string> paramVec);
+	void socket_dump(string input, string query);
+	void socket_parse(string filename);
 	void dump(string input);
 	void load(string testFile);
    	void drop(string input);

@@ -27,6 +27,11 @@ Rule::Rule(string name, logical_op_t logical_op, vector<string> predicates, vect
 	this->num_values = values.size();
 }
 
+Rule::Rule(string name, vector<string> values){
+	this->name = name;
+	this->values = values;
+}
+
 Rule::~Rule(){}
 
 logical_op_t Rule::getOp()
@@ -81,4 +86,3 @@ vector<string> Rule::getValueVector()
 {
 	return this->values;
 }
-

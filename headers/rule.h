@@ -20,6 +20,7 @@ class Rule
 {
 public:
 	Rule(string name, logical_op_t logical_op, vector<string> predicates, vector<string> values);
+	Rule(string name, vector<string> values);
 	~Rule();
 	string getName();
 	logical_op_t getOp();

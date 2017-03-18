@@ -8,7 +8,6 @@
 
 #include "../headers/rule_engine.h"
 #include "../headers/help_store_or.h"
-//#include "util.h"
 
 using namespace std;
 
@@ -148,7 +147,6 @@ void RuleEngine::storeAnd(string rule_name, vector<string> predicates)
     if(inRB(predicate))
     {
         //cout << "Found " << predicate << " in the RB!\n";
-        
         // Found in the RB
         vector<Rule> rule_vect = rb[predicate];
 
@@ -324,6 +322,56 @@ void RuleEngine::storeValues(string rule_name, logical_op_t op, vector<string> p
     }
 }
 
+void RuleEngine::socket_storeRule(string query, vector<string> paramVec){
+  vector<Rule> rules = rb[query];
+  Rule new_rule(query, paramVec);
+  rules.push_back(new_rule);
+}
+
+void RuleEngine::socket_parse(string filename){
+  string line;
+  string query;
+  string temp;
+  vector<string> paramVec;
+  ifstream sriFile(filename);
+  if(sriFile.is_open()){
+    while(getline(sriFile, line)){
+      stringstream iss(line);
+      getline(iss, query, '(');
+      while(getline(iss, temp, ',')){
+        if(temp.back() == ')') temp.pop_back();
+        paramVec.push_back(temp);
+      }
+      this->socket_storeRule(query, paramVec);
+    }
+  }
+  sriFile.close();
+}
+
+void RuleEngine::socket_dump(string input, string query){
+  string filename = input;
+  string prev;
+  ofstream ofile(filename);
+
+  vector<Rule> rules = rb[query];
+  for(uint i = 0; i<rules.size();i++)
+  {
+     ofile << query << "(";
+     int preds = rules[i].getNumValues();
+     for(int j = 0; j<preds;j++)
+     {
+        if(j + 1 == preds)
+        {
+           ofile << rules[i].getValue(j);
+           break;
+        }
+        ofile << rules[i].getValue(j) << ",";
+     }
+     ofile << ")" << endl;
+  }
+  ofile.close();
+}
+
 void RuleEngine::parseInput(string commandLine)
 {
     string name = "";
@@ -490,6 +538,7 @@ void RuleEngine::drop(string input)
 void RuleEngine::load(string testFile)
 {
  string line;
+ string query;
  ifstream sriFile(testFile);
  if(sriFile.is_open()){
    while(getline(sriFile, line)){
