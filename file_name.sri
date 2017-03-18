@@ -1,1 +1,3 @@
-RULE Parent(x,z):- AND Father(x,y) Mother(y,z)
+FACT Father(John,Adam)
+FACT Mother(Adam,Bob)
+RULE Parent($X,$Y):- AND Father($X,$Z) Mother($Z,$Y)

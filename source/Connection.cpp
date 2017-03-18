@@ -46,6 +46,9 @@ void * Connection::threadMainBody(void * arg) { // Main thread body for serving 
     }
 
     sri.load(file_name);
+    cout << sri.inKB("Father") << endl;
+    cout << sri.inKB("Mother") << endl;
+    cout << sri.inRB(query) << endl;
     sri.socket_dump("return_file.sri", query);
     const char * myBuffer = "return_file.sri";
 

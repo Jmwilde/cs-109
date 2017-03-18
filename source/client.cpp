@@ -33,7 +33,7 @@ int main (int argc,char ** argv)
     RuleEngine sri;
     sri.parseInput("FACT Father(John,Adam)");
     sri.parseInput("FACT Mother(Adam,Bob)");
-    string commandLine = "RULE Parent($X,$Y):- AND Father($X,$Z) Mother($Z,$Y)"
+    string commandLine = "RULE Parent($X,$Y):- AND Father($X,$Z) Mother($Z,$Y)";
     ofstream sri_file;
     char* remote_ip = (char*)"0.0.0.0";
     int port = 9999;
@@ -59,7 +59,7 @@ int main (int argc,char ** argv)
       // if(commandLine == "") continue;
       // if(commandLine == "x") break;
       sri.dump("file_name.sri");
-      sri_file.open("file_name.sri");
+      sri_file.open("file_name.sri", ios::app);
       sri_file << commandLine+"\n";
       sri_file.close();
       const char * myBuffer = "file_name.sri";
