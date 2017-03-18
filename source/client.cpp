@@ -33,7 +33,7 @@ int main (int argc,char ** argv)
     RuleEngine sri;
     sri.parseInput("FACT Father(John,Adam)");
     sri.parseInput("FACT Mother(Adam,Bob)");
-    string commandLine = "RULE Parent($X,$Y):- AND Father($X,$Z) Mother($Z,$Y)"
+    string commandLine = "RULE Parent($X,$Y):- OR Father($X,$Z) Mother($Z,$Y)"
     ofstream sri_file;
     char* remote_ip = (char*)"0.0.0.0";
     int port = 9999;
@@ -41,9 +41,11 @@ int main (int argc,char ** argv)
     cout << "\nWelcome to the Simple Rule Inference Engine!\n";
 
     TCPSocket client(remote_ip, port);
+
     char file_name[1024];
     memset(file_name,0,1024);
-    sri.dump("file_name.sri");
+    sri.dump("send.sri");
+    
     sri_file.open("file_name.sri");
     sri_file << commandLine+"\n";
     sri_file.close();
