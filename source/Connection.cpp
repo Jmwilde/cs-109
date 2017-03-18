@@ -1,4 +1,5 @@
 #include "../headers/Connection.h"
+#include "../headers/rule_engine.h"
 //Constructor: Call parent Thread Constructor
 
 Connection::Connection(TCPSocket * p_tcpSocket): Thread(){
@@ -22,11 +23,31 @@ Connection::~Connection(){
 }
 
 void * Connection::threadMainBody(void * arg) { // Main thread body for serving the connection
+    RuleEngine sri;
+    string last_line;
+    string temp_line;
+    string temp_name;
+    string query;
     cout << "Running the threadMainBody of Connection\n\n";
     char file_name[1024]; // A buffer for holding the file name
     memset(file_name,0,1024); // Initialize the buffer
 
     int read_bytes = tcpSocket->readFromSocket(file_name,1023); // read from socket the file name to be fetched
+
+    ifstream file_read(file_name);
+    if(file_read.is_open()){
+      while(getline(file_read, temp_line)){
+        last_line = temp_line;
+      }
+      stringstream iss(last_line);
+      getline(iss, temp_name, ' ');
+      getline(iss, query, '(');
+      file_read.close();
+    }
+
+    sri.load(file_name);
+    sri.socket_dump("return_file.sri", query);
+    const char * myBuffer = "return_file.sri";
 
     if( read_bytes > 0)
     { // If read successfully
@@ -45,7 +66,7 @@ void * Connection::threadMainBody(void * arg) { // Main thread body for serving 
             fseek (f,0,0); // Seek the beginning of the file
             fread(buffer,1,fsize,f); // Read the whole file into the buffer
             cout << "File contents: \n" << buffer << endl;
-            tcpSocket->writeToSocket(buffer,fsize); // Write the buffer to the socket
+            tcpSocket->writeToSocket(myBuffer,strlen(myBuffer)); // Write the buffer to the socket
             free(buffer); // Free the buffer
             fclose(f); // Close the file
         }

@@ -1,0 +1,1 @@
+RULE Parent(x,z):- AND Father(x,y) Mother(y,z)
