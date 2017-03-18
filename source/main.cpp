@@ -41,7 +41,10 @@ int main()
     {
       continue;
     }
-    if(commandLine == "x") break;
+    if(commandLine == "x"){ 
+      remove("tbd.temp");
+      break;
+    }
     sri.parseInput(commandLine);
   }
 

@@ -45,13 +45,15 @@ public:
 	void storeRule(string rule_name, logical_op_t op, vector<string> predicates);
 	void storeValues(string rule_name, logical_op_t op, vector<string> predicate_names, string predicate);
 	void storeFact(string name, vector<string> predicates);
-	void dump(string input);
+	void dump(const char* input);
 	void load(string testFile);
    	void drop(string input);
 	void printKb();
 	void printRb();
 	void printResults(vector<string> results);
 	void filter(vector<string> predicates, int pred_index, string filter_value, vector<string>& next_values, vector<string>& output);
+	void dumpprep(string line);
+	void lineConstructor(string name, vector<string> results);
 private:
 	void searchKnowledgeBase(string query, int num_params, bool add, string name);
 	void searchRuleBase(string query, int num_params, bool add, string name);

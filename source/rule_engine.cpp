@@ -11,6 +11,10 @@
 //#include "util.h"
 
 using namespace std;
+bool created = 0;
+const char* prep = "tbd.temp";
+ofstream ofile (prep);
+
 
 RuleEngine::RuleEngine()
 {
@@ -167,8 +171,8 @@ void RuleEngine::storeAnd(vector<string> predicates)
 
 void RuleEngine::filter(vector<string> predicates, int pred_index, string filter_value, vector<string>& next_values, vector<string>& output)
 {
-    string predicate = predicates[pred_index];
-    cout << "Calling filter on " << predicate << endl;
+    //string predicate = predicates[pred_index];
+    //cout << "Calling filter on " << predicate << endl;
 
     // Base case
     if (pred_index == predicates.size() )
@@ -182,6 +186,9 @@ void RuleEngine::filter(vector<string> predicates, int pred_index, string filter
         }
         return;
     }
+    string predicate = predicates[pred_index];
+    cout << "Calling filter on " << predicate << endl;
+
 
     // Search for the predicate in KB
     if(inKB(predicate))
@@ -321,9 +328,11 @@ void RuleEngine::parseInput(string commandLine)
         if(temp.back() == ')') temp.pop_back();
         paramVec.push_back(temp);
         }
-    this->storeFact(query, paramVec);
+      dumpprep(commandLine);
+      this->storeFact(query, paramVec);
 
-    }else if(name == "RULE"){
+    }
+    else if(name == "RULE"){
         try{
             if(commandLine.find(":-") == -1) throw 0;
         }catch(int e){
@@ -348,6 +357,7 @@ void RuleEngine::parseInput(string commandLine)
                 cout << "Error: Invalid command line argument1" << endl;
             }
         }
+        dumpprep(commandLine);
         this->storeRule(query, op, predVec);
   }else if(name == "INFERENCE"){
     try{
@@ -361,7 +371,7 @@ void RuleEngine::parseInput(string commandLine)
         for(int i=0; i<temp.size(); i++){
             if(temp.at(i) == ',') count++;
         }
-        getline(iss, temp, ' ');
+        //getline(iss, temp, ' ');
         getline(iss, pred);
         if(pred != ""){
             this->inference(query, count, pred);
@@ -374,8 +384,11 @@ void RuleEngine::parseInput(string commandLine)
     getline(iss, sriFile);
         this->load(sriFile);
   }else if(name == "DUMP"){
-    getline(iss, sriFile);
-        this->dump(sriFile);
+      getline(iss, sriFile);
+      const char *fileName = sriFile.c_str();
+      this->dump(fileName);
+    //getline(iss, sriFile);
+    //    this->dump(sriFile);
   }else if(name == "DROP"){
     getline(iss, pred);
         this->drop(pred);
@@ -406,7 +419,6 @@ void RuleEngine::searchKnowledgeBase(string query, int num_values, bool add, str
     {
         // Found in the KB
         vector<Fact> fact_vect = kb[query];
-
         // For each Fact in the vector
         for (int i=0; i<fact_vect.size(); i++)
         {
@@ -414,10 +426,14 @@ void RuleEngine::searchKnowledgeBase(string query, int num_values, bool add, str
             if (fact_vect[i].getNumValues() != num_values) continue;
 
             // Print corresponding list of strings
-            std::vector<string> results = fact_vect[i].getValueVector();
+            vector<string> results = fact_vect[i].getValueVector();
             printResults(results);
 
-            if(add) storeFact(name, results);
+            if(add)
+            {
+                lineConstructor(name, results);
+                storeFact(name, results);
+            }
         }
     }
 }
@@ -440,7 +456,10 @@ void RuleEngine::searchRuleBase(string query, int num_values, bool add, string n
             vector<string> results = rule_vect[i].getValueVector();
             printResults(results);
 
-            if(add) storeFact(name, results);
+            if(add){
+              lineConstructor(name, results);  
+              storeFact(name, results);
+            }
         }
     }
 }
@@ -476,7 +495,29 @@ void RuleEngine::load(string testFile)
    return;
 }
 
-void RuleEngine::dump(string input)
+void RuleEngine::dump(const char* newname)
+{
+  ofile.close();
+  rename(prep,newname);
+}
+
+void RuleEngine::lineConstructor(string name, vector<string> results)
+{
+  string line = "FACT " + name + "(";
+  for(int i = 0; i<results.size();i++){              
+    line += results[i];
+    if (i+1 != results.size()) line+= ",";
+    if (i==results.size()-1) line+= ")";
+  }
+  dumpprep(line);
+}
+
+void RuleEngine::dumpprep(string line)
+{
+  ofile << line << endl;
+}
+
+/*void RuleEngine::dump(string input)
 {
    string filename = input;
    string prev;
@@ -505,15 +546,19 @@ void RuleEngine::dump(string input)
    for(map<string, vector<Rule>>::iterator it = rb.begin(); it!= rb.end(); ++it) //Iterating through RB
    {
       vector<Rule> rules = rb[it->first];
-      for(uint i = 0; i<rules.size();i++)
+      cout << "current rule size" << rules.size() << endl;
+      for(uint i = 0; i<=rules.size();i++)
       {
+        
          int preds = rules[i].getNumPredicates();
-         //cout << preds << it-> first << endl;
 
          if (it->first == prev)                                  //checking for duplicate rule names
          {
+            //cout<< "last vector: " << prev << endl;
+            cout<< " current vector: " << it->first << " current index i = " << i << endl;
+            //cout << it->first << " " << prev << endl;
             if(rules[i-1].getNumPredicates() == preds){        //checking if duplicate name has same predicates
-                cout<< "same one" << endl;
+                //cout<< rules[i-1].getNumPredicates() << " " << preds << endl;
                 break;
             }
             else{
@@ -582,8 +627,9 @@ void RuleEngine::dump(string input)
             }
           }
             prev = it->first; //prev storing previous rule name
+            cout << "last vector name: "<< prev << "current index i = " << i << endl;
       }
       ofile << endl;
    }
    ofile.close();
-}
+}*/
