@@ -323,9 +323,9 @@ void RuleEngine::storeValues(string rule_name, logical_op_t op, vector<string> p
 }
 
 void RuleEngine::socket_storeRule(string query, vector<string> paramVec){
-  vector<Rule> rules = rb[query];
+  rb[query] = {};
   Rule new_rule(query, paramVec);
-  rules.push_back(new_rule);
+  this->rb[query].push_back(new_rule);
 }
 
 void RuleEngine::socket_parse(string filename){

@@ -1,2 +1,3 @@
 FACT Father(John,Adam)
 FACT Mother(Adam,Bob)
+RULE Parent($A,$ë):- AND 
