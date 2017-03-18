@@ -8,7 +8,7 @@
 
 // The testing file
 
-#include "../source/rule_engine.h"
+#include "../headers/rule_engine.h"
 
 #include <vector>
 #include <string>
@@ -16,6 +16,21 @@
 #include <map>
 
 using namespace std;
+
+void testNewStoreAnd()
+{
+	RuleEngine sri;
+	string commandLine = "LOAD test.sri";
+  	sri.parseInput(commandLine);
+
+  	commandLine = "INFERENCE STAR($X,$Y)";
+  	sri.parseInput(commandLine);
+  	cout << endl;
+
+  	commandLine = "INFERENCE STAAR($X,$Y)";
+  	sri.parseInput(commandLine);
+  	cout << endl;
+}
 
 void testStoreRule()
 {
@@ -69,6 +84,7 @@ void testStoreAnd()
 int main()
 {
 	cout << "*** Running test file! ***\n";
+	testNewStoreAnd();
 	//testStoreRule();
 	//testStoreAnd();
 }

@@ -64,6 +64,9 @@ clean:
 print:
 	@echo $(NOMAINS)
 
+grind:
+	valgrind --leak-check=full -v output
+
 test_run: test
 	./test
 
@@ -76,4 +79,4 @@ run_client: client
 run_server: server
 	./server
 
-.PHONY: clean run
+.PHONY: clean run print grind

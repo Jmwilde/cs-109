@@ -76,18 +76,18 @@ void RuleEngine::storeRule(string rule_name, logical_op_t op, vector<string> pre
     // Store rule now depends on the operator
     if(op == OR)
     {
-        cout << "Beginning OR storeRule\n";
+        //cout << "Beginning OR storeRule\n";
         storeOr(rule_name, op, predicates);
     }else if(op == AND){
-        cout << "Beginning AND storeRule\n";
-        storeAnd(predicates);
+        //cout << "Beginning AND storeRule\n";
+        storeAnd(rule_name, predicates);
     }else
-        cout << "Error: No operator given!\n";
+        cout << "Error: Missing operator given!\n";
 }
 
-void RuleEngine::storeAnd(vector<string> predicates)
+void RuleEngine::storeAnd(string rule_name, vector<string> predicates)
 {
-    cout << "Calling store AND\n";
+    //cout << "Calling store AND\n";
 
     // Get the first predicate
     string predicate = predicates[0];
@@ -95,7 +95,7 @@ void RuleEngine::storeAnd(vector<string> predicates)
     // Find query in KB
     if(inKB(predicate))
     {
-        cout << "Found " << predicate << " in the KB!\n";
+        //cout << "Found " << predicate << " in the KB!\n";
 
         // Found in the KB
         vector<Fact> fact_vect = kb[predicate];
@@ -110,7 +110,7 @@ void RuleEngine::storeAnd(vector<string> predicates)
         for (int i=0; i<fact_vect.size(); i++)
         {
 
-            cout << "Looking at FACT " << i << endl;
+            //cout << "Looking at FACT " << i << endl;
             // Get intial value
             first_value = fact_vect[i].firstValue();
             // Set intial filter value
@@ -121,10 +121,25 @@ void RuleEngine::storeAnd(vector<string> predicates)
             filter(predicates, pred_index+1, filter_value, next_values, output);
 
             // Print out the final results
-            char letter = 'A';
+            // char letter = 'A';
+            // for (int i=0; i<output.size(); i++)
+            // {
+            //     cout << char(letter) << ":" << first_value << ", " << char(letter+1) << ":" << output[i] << endl;
+            // }
+
+            // Call constructor to create a new RULE obj
+            // Store it in the RB under the correct name
+            //char letter = 'A';
+            vector<string> values;
             for (int i=0; i<output.size(); i++)
             {
-                cout << char(letter) << ":" << first_value << ", " << char(letter+1) << ":" << output[i] << endl;
+                //cout << "Creating " << rule_name << " as a new rule in the RB:\n";
+                //cout << char(letter) << ":" << first_value << ", " << char(letter+1) << ":" << output[i] << endl;
+                values.clear();
+                values.push_back(first_value);
+                values.push_back(output[i]);
+                Rule new_rule(rule_name, AND, predicates, values);
+                rb[rule_name].push_back(new_rule);
             }
         }
     }
@@ -132,7 +147,7 @@ void RuleEngine::storeAnd(vector<string> predicates)
     // Find query in RB
     if(inRB(predicate))
     {
-        cout << "Found " << predicate << " in the RB!\n";
+        //cout << "Found " << predicate << " in the RB!\n";
         
         // Found in the RB
         vector<Rule> rule_vect = rb[predicate];
@@ -155,11 +170,18 @@ void RuleEngine::storeAnd(vector<string> predicates)
             vector<string> output;
             filter(predicates, pred_index+1, filter_value, next_values, output);
 
-            // Print out the final results
-            char letter = 'A';
+            // Store the final results as RULES in the RB
+            //char letter = 'A';
+            vector<string> values;
+
             for (int i=0; i<output.size(); i++)
             {
-                cout << char(letter) << ":" << first_value << ", " << char(letter+1) << ":" << output[i] << endl;
+                //cout << char(letter) << ":" << first_value << ", " << char(letter+1) << ":" << output[i] << endl;
+                values.clear();
+                values.push_back(first_value);
+                values.push_back(output[i]);
+                Rule new_rule(rule_name, AND, predicates, values);
+                rb[rule_name].push_back(new_rule);
             }
         }
     }
@@ -167,13 +189,13 @@ void RuleEngine::storeAnd(vector<string> predicates)
 
 void RuleEngine::filter(vector<string> predicates, int pred_index, string filter_value, vector<string>& next_values, vector<string>& output)
 {
-    string predicate = predicates[pred_index];
-    cout << "Calling filter on " << predicate << endl;
+    //string predicate = predicates[pred_index];
+    //cout << "Calling filter on " << predicate << endl;
 
     // Base case
     if (pred_index == predicates.size() )
     {
-        cout << "Reached the Base Case with predicates.size() == " << predicates.size() << endl;
+        //cout << "Reached the Base Case with predicates.size() == " << predicates.size() << endl;
         for (int i=0; i<next_values.size(); i++)
         {
             // Search the output to avoid duplicates
@@ -183,11 +205,14 @@ void RuleEngine::filter(vector<string> predicates, int pred_index, string filter
         return;
     }
 
+    string predicate = predicates[pred_index];
+    //cout << "searching for " << predicate << " with filter=" << filter_value << endl;
+
     // Search for the predicate in KB
     if(inKB(predicate))
     {
         // Found in the KB
-        cout << "Found " << predicate << " in the KB!\n";
+        //cout << "Found " << predicate << " in the KB!\n";
         vector<Fact> fact_vect = kb[predicate];
         vector<string> current_filters;
 
@@ -197,6 +222,7 @@ void RuleEngine::filter(vector<string> predicates, int pred_index, string filter
             // Collect the filters for the next round
             if (fact_vect[i].firstValue() == filter_value)
             {
+                //cout << fact_vect[i].firstValue() << " (filter) matches " << filter_value << endl;
                 current_filters.push_back(fact_vect[i].lastValue());
             }
         }
@@ -213,7 +239,7 @@ void RuleEngine::filter(vector<string> predicates, int pred_index, string filter
     if(inRB(predicate))
     {
         // Found in the RB
-        cout << "Found " << predicate << " in the RB!\n";
+        //cout << "Found " << predicate << " in the RB(filter)!\n";
         vector<Rule> rule_vect = rb[predicate];
         vector<string> current_filters;
 
@@ -226,6 +252,8 @@ void RuleEngine::filter(vector<string> predicates, int pred_index, string filter
             // Collect the filters for the next round
             if (rule_vect[i].firstValue() == filter_value)
             {
+                //cout << rule_vect[i].firstValue() << " (filter) matches " << filter_value << endl;
+                //cout << "Adding " << rule_vect[i].lastValue() << " to next round!\n";
                 current_filters.push_back(rule_vect[i].lastValue());
             }
         }
@@ -238,7 +266,7 @@ void RuleEngine::filter(vector<string> predicates, int pred_index, string filter
         }
     }
 
-    cout << "Did not find " << predicate << " in KB or RB!\n";
+    //cout << "Did not find " << predicate << " in KB or RB!\n";
     return;
 }
 
@@ -247,15 +275,18 @@ void RuleEngine::storeOr(string rule_name, logical_op_t op, vector<string> predi
     storeHelper(rule_name, op, predicates);
 }
 
-void RuleEngine::storeHelper(string rule_name, logical_op_t op, vector<string> predicates){
-   ThreadManager * threadManager = new ThreadManager();
- for(int i = 0; i < predicates.size(); i++){
-  cout << "Adding thread " << i << endl;
-  threadManager->addThread(new helpStoreOr(this, rule_name, op, predicates, predicates[i]));
- }
-   threadManager->start();
-   threadManager->barrier();
-   delete(threadManager);
+void RuleEngine::storeHelper(string rule_name, logical_op_t op, vector<string> predicates)
+{
+    ThreadManager * threadManager = new ThreadManager();
+
+    for(int i = 0; i < predicates.size(); i++)
+    {
+        //cout << "Adding thread " << i << endl;
+        threadManager->addThread(new helpStoreOr(this, rule_name, op, predicates, predicates[i]));
+    }
+    threadManager->start();
+    threadManager->barrier();
+    delete(threadManager);
 }
 
 // NOTE: Does not check for # of parameters when storing
@@ -393,7 +424,7 @@ void RuleEngine::inference(string query, int num_sub_vars, string name)
 
 void RuleEngine::inference(string query, int num_sub_vars)
 {
-    cout << "Callling second inference" << endl;
+    //cout << "Callling second inference" << endl;
     searchKnowledgeBase(query, num_sub_vars, false, "");
     searchRuleBase(query, num_sub_vars, false, "");
 }
@@ -464,10 +495,11 @@ void RuleEngine::load(string testFile)
    while(getline(sriFile, line)){
        if(line.empty() || util::isWhitespace(line))
        {
-          cout << "Warning: empty line inserted" << endl;
+          cout << "Warning: Ignoring empty whitespace line." << endl;
+          continue;
        }
        parseInput(line);
-       cout << "Success: line being parsed" << endl;
+       cout << "Current line successfully parsed!" << endl;
    }
    sriFile.close();
  }else{
