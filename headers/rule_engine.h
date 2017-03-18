@@ -29,6 +29,7 @@ using namespace std;
 class RuleEngine
 {
 public:
+	map<string, vector<Rule>> rb;
 	RuleEngine();
 	RuleEngine(string sri_file);
 	~RuleEngine();
@@ -38,7 +39,7 @@ public:
 	void storeOr(string rule_name, logical_op_t, vector<string> predicates);
 	void buildFilterTable(map<string,vector<string>> var_map, vector<vector<pair<string,int>>>& filter_table, string start_letter, string end_letter);
 	void filter_letters(string predicate, string prev_match, map<string,vector<string>> var_map, int index, vector<vector<pair<string,int>>>& filter_table);
-	void storeAnd(vector<string> predicates);
+	void storeAnd(string rule_name, vector<string> predicates);
 	void parseInput(string commandLine);
 	void inference(string query, int num_predicates);
 	void inference(string query, int num_predicates, string name);
@@ -60,7 +61,7 @@ private:
 	void searchRuleBase(string query, int num_params, bool add, string name);
    	void storeHelper(string rule_name, logical_op_t op, vector<string> predicates);
 	map<string, vector<Fact>> kb;
-	map<string, vector<Rule>> rb;
+	//map<string, vector<Rule>> rb;
 };
 
 #endif  // RULE_ENGINE_H

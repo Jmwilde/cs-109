@@ -79,5 +79,6 @@ void * Connection::threadMainBody(void * arg) { // Main thread body for serving 
         }
     }
     tcpSocket->shutDown(); // Shutdown the TCP Socket
-    return NULL;
+    arg = NULL;
+    return arg;
 }
